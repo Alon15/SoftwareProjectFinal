@@ -23,6 +23,12 @@ typedef enum sp_config_msg_t {
 	SP_CONFIG_SUCCESS
 } SP_CONFIG_MSG;
 
+typedef enum sp_split_method {
+	RANDOM,
+	MAX_SPREAD,
+	INCREMENTAL
+} SP_SPLIT_METHOD;
+
 typedef struct sp_config_t* SPConfig;
 
 /**
