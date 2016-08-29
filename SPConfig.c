@@ -5,7 +5,7 @@
 #include <stdbool.h> // bool, true, false
 #include <assert.h> // assert
 
-#define STRING_LENGTH 1025
+#define STRING_LENGTH 1025 // 1024 + \n
 #define BUFFER_SIZE 1024
 #define NON_DEFAULT_CONFIG_PARAM 4
 #define CONFIG_PARAM 14
@@ -30,190 +30,73 @@ struct sp_config_t {
 	int spLoggerLevel; // default value= 3
 	char* spLoggerFilename; // default value= stdout
 };
+void ConfigErrorMsg(char* filename, int lineNumber,SP_CONFIG_MSG* msg, char* errorMsg){
+
+	switch (msg){
+	case SP_CONFIG_MISSING_DIR:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesDirectory is not set\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_MISSING_PREFIX:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesPrefix is not set\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_MISSING_SUFFIX:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesSuffix is not set\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_MISSING_NUM_IMAGES:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spNumOfImages is not set\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_CANNOT_OPEN_FILE:
+		snprintf(errorMsg,STRING_LENGTH,"The configuration file %s couldn’t be open\n",filename);
+		break;
+	case SP_CONFIG_ALLOC_FAIL:
+		snprintf(errorMsg,STRING_LENGTH,"An error occurred - allocation failure\n");
+		break;
+	case SP_CONFIG_INVALID_LINE:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid configuration line\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_INVALID_INTEGER:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid value - constraint not met”\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_INVALID_STRING:
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid value - constraint not met”\n",filename, lineNumber);
+		break;
+	case SP_CONFIG_INVALID_ARGUMENT:
+		snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c %s \n",filename);
+		break;
+	case SP_CONFIG_INDEX_OUT_OF_RANGE:
+		//TODO check when this error happens
+		break;
+	default:
+		break;
+	}
+
+}
 
 SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg){
 	// Function variables
 	SPConfig config;
 	FILE* configFile;
 	bool success;
-
+	int lineNumber = 1;
+	//TODO check if filename is valid argument before trying to open it
 	configFile = fopen(filename,"r");
 	if (configFile == NULL){
-		return SP_CONFIG_CANNOT_OPEN_FILE;
+		msg = SP_CONFIG_CANNOT_OPEN_FILE;
+		return NULL;
 	}
 	config = (SPConfig) malloc(sizeof(struct sp_config_t));
 	if (config == NULL){
-		return SP_CONFIG_ALLOC_FAIL;
-	}
-	SetDefaultConfigValues(config);
-	success = ParseConfig(configFile, config);
-	if (success == false){
-		//TODO terminate the program
+		msg = SP_CONFIG_ALLOC_FAIL;
 		return NULL;
 	}
-	return SP_CONFIG_SUCCESS;
-}
-
-bool setConfigParameters(SPConfig config,char* variableName,char* value, int lineNumber,bool* nonDefaultParam ){
-
-	switch(variableName){
-    case 'spImagesDirectory' :
-    	config->spImagesDirectory = (char*) malloc(strlen(value));
-    	strcpy(config->spImagesDirectory, value);
-    	*nonDefaultParam = true; //TODO test if it works
-        break;
-    case 'spImagesPrefix' :
-    	config->spImagesPrefix = (char*) malloc(strlen(value));
-    	strcpy(config->spImagesPrefix, value);
-    	*(nonDefaultParam+1) = true;
-        break;
-    case 'spImagesSuffix' :
-    	if(value == '.jpg' || value == '.png' || value == '.bmp' || value == '.gif'){
-        	config->spImagesSuffix = (char*) malloc(strlen(value));
-        	strcpy(config->spImagesSuffix, value);
-        	*(nonDefaultParam+2) = true;
-    	} else {
-    		//TODO error, invalid suffix
-    	}
-        break;
-    case 'spNumOfImages' :
-    	if (atoi(value)> 0){
-        	config->spNumOfImages = atoi(value);
-        	*(nonDefaultParam+3) = true;
-    	} else {
-    		//TODO error, negative number or NAN
-    	}
-        break;
-    case 'spPCADimension' :
-    	if (atoi(value) > 28 || atoi(value) < 10){
-    		//TODO error, out of range or NAN
-    	} else {
-        	config->spPCADimension = atoi(value);
-    	}
-        break;
-    case 'spPCAFilename' :
-    	config->spPCAFilename = (char*) malloc(strlen(value));
-    	strcpy(config->spPCAFilename, value);
-        break;
-    case 'spNumOfFeatures' :
-    	if (atoi(value)> 0){
-        	config->spNumOfFeatures = atoi(value);
-    	} else {
-    		//TODO error, negative number or NAN
-    	}
-        break;
-    case 'spExtractionMode' :
-    	if (value == "true"){
-    		config->spExtractionMode = true;
-    	}else if(value == "false"){
-    		config->spExtractionMode = false;
-    	}else{
-    		//TODO error invalid string
-    	}
-        break;
-    case 'spNumOfSimilarImages' :
-    	if (atoi(value)> 0){
-        	config->spNumOfSimilarImages = atoi(value);
-    	} else {
-    		//TODO error, negative number or NAN
-    	}
-        break;
-    case 'spKDTreeSplitMethod' :
-    	switch(value){
-    	case 'RANDOM':
-    		config->spKDTreeSplitMethod = RANDOM;
-    		break;
-    	case 'MAX_SPREAD':
-    		config->spKDTreeSplitMethod = MAX_SPREAD;
-    		break;
-    	case 'INCREMENTAL':
-    		config->spKDTreeSplitMethod = INCREMENTAL;
-    		break;
-        default :
-        	//TODO error
-    	}
-        break;
-    case 'spKNN' :
-    	if (atoi(value)> 0){
-        	config->spKNN = atoi(value);
-    	} else {
-    		//TODO error, negative number or NAN
-    	}
-        break;
-    case 'spMinimalGUI' :
-    	if (value == "true"){
-    		config->spMinimalGUI = true;
-    	}else if(value == "false"){
-    		config->spMinimalGUI = false;
-    	}else{
-    		//TODO error invalid string
-    	}
-        break;
-    case 'spLoggerLevel' :
-    	if (atoi(value) > 4 || atoi(value) < 1){
-    		//TODO error, out of range or NAN
-    	} else {
-        	config->spLoggerLevel = atoi(value);
-    	}
-        break;
-    case 'spLoggerFilename' :
-    	config->spLoggerFilename = (char*) malloc(strlen(value));
-    	strcpy(config->spLoggerFilename, value);
-        break;
-    default :
-       	//TODO error, invalid variable name
-    	return false;
+	SetDefaultConfigValues(config);
+	success = ParseConfig(configFile, config, msg, &lineNumber);
+	if (success == false){
+		spConfigDestroy(config);
+		return NULL;
 	}
-	return true;
-}
-bool ParseConfig(FILE* configFile, SPConfig config ){
-	char* buffer, line, p, variableName, value;
-	int numOfChar = 0, i = 0, lineNumber = 1;
-	bool nonDefaultParam[NON_DEFAULT_CONFIG_PARAM] = {0}; // init the array to false
-	bool parseSuccess;
-
-	variableName = (char*) malloc(STRING_LENGTH);
-	value = (char*) malloc(STRING_LENGTH);
-	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
-	line = (char*) calloc(STRING_LENGTH,sizeof(char));
-	if (variableName == NULL || value == NULL || buffer == NULL || line == NULL){
-		//TODO free things
-		return false
-	}
-	p = line;
-	while ((numOfChar = fread(buffer,sizeof(char),BUFFER_SIZE,configFile)) > 0){
-
-		for (i=0;i<numOfChar;i++){
-			line[p] = buffer[i];
-			p++;
-			if (buffer[i]=="\n"){
-				parseSuccess = Parseline(line,variableName,value,lineNumber);
-				if (parseSuccess == false){
-					//TODO terminate the program + free
-					return false;
-				}
-				parseSuccess = setConfigParameters(config,variableName,value,lineNumber,nonDefaultParam);
-				if (parseSuccess == false){
-					//TODO terminate the program + free
-					return false;
-				}
-				lineNumber++;
-				p = line;
-			}
-		}
-
-	}
-	for (i=0;i<NON_DEFAULT_CONFIG_PARAM;i++){
-		if (nonDefaultParam[i] == false){
-			//TODO error, non default parameter was not set + free
-			return false;
-		}
-	}
-	free(buffer);
-	free(line);
-	free(value);
-	free(variableName);
-	return true;
+	msg = SP_CONFIG_SUCCESS;
+	return config;
 }
 
 void SetDefaultConfigValues(SPConfig config){
@@ -229,7 +112,200 @@ void SetDefaultConfigValues(SPConfig config){
 	config->spLoggerFilename = "stdout";
 }
 
-bool ParseLine(char* line, char* variableName, char* value, int lineNumber){
+bool setConfigParameters(SPConfig config,char* variableName,char* value,bool* nonDefaultParam, SP_CONFIG_MSG* msg ){
+
+	switch(variableName){
+    case 'spImagesDirectory' :
+    	config->spImagesDirectory = (char*) malloc(strlen(value));
+    	strcpy(config->spImagesDirectory, value);
+    	*nonDefaultParam = true;
+        break;
+    case 'spImagesPrefix' :
+    	config->spImagesPrefix = (char*) malloc(strlen(value));
+    	strcpy(config->spImagesPrefix, value);
+    	*(nonDefaultParam+1) = true;
+        break;
+    case 'spImagesSuffix' :
+    	if(value == '.jpg' || value == '.png' || value == '.bmp' || value == '.gif'){
+        	config->spImagesSuffix = (char*) malloc(strlen(value));
+        	strcpy(config->spImagesSuffix, value);
+        	*(nonDefaultParam+2) = true;
+    	} else {
+    		msg = SP_CONFIG_INVALID_STRING;
+    		return false;
+    	}
+        break;
+    case 'spNumOfImages' :
+    	if (atoi(value)> 0){
+        	config->spNumOfImages = atoi(value);
+        	*(nonDefaultParam+3) = true;
+    	} else {
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	}
+        break;
+    case 'spPCADimension' :
+    	if (atoi(value) > 28 || atoi(value) < 10){
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	} else {
+        	config->spPCADimension = atoi(value);
+    	}
+        break;
+    case 'spPCAFilename' :
+    	config->spPCAFilename = (char*) malloc(strlen(value));
+    	strcpy(config->spPCAFilename, value);
+        break;
+    case 'spNumOfFeatures' :
+    	if (atoi(value)> 0){
+        	config->spNumOfFeatures = atoi(value);
+    	} else {
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	}
+        break;
+    case 'spExtractionMode' :
+    	if (value == "true"){
+    		config->spExtractionMode = true;
+    	}else if(value == "false"){
+    		config->spExtractionMode = false;
+    	}else{
+    		msg = SP_CONFIG_INVALID_STRING;
+    		return false;
+    	}
+        break;
+    case 'spNumOfSimilarImages' :
+    	if (atoi(value)> 0){
+        	config->spNumOfSimilarImages = atoi(value);
+    	} else {
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	}
+        break;
+    case 'spKDTreeSplitMethod' :
+    	switch(value){
+    	case 'RANDOM':
+    		config->spKDTreeSplitMethod = RANDOM;
+    		break;
+    	case 'MAX_SPREAD':
+    		config->spKDTreeSplitMethod = MAX_SPREAD;
+    		break;
+    	case 'INCREMENTAL':
+    		config->spKDTreeSplitMethod = INCREMENTAL;
+    		break;
+        default :
+    		msg = SP_CONFIG_INVALID_STRING;
+    		return false;
+    	}
+        break;
+    case 'spKNN' :
+    	if (atoi(value)> 0){
+        	config->spKNN = atoi(value);
+    	} else {
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	}
+        break;
+    case 'spMinimalGUI' :
+    	if (value == "true"){
+    		config->spMinimalGUI = true;
+    	}else if(value == "false"){
+    		config->spMinimalGUI = false;
+    	}else{
+    		msg = SP_CONFIG_INVALID_STRING;
+    		return false;
+    	}
+        break;
+    case 'spLoggerLevel' :
+    	if (atoi(value) > 4 || atoi(value) < 1){
+    		msg = SP_CONFIG_INVALID_INTEGER;
+    		return false;
+    	} else {
+        	config->spLoggerLevel = atoi(value);
+    	}
+        break;
+    case 'spLoggerFilename' :
+    	config->spLoggerFilename = (char*) malloc(strlen(value));
+    	strcpy(config->spLoggerFilename, value);
+        break;
+    default :
+		msg = SP_CONFIG_INVALID_LINE;
+    	return false;
+	}
+	return true;
+}
+bool ParseConfig(FILE* configFile, SPConfig config, SP_CONFIG_MSG* msg, int* lineNumber ){
+	char* buffer, line, p, variableName, value;
+	int numOfChar = 0, i = 0;
+	bool nonDefaultParam[NON_DEFAULT_CONFIG_PARAM] = {0}; // init the array to false
+	bool parseSuccess;
+
+	variableName = (char*) malloc(STRING_LENGTH);
+	value = (char*) malloc(STRING_LENGTH);
+	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
+	line = (char*) calloc(STRING_LENGTH,sizeof(char));
+	if (variableName == NULL || value == NULL || buffer == NULL || line == NULL){
+		msg = SP_CONFIG_ALLOC_FAIL;
+		FreeParseConfig(buffer,line,value,variableName);
+		return false;
+	}
+	p = line;
+	while ((numOfChar = fread(buffer,sizeof(char),BUFFER_SIZE,configFile)) > 0){
+		for (i=0;i<numOfChar;i++){
+			line[p] = buffer[i];
+			p++;
+			if (buffer[i]=="\n"){
+				parseSuccess = Parseline(line,variableName,value, msg);
+				if (parseSuccess == false){
+					FreeParseConfig(buffer,line,value,variableName);
+					return false;
+				}
+				parseSuccess = setConfigParameters(config,variableName,value,nonDefaultParam, msg);
+				if (parseSuccess == false){
+					FreeParseConfig(buffer,line,value,variableName);
+					return false;
+				}
+				lineNumber++;
+				p = line;
+			}
+		}
+
+	}
+	for (i=0;i<NON_DEFAULT_CONFIG_PARAM;i++){
+		if (nonDefaultParam[i] == false){
+			switch (i){
+			case 0:
+				msg = SP_CONFIG_MISSING_DIR;
+				break;
+			case 1:
+				msg = SP_CONFIG_MISSING_PREFIX;
+				break;
+			case 2:
+				msg = SP_CONFIG_MISSING_SUFFIX;
+				break;
+			case 3:
+				msg = SP_CONFIG_MISSING_NUM_IMAGES;
+				break;
+			}
+			FreeParseConfig(buffer,line,value,variableName);
+			return false;
+		}
+	}
+	FreeParseConfig(buffer,line,value,variableName);
+	return true;
+}
+void FreeParseConfig(char* buffer, char* line, char* value, char* variableName){
+	if (variableName)
+		free(variableName);
+	if (value)
+		free(value);
+	if(buffer)
+		free(buffer);
+	if(line)
+		free(line);
+}
+
+bool ParseLine(char* line, char* variableName, char* value, SP_CONFIG_MSG* msg){
 
 	int lineC = 0, varC = 0, valC = 0;
 
@@ -240,7 +316,7 @@ bool ParseLine(char* line, char* variableName, char* value, int lineNumber){
 		return true;
 	}
 	if (line[lineC] == '='){
-		//TODO invalid line, throw error
+		msg = SP_CONFIG_INVALID_LINE;
 		return false;
 	}
 	while (line[lineC] != ' ' || line[lineC] != '\t' || line[lineC] != '='){ // copy variable Name
@@ -251,7 +327,7 @@ bool ParseLine(char* line, char* variableName, char* value, int lineNumber){
 	variableName[varC] = '\n';
 	lineC = skipTabsAndWhitespace(line, lineC);
 	if (line[lineC] != '='){
-		//TODO invalid line, throw error
+		msg = SP_CONFIG_INVALID_LINE;
 		return false;
 	}
 	lineC++;
@@ -264,7 +340,7 @@ bool ParseLine(char* line, char* variableName, char* value, int lineNumber){
 	value[valC] = '\n';
 	lineC = skipTabsAndWhitespace(line, lineC);
 	if (line[lineC] != '\n'){
-		//TODO invalid line, throw error
+		msg = SP_CONFIG_INVALID_LINE;
 		return false;
 	}
 	return true;
