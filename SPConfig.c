@@ -78,21 +78,31 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg){
 	FILE* configFile;
 	bool success;
 	int lineNumber = 1;
+	char errorMsg[STRING_LENGTH];
 	//TODO check if filename is valid argument before trying to open it
 	configFile = fopen(filename,"r");
 	if (configFile == NULL){
 		msg = SP_CONFIG_CANNOT_OPEN_FILE;
+		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
+		printf(errorMsg);
+		fflush(stdout);
 		return NULL;
 	}
 	config = (SPConfig) malloc(sizeof(struct sp_config_t));
 	if (config == NULL){
 		msg = SP_CONFIG_ALLOC_FAIL;
+		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
+		printf(errorMsg);
+		fflush(stdout);
 		return NULL;
 	}
 	SetDefaultConfigValues(config);
 	success = ParseConfig(configFile, config, msg, &lineNumber);
 	if (success == false){
 		spConfigDestroy(config);
+		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
+		printf(errorMsg);
+		fflush(stdout);
 		return NULL;
 	}
 	msg = SP_CONFIG_SUCCESS;
