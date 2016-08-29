@@ -15,6 +15,7 @@ typedef enum sp_config_msg_t {
 	SP_CONFIG_MISSING_SUFFIX,
 	SP_CONFIG_MISSING_NUM_IMAGES,
 	SP_CONFIG_CANNOT_OPEN_FILE,
+	SP_CONFIG_DEFAULT_CANNOT_OPEN_FILE,
 	SP_CONFIG_ALLOC_FAIL,
 	SP_CONFIG_INVALID_LINE,
 	SP_CONFIG_INVALID_INTEGER,
@@ -45,6 +46,7 @@ typedef struct sp_config_t* SPConfig;
  * The resulting value stored in msg is as follow:
  * - SP_CONFIG_INVALID_ARGUMENT - if filename == NULL
  * - SP_CONFIG_CANNOT_OPEN_FILE - if the configuration file given by filename cannot be open
+ * - SP_CONFIG_DEFAULT_CANNOT_OPEN_FILE - if the default configuration file cannot be open
  * - SP_CONFIG_ALLOC_FAIL - if an allocation failure occurred
  * - SP_CONFIG_INVALID_LINE - if a line in the config file has invalid structure
  * - SP_CONFIG_INVALID_INTEGER - if a line in the config file contains invalid integer
