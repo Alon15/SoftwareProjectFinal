@@ -340,6 +340,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg){
 		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
 		printf(errorMsg);
 		fflush(stdout);
+		fclose(configFile);
 		return NULL;
 	}
 	config = (SPConfig) malloc(sizeof(struct sp_config_t));
@@ -348,6 +349,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg){
 		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
 		printf(errorMsg);
 		fflush(stdout);
+		fclose(configFile);
 		return NULL;
 	}
 	SetDefaultConfigValues(config);
@@ -357,9 +359,11 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg){
 		ConfigErrorMsg(filename, lineNumber,msg,errorMsg);
 		printf(errorMsg);
 		fflush(stdout);
+		fclose(configFile);
 		return NULL;
 	}
 	*msg = SP_CONFIG_SUCCESS;
+	fclose(configFile);
 	return config;
 }
 bool spConfigIsExtractionMode(const SPConfig config, SP_CONFIG_MSG* msg){
