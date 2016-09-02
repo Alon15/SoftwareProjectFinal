@@ -33,27 +33,31 @@ void WriteFeat(FILE* featsFile,SPPoint feature){
     }
 
 }
-void ExportFeats(const char* path, SPPoint* feats, int* numOfFeats){
+bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
 	int i;
 	FILE* featsFile;
 	size_t success;
 	char* firstLine;
 	if (path == NULL){
 		//TODO error
+		return false;
 	}
 	featsFile = fopen(path,"w");
 	if (featsFile == NULL){
 		//TODO error
+		return false;
 	}
-	sprintf(firstLine, "%d,%d\n",*numOfFeats, feats->index);
+	sprintf(firstLine, "%d,%d\n",numOfFeats, feats->index);
     success = fwrite(firstLine,1, strlen(firstLine),featsFile);
     if (success == 0) {
     	// TODO error
+    	return false;
     }
 	for (i=0; i<numOfFeats;i++){
 		WriteFeat(featsFile,feats[i]);
 	}
 	fclose(featsFile);
+	return true;
 }
 bool ParseFeature(char* feature, int* dim, double* data){
 	char* storedDim, *storedData, *success;

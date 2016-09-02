@@ -3,8 +3,8 @@
 #define EXTRACTION_H_
 
 
-void ExportFeats(SPPoint* feats);
+bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats);
 
-SPPoint* ImportFeats(const char* path);
+SPPoint* ImportFeats(const char* path, int* numOfFeats);
 
 #endif /* EXTRACTION_H_ */

@@ -6,7 +6,7 @@
 #include <string.h> // strcmp
 #include <assert.h> // assert
 
-#define STRING_LENGTH 1025 // 1024 + \n
+#define STRING_LENGTH 1025 // 1024 + \0
 #define BUFFER_SIZE 1024
 #define NON_DEFAULT_CONFIG_PARAM 4
 #define CONFIG_PARAM 14
@@ -440,6 +440,19 @@ SP_CONFIG_MSG spConfigGetImagePath(char* imagePath, const SPConfig config,int in
 	}
 	snprintf(imagePath,STRING_LENGTH,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,
 			index,config->spImagesSuffix);
+	return SP_CONFIG_SUCCESS;
+}
+
+SP_CONFIG_MSG spConfigGetFeatsPath(char* imagePath, const SPConfig config,int index){
+
+	if (imagePath == NULL || config == NULL ){
+		return SP_CONFIG_INVALID_ARGUMENT;
+	}
+	if (index >= config->spNumOfImages){
+		return SP_CONFIG_INDEX_OUT_OF_RANGE;
+	}
+	snprintf(imagePath,STRING_LENGTH,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,
+			index,".feats");
 	return SP_CONFIG_SUCCESS;
 }
 

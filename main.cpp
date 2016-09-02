@@ -1,35 +1,81 @@
 #include "main_aux.h"
 #include "SPImageProc.h"
 #include "SPConfig.h"
+#include "Extraction.h"
 #include <stdio.h> // printf, stdout, scanf, snprintf
 #include <stdlib.h> // malloc, EXIT_FAILURE, EXIT_SUCCESS
 #include <string.h> // strcmp
 
+#define STRING_LENGTH 1025 // 1024 + \0
+#define QUERY_IMG_MSG "Please enter an image path:\n"
+#define EXIT_MSG "Exiting...\n"
+
+using namespace sp;
+
 int main ( int argc, char *argv[] ){
-	char* filename;
-	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
+	char* filename,*imagePath;
+	char query[STRING_LENGTH] = {'\0'};
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SPConfig config;
-	sp::ImageProc *imageProc = NULL;
+	ImageProc *imageProc = NULL;
+	int index, numOfImages,numOfFeats;
+	SPPoint* featuresArray;
+
 	if (argc > 2)
 		filename = NULL;
 	else if (argc == 2)
 		filename = argv[1];
 	else
 		filename = (char*)"spcbir.config";
-	config = spConfigCreate(filename, &msg);
-
+	config = spConfigCreate(filename, &config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS){
+		//TODO error
+	}
 	// TODO activate the logger
 	try{
-	imageProc = new sp::ImageProc(config);
+	imageProc = new ImageProc(config);
 	}
 	catch(...){
 		//TODO ImageProc error, terminate
 	}
+	if ( spConfigIsExtractionMode(config, &config_msg)){
+		numOfImages = spConfigGetNumOfImages(config,&config_msg);
+		for (index=0;index<numOfImages;index++){
+			config_msg = spConfigGetImagePath(imagePath,config,index);
+			if (config_msg != SP_CONFIG_SUCCESS){
+				//TODO error
+			}
+			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats);
+			if (featuresArray == NULL){
+				//TODO error
+			}
+			config_msg = spConfigGetFeatsPath(imagePath,config,index);
+			if (config_msg != SP_CONFIG_SUCCESS){
+				//TODO error
+			}
+			if (ExportFeats(imagePath,featuresArray, numOfFeats)){
+				//TODO error
+			}
+		}
+	}
+	// TODO import the extracted features
+	// TODO build the KDtree
 
+	while(strcmp(query,"<>") != 0){
+		printf(QUERY_IMG_MSG);
+		fflush(stdout);
+		scanf("%1024s",query);
+		query[strlen(query) - 1] = '\0'; // delete the \n from the end of the query
+		//TODO check if the query path is valid
 
-	// TODO Main code here
+		//TODO get features of the new image
 
+		//TODO find matches (KDTree search)
+		//TODO show matches (GUI or stdout)
+		//TODO reset variable of the current query (clear the features)
+	}
 
+	//TODO free memory
 	delete imageProc;
 	spConfigDestroy(config);
 
