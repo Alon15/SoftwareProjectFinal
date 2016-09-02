@@ -35,16 +35,16 @@ void ConfigErrorMsg(const char* filename, int lineNumber,SP_CONFIG_MSG* msg,char
 
 	switch (*msg){
 	case SP_CONFIG_MISSING_DIR:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesDirectory is not set\n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Parameter spImagesDirectory is not set\n",filename, lineNumber);
 		break;
 	case SP_CONFIG_MISSING_PREFIX:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesPrefix is not set\n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Parameter spImagesPrefix is not set\n",filename, lineNumber);
 		break;
 	case SP_CONFIG_MISSING_SUFFIX:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spImagesSuffix is not set\n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Parameter spImagesSuffix is not set\n",filename, lineNumber);
 		break;
 	case SP_CONFIG_MISSING_NUM_IMAGES:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Parameter spNumOfImages is not set\n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Parameter spNumOfImages is not set\n",filename, lineNumber);
 		break;
 	case SP_CONFIG_CANNOT_OPEN_FILE:
 		snprintf(errorMsg,STRING_LENGTH,"The configuration file %s couldn稚 be open\n",filename);
@@ -56,13 +56,13 @@ void ConfigErrorMsg(const char* filename, int lineNumber,SP_CONFIG_MSG* msg,char
 		snprintf(errorMsg,STRING_LENGTH,"An error occurred - allocation failure\n");
 		break;
 	case SP_CONFIG_INVALID_LINE:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid configuration line\n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Invalid configuration line\n",filename, lineNumber);
 		break;
 	case SP_CONFIG_INVALID_INTEGER:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid value - constraint not met能n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Invalid value - constraint not met能n",filename, lineNumber);
 		break;
 	case SP_CONFIG_INVALID_STRING:
-		snprintf(errorMsg,STRING_LENGTH,"File: %s \n Line: %d \n Message: Invalid value - constraint not met能n",filename, lineNumber);
+		snprintf(errorMsg,STRING_LENGTH,"File: %s \nLine: %d \nMessage: Invalid value - constraint not met能n",filename, lineNumber);
 		break;
 	case SP_CONFIG_INVALID_ARGUMENT:
 		snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c <config_filename>");
@@ -89,6 +89,9 @@ void SetDefaultConfigValues(SPConfig config){
 }
 bool setConfigParameters(const SPConfig config,const char* variableName,const char* value,bool* nonDefaultParam, SP_CONFIG_MSG* msg ){
 
+	if (strcmp(variableName,"\0") == 0){
+		return true;
+	}
     if (strcmp(variableName,"spImagesDirectory") == 0){
     	config->spImagesDirectory = (char*) malloc(strlen(value));
     	strcpy(config->spImagesDirectory, value);
@@ -214,20 +217,20 @@ bool ParseLine(char* line,char* variableName,char* value, SP_CONFIG_MSG* msg){
 
 	lineC = skipTabsAndWhitespace(line, lineC);
 	if (line[lineC] == '#' || line[lineC] == '\n' ){
-		variableName = NULL;
-		value = NULL;
+		*variableName = '\0';
+		*value = '\0';
 		return true;
 	}
 	if (line[lineC] == '='){
 		*msg = SP_CONFIG_INVALID_LINE;
 		return false;
 	}
-	while (line[lineC] != ' ' || line[lineC] != '\t' || line[lineC] != '='){ // copy variable Name
+	while ((line[lineC] != ' ') && (line[lineC] != '\t') && (line[lineC] != '=')){ // copy variable Name
 		variableName[varC] = line[lineC];
 		lineC++;
 		varC++;
 	}
-	variableName[varC] = '\n';
+	variableName[varC] = '\0';
 	lineC = skipTabsAndWhitespace(line, lineC);
 	if (line[lineC] != '='){
 		*msg = SP_CONFIG_INVALID_LINE;
@@ -235,12 +238,12 @@ bool ParseLine(char* line,char* variableName,char* value, SP_CONFIG_MSG* msg){
 	}
 	lineC++;
 	lineC = skipTabsAndWhitespace(line, lineC);
-	while (line[lineC] != ' ' || line[lineC] != '\t' || line[lineC] != '\n'){ // copy variable value
+	while (line[lineC] != ' ' && line[lineC] != '\t' && line[lineC] != '\n'){ // copy variable value
 		value[valC] = line[lineC];
 		lineC++;
 		valC++;
 	}
-	value[valC] = '\n';
+	value[valC] = '\0';
 	lineC = skipTabsAndWhitespace(line, lineC);
 	if (line[lineC] != '\n'){
 		*msg = SP_CONFIG_INVALID_LINE;
@@ -288,7 +291,7 @@ bool ParseConfig(FILE* configFile,const SPConfig config, SP_CONFIG_MSG* msg, int
 					FreeParseConfig(buffer,line,value,variableName);
 					return false;
 				}
-				lineNumber++;
+				(*lineNumber)++;
 				p = 0;
 			}
 		}

@@ -26,7 +26,7 @@ void WriteFeat(FILE* featsFile,SPPoint feature){
 		sprintf(storedFeat[j],"%s,",dataTruc);
 		j += strlen(dataTruc);
 	}
-	storedFeat[j-1] = '\n';
+	storedFeat[j-1] = '\0';
     success = fwrite(storedFeat,1, strlen(storedFeat),featsFile);
     if (success == 0) {
     	// TODO error
@@ -63,7 +63,7 @@ bool ParseFeature(char* feature, int* dim, double* data){
 		i++;
 		j++;
 	}
-	storedDim[j] = '\n';
+	storedDim[j] = '\0';
 	*dim = strtol(storedDim,&success, 10);
 	if (storedDim >= success){
 		//TODO error, failed to convert
@@ -76,7 +76,7 @@ bool ParseFeature(char* feature, int* dim, double* data){
 			i++;
 			j++;
 		}
-		storedDim[j] = '\n';
+		storedDim[j] = '\0';
 		data[featsExtracted] = strtod(storedData,&success);
 		if (storedData >= success){
 			//TODO error, failed to convert
@@ -101,7 +101,8 @@ SPPoint* ParseFeats(FILE* featsFile,int* numOfFeats){
 	data = (double*) malloc(MAX_FEATURE_DIM*sizeof(double));
 	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
 	feature = (char*) calloc(STRING_LENGTH,sizeof(char));
-	if (buffer == NULL || feature == NULL || data == NULL){
+	header = (char*) calloc(STRING_LENGTH,sizeof(char));
+	if (buffer == NULL || feature == NULL || data == NULL || header == NULL){
 		// TODO free memory
 	}
 	while ((numOfChar = fread(buffer,sizeof(char),BUFFER_SIZE,featsFile)) > 0){
@@ -117,15 +118,16 @@ SPPoint* ParseFeats(FILE* featsFile,int* numOfFeats){
 						p++;
 						j++;
 					}
-					header[j] = '\n';
+					header[j] = '\0';
 					*numOfFeats = strtol(header);
 					j = 0;
 					while (feature[p] != '\n'){
+						header[j] = feature[p];
 						p++;
 						j++;
 					}
+					header[j] = '\0';
 					index = strtol(header);
-					header[j] = '\n';
 					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL){
 						// TODO free memory
@@ -145,7 +147,7 @@ SPPoint* ParseFeats(FILE* featsFile,int* numOfFeats){
 		}
 
 	}
-
+	return features;
 }
 
 SPPoint* ImportFeats(const char* path, int* numOfFeats){
