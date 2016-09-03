@@ -1,10 +1,10 @@
-#include "SPConfig.h"
-#include "SPLogger.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strcmp
 #include <assert.h> // assert
+#include "SPConfig.h"
+#include "SPLogger.h"
 
 #define STRING_LENGTH 1025 // 1024 + \0
 #define BUFFER_SIZE 1024
