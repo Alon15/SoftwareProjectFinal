@@ -1,12 +1,13 @@
-#include <stdio.h> // TODO Change 'stdio.h' to 'cstdio' ?
-#include <stdlib.h> // TODO Change 'stdlib.h' to 'cstdlib' ?
-#include <string.h> // TODO Change 'string.h' to 'cstring' ?
 #include "SPImageProc.h"
 extern "C" {
 #include "Extraction.h"
 #include "main_aux.h"
 #include "SPConfig.h"
+#include "SPLogger.h"
 }
+#include <stdio.h> // TODO Change 'stdio.h' to 'cstdio' ?
+#include <stdlib.h> // TODO Change 'stdlib.h' to 'cstdlib' ?
+#include <string.h> // TODO Change 'string.h' to 'cstring' ?
 
 #define STRING_LENGTH 1025 // 1024 + \0
 #define QUERY_IMG_MSG "Please enter an image path:\n"
@@ -28,6 +29,7 @@ int main (int argc, char *argv[]) {
 		filename = argv[1];
 	} else {
 		filename = (char*)"spcbir.config";
+	}
 	config = spConfigCreate(filename, &config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		//TODO error

@@ -27,6 +27,8 @@ main_aux.o: main_aux.c main_aux.h # TODO update me
 	$(CC) $(C_COMP_FLAG) -c $*.c
 SPPoint.o: SPPoint.c SPPoint.h # TODO update me
 	$(CC) $(C_COMP_FLAG) -c $*.c
+SPLogger.o: SPLogger.c SPLogger.h # TODO update me
+	$(CC) $(C_COMP_FLAG) -c $*.c
 clean:
 	rm -f $(OBJS) $(EXEC)
 # TIP: use gcc -MM SPPoint.c to see the dependencies # TODO delete me

@@ -1,11 +1,11 @@
-#include <stdlib.h> // malloc, free, NULL
-#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
-#include <stdbool.h> // bool, true, false
-#include <string.h> // strcmp
 #include "SPConfig.h"
 #include "SPLogger.h"
 #include "SPImageProc.h"
 #include "SPPoint.h"
+#include <stdlib.h> // malloc, free, NULL
+#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
+#include <stdbool.h> // bool, true, false
+#include <string.h> // strcmp
 
 #define STRING_LENGTH 1025 // 1024 + \n
 #define BUFFER_SIZE 1024
@@ -97,7 +97,7 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 }
 
 SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
-	char* buffer, *feature, *header;
+	char* buffer, *feature, *header, *ptr;
 	double* data;
 	int numOfChar = 0, i = 0, p = 0, j = 0, index, dim, featsExtracted = 0;
 	SPPoint* features;
@@ -123,7 +123,7 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 						j++;
 					}
 					header[j] = '\0';
-					*numOfFeats = strtol(header);
+					*numOfFeats = strtol(header, &ptr, 10);
 					j = 0;
 					while (feature[p] != '\n') {
 						header[j] = feature[p];
@@ -131,7 +131,7 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 						j++;
 					}
 					header[j] = '\0';
-					index = strtol(header);
+					index = strtol(header, &ptr, 10);
 					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL) {
 						// TODO free memory
