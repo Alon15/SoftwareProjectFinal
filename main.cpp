@@ -78,5 +78,6 @@ int main (int argc, char *argv[]) {
 	//TODO free memory
 	delete imageProc;
 	spConfigDestroy(config);
+	//TODO figure out why the program crash here instead of peacefully end
 	return (EXIT_SUCCESS);
 }

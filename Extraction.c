@@ -16,15 +16,15 @@ void WriteFeat(FILE* featsFile, SPPoint feature){
 	char dataTruc[50];
 	size_t success;
 	int i=0, j=0;
-	sprintf(dataTruc,"%d",feature->dim);
-	sprintf(storedFeat[j],"%s,",dataTruc);
+	sprintf(dataTruc,"%d",spPointGetDimension(feature));
+	sprintf(storedFeat+j,"%s,",dataTruc);
 	j += strlen(dataTruc);
-	for (i=0;i<(feature->dim);i++) {
-		sprintf(dataTruc,"%.4f",feature->data[i]);
-		sprintf(storedFeat[j],"%s,",dataTruc);
+	for (i=0;i<(spPointGetDimension(feature));i++) {
+		sprintf(dataTruc,"%.4f,",spPointGetAxisCoor(feature,i));
+		sprintf(storedFeat+j,"%s",dataTruc);
 		j += strlen(dataTruc);
 	}
-	storedFeat[j-1] = '\0';
+	storedFeat[j-1] = '\n';
 	success = fwrite(storedFeat,1,strlen(storedFeat),featsFile);
 	if (success == 0) {
 		// TODO error
@@ -35,7 +35,7 @@ bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
 	int i;
 	FILE* featsFile;
 	size_t success;
-	char* firstLine;
+	char firstLine[STRING_LENGTH];
 	if (path == NULL) {
 		//TODO error
 		return false;
@@ -45,7 +45,7 @@ bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
 		//TODO error
 		return false;
 	}
-	sprintf(firstLine,"%d,%d\n",numOfFeats,feats->index);
+	sprintf(firstLine,"%d,%d\n",numOfFeats,spPointGetIndex(*feats)); // number of features and index of the image
 	success = fwrite(firstLine,1,strlen(firstLine),featsFile);
 	if (success == 0) {
 		// TODO error
@@ -59,7 +59,8 @@ bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
 }
 
 bool ParseFeature(char* feature,int* dim,double* data) {
-	char* storedDim, *storedData, *success;
+	char storedDim[50], storedData[STRING_LENGTH];
+	char* success;
 	int i = 0, j = 0, featsExtracted = 0;
 	while (feature[i] != ',') {
 		storedDim[j] = feature[i];
@@ -88,7 +89,7 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 		featsExtracted++;
 		i++;
 	}
-	if (featsExtracted != dim) {
+	if (featsExtracted != *dim) {
 		//TODO error corrupted data
 		return false;
 	}
@@ -163,7 +164,7 @@ SPPoint* ImportFeats(const char* path, int* numOfFeats) {
 		//TODO error
 		return NULL;
 	}
-	features = ParseFeats(featsFile,&numOfFeats);
+	features = ParseFeats(featsFile,numOfFeats);
 	fclose(featsFile);
 	return features;
 }
