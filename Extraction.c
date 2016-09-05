@@ -10,14 +10,13 @@
 #define BUFFER_SIZE 1024
 #define MAX_FEATURE_DIM 28
 
-//TODO check if i need to convert array expressions to pointer expressions
 void WriteFeat(FILE* featsFile, SPPoint feature){
 	char storedFeat[STRING_LENGTH];
 	char dataTruc[50];
 	size_t success;
 	int i=0, j=0;
-	sprintf(dataTruc,"%d",spPointGetDimension(feature));
-	sprintf(storedFeat+j,"%s,",dataTruc);
+	sprintf(dataTruc,"%d,",spPointGetDimension(feature));
+	sprintf(storedFeat+j,"%s",dataTruc);
 	j += strlen(dataTruc);
 	for (i=0;i<(spPointGetDimension(feature));i++) {
 		sprintf(dataTruc,"%.4f,",spPointGetAxisCoor(feature,i));
@@ -73,21 +72,23 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 		//TODO error, failed to convert
 		return false;
 	}
+	i++;
 	while (feature[i] != '\n') {
 		j = 0;
-		while (feature[i] != ',') {
+		while (feature[i] != ',' && feature[i] != '\n') {
 			storedData[j] = feature[i];
 			i++;
 			j++;
 		}
-		storedDim[j] = '\0';
+		storedData[j] = '\0';
 		data[featsExtracted] = strtod(storedData,&success);
 		if (storedData >= success) {
 			//TODO error, failed to convert
 			return false;
 		}
 		featsExtracted++;
-		i++;
+		if (feature[i] != '\n')
+			i++;
 	}
 	if (featsExtracted != *dim) {
 		//TODO error corrupted data
@@ -99,7 +100,7 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 	char* buffer, *feature, *header, *ptr;
 	double* data;
-	int numOfChar = 0, i = 0, p = 0, j = 0, index, dim, featsExtracted = 0;
+	int numOfChar = 0, i = 0, p = 0, j = 0, ind, dim, featsExtracted = 0;
 	SPPoint* features;
 	bool parseSuccess, firstLine = true;
 	data = (double*) malloc(MAX_FEATURE_DIM*sizeof(double));
@@ -131,7 +132,7 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 						j++;
 					}
 					header[j] = '\0';
-					index = strtol(header, &ptr, 10);
+					ind = strtol(header, &ptr, 10);
 					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL) {
 						// TODO free memory
@@ -142,7 +143,7 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 						// TODO free memory
 						// TODO count how many failed
 					}
-					features[featsExtracted] = spPointCreate(data,dim,index);
+					features[featsExtracted] = spPointCreate(data,dim,ind);
 					featsExtracted++;
 				}
 				p = 0;
