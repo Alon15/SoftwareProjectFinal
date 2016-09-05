@@ -4,10 +4,11 @@ extern "C" {
 #include "main_aux.h"
 #include "SPConfig.h"
 #include "SPLogger.h"
+#include "SPPoint.h"
 }
-#include <stdio.h> // TODO Change 'stdio.h' to 'cstdio' ?
-#include <stdlib.h> // TODO Change 'stdlib.h' to 'cstdlib' ?
-#include <string.h> // TODO Change 'string.h' to 'cstring' ?
+#include <cstdio> // TODO Change 'stdio.h' to 'cstdio' ? I'm not sure we're allowed to use c++ libraries
+#include <cstdlib> // TODO Change 'stdlib.h' to 'cstdlib' ?
+#include <cstring> // TODO Change 'string.h' to 'cstring' ?
 
 #define STRING_LENGTH 1025 // 1024 + \0
 #define QUERY_IMG_MSG "Please enter an image path:\n"
@@ -66,7 +67,6 @@ int main (int argc, char *argv[]) {
 		printf(QUERY_IMG_MSG);
 		fflush(stdout);
 		scanf("%1024s",query);
-		query[strlen(query) - 1] = '\0'; // delete the \n from the end of the query
 		//TODO check if the query path is valid
 		//TODO get features of the new image
 		//TODO find matches (KDTree search)

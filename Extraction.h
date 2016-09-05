@@ -1,6 +1,6 @@
 #ifndef EXTRACTION_H_
 #define EXTRACTION_H_
-
+#include "SPPoint.h"
 /*
  * @@@@@@@@@@@
  *

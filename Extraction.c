@@ -1,6 +1,5 @@
 #include "SPConfig.h"
 #include "SPLogger.h"
-#include "SPImageProc.h"
 #include "SPPoint.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
