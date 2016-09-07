@@ -33,7 +33,7 @@ struct sp_config_t {
 };
 
 void ConfigErrorMsg(const char* filename, int lineNumber, SP_CONFIG_MSG* msg, char* errorMsg) {
-	switch (*msg) { // TODO try to make this function "smart" (with less duplication)
+	switch (*msg) {
 		case SP_CONFIG_MISSING_DIR: // spImagesDirectory is missing
 			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spImagesDirectory is not set\n",filename, lineNumber);
 			break;
@@ -67,9 +67,6 @@ void ConfigErrorMsg(const char* filename, int lineNumber, SP_CONFIG_MSG* msg, ch
 		case SP_CONFIG_INVALID_ARGUMENT: // filename == NULL
 			snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c <config_filename>\n");
 			break;
-		case SP_CONFIG_INDEX_OUT_OF_RANGE:
-			//TODO Check when this error happens, Check error string
-			break;
 		default:
 			break;
 	}
@@ -92,11 +89,11 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 	if (strcmp(variableName,"\0") == 0) {
 		return true;
 	}
-	if (strcmp(variableName,"spImagesDirectory") == 0) { // TODO Check that the string contains no spaces
+	if (strcmp(variableName,"spImagesDirectory") == 0) {
 		config->spImagesDirectory = (char*) malloc(strlen(value));
 		strcpy(config->spImagesDirectory, value);
 		*nonDefaultParam = true;
-	} else if (strcmp(variableName,"spImagesPrefix") == 0) { // TODO Check that the string contains no spaces
+	} else if (strcmp(variableName,"spImagesPrefix") == 0) {
 		config->spImagesPrefix = (char*) malloc(strlen(value));
 		strcpy(config->spImagesPrefix, value);
 		*(nonDefaultParam+1) = true;
@@ -124,7 +121,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		} else {
 			config->spPCADimension = atoi(value);
 		}
-	} else if (strcmp(variableName,"spPCAFilename") == 0) { // TODO Check that the string contains no spaces
+	} else if (strcmp(variableName,"spPCAFilename") == 0) {
 		config->spPCAFilename = (char*) malloc(strlen(value));
 		strcpy(config->spPCAFilename, value);
 	} else if (strcmp(variableName,"spNumOfFeatures") == 0) {
@@ -184,7 +181,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		} else {
 			config->spLoggerLevel = atoi(value);
 		}
-	} else if (strcmp(variableName,"spLoggerFilename") == 0) { // TODO Check that the string contains no spaces
+	} else if (strcmp(variableName,"spLoggerFilename") == 0) {
 		config->spLoggerFilename = (char*) malloc(strlen(value));
 		strcpy(config->spLoggerFilename, value);
 	} else {

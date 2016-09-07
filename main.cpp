@@ -26,14 +26,11 @@ int main (int argc, char *argv[]) {
 	SPPoint* featuresArray;
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
-	if (config_msg != SP_CONFIG_SUCCESS) { // Print error as regular message
-		// TODO print error as 'regular message'
-		// TODO Free memory (including the logger spLogger))
-		// TODO Terminate the program
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		//TODO print error
 		return EXIT_FAILURE;
 	}
-	const char* testFile = "basicLoggerInfoTest.log";
-	if (spLoggerCreate(testFile,SP_LOGGER_INFO_WARNING_ERROR_LEVEL) != SP_LOGGER_SUCCESS){
+	if(!initLogger(config)){
 		//TODO print error
 		return EXIT_FAILURE;
 	}
