@@ -16,33 +16,28 @@ extern "C" {
 
 using namespace sp;
 
+
 int main (int argc, char *argv[]) {
-	char* filename, *imagePath;
-	char query[STRING_LENGTH] = {'\0'};
+	char filename[STRING_LENGTH], imagePath[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SPConfig config;
 	ImageProc *imageProc = NULL;
 	int index, numOfImages, numOfFeats;
 	SPPoint* featuresArray;
-	if (argc > 3) {
-		filename = NULL;
-	} else if ((argc == 3)and(argv[1][0] == '-')and(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
-		filename = argv[2];
-	} else { // Use default configuration file
-		filename = (char*)"spcbir.config";
-	}
+	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
-	if (config_msg != SP_CONFIG_SUCCESS) { // Print error as regular message
-		// TODO error occurred
-		// TODO Free memory (including the logger spLogger))
-		// TODO Terminate the program
+	config = spConfigCreate(filename, &config_msg); // Load the configuration file
+	config = spConfigCreate(filename, &config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		//TODO print error
+		return EXIT_FAILURE;
 	}
-	// TODO activate the logger
-	try {
-		imageProc = new ImageProc(config);
-	} catch(...) {
-		//TODO ImageProc error, terminate
+	const char* testFile = "basicLoggerInfoTest.log";
+	if (spLoggerCreate(testFile,SP_LOGGER_INFO_WARNING_ERROR_LEVEL) != SP_LOGGER_SUCCESS){
+		//TODO print error
+		return EXIT_FAILURE;
 	}
+	imageProc = new ImageProc(config);
 	if (spConfigIsExtractionMode(config,&config_msg)) {
 		numOfImages = spConfigGetNumOfImages(config,&config_msg);
 		for (index=0;index<numOfImages;index++) {
@@ -50,7 +45,7 @@ int main (int argc, char *argv[]) {
 			if (config_msg != SP_CONFIG_SUCCESS) {
 				//TODO error
 			}
-			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats);
+			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats); //TODO can't move this function from the main because of imageProc
 			if (featuresArray == NULL) {
 				//TODO error
 			}

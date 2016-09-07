@@ -384,6 +384,7 @@ int spConfigGetNumOfImages(const SPConfig config, SP_CONFIG_MSG* msg) {
 	assert(msg != NULL);
 	if (config == NULL) {
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
 	} else{
 		*msg = SP_CONFIG_SUCCESS;
 	}
@@ -394,6 +395,7 @@ int spConfigGetNumOfFeatures(const SPConfig config, SP_CONFIG_MSG* msg) {
 	assert(msg != NULL);
 	if (config == NULL) {
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
 	} else {
 		*msg = SP_CONFIG_SUCCESS;
 	}
@@ -404,6 +406,7 @@ int spConfigGetPCADim(const SPConfig config, SP_CONFIG_MSG* msg) {
 	assert(msg != NULL);
 	if (config == NULL) {
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
 	} else {
 		*msg = SP_CONFIG_SUCCESS;
 	}
@@ -437,6 +440,44 @@ SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config) {
 		return SP_CONFIG_INVALID_ARGUMENT;
 	}
 	snprintf(pcaPath,STRING_LENGTH,"%s%s",config->spImagesDirectory,config->spPCAFilename);
+	return SP_CONFIG_SUCCESS;
+}
+SP_SPLIT_METHOD spConfigGetKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg){
+	assert(msg != NULL);
+	if (config == NULL) {
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return NULL;
+	} else {
+		*msg = SP_CONFIG_SUCCESS;
+	}
+	return config->spKDTreeSplitMethod;
+}
+int spConfigGetKNN(const SPConfig config, SP_CONFIG_MSG* msg) {
+	assert(msg != NULL);
+	if (config == NULL) {
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
+	} else {
+		*msg = SP_CONFIG_SUCCESS;
+	}
+	return config->spKNN;
+}
+int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg) {
+	assert(msg != NULL);
+	if (config == NULL) {
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
+	} else {
+		*msg = SP_CONFIG_SUCCESS;
+	}
+	return config->spLoggerLevel;
+}
+
+SP_CONFIG_MSG spConfigGetLoggerFileName(char* fileName, const SPConfig config) {
+	if (fileName == NULL || config == NULL) {
+		return SP_CONFIG_INVALID_ARGUMENT;
+	}
+	snprintf(fileName,STRING_LENGTH,"%s",config->spLoggerFilename);
 	return SP_CONFIG_SUCCESS;
 }
 
