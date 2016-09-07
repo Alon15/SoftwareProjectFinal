@@ -24,16 +24,18 @@ int main (int argc, char *argv[]) {
 	ImageProc *imageProc = NULL;
 	int index, numOfImages, numOfFeats;
 	SPPoint* featuresArray;
-	if (argc > 2) {
+	if (argc > 3) {
 		filename = NULL;
-	} else if (argc == 2) {
-		filename = argv[1];
-	} else {
+	} else if ((argc == 3)and(argv[1][0] == '-')and(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		filename = argv[2];
+	} else { // Use default configuration file
 		filename = (char*)"spcbir.config";
 	}
-	config = spConfigCreate(filename, &config_msg);
-	if (config_msg != SP_CONFIG_SUCCESS) {
-		//TODO error
+	config = spConfigCreate(filename, &config_msg); // Load the configuration file
+	if (config_msg != SP_CONFIG_SUCCESS) { // Print error as regular message
+		// TODO error occurred
+		// TODO Free memory (including the logger spLogger))
+		// TODO Terminate the program
 	}
 	// TODO activate the logger
 	try {

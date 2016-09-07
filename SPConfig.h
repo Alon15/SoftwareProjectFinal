@@ -1,3 +1,4 @@
+// Notice - "The header file is not complete and you will probably need to extend it."
 #ifndef SPCONFIG_H_
 #define SPCONFIG_H_
 
