@@ -9,17 +9,17 @@
 
 #define STRING_LENGTH 1025 // 1024 + \0
 
-void getFileName(char* filename, int argc, char** argv){
+void getFileName(char* filename, int argc, char** argv) {
 	if (argc > 3) {
 		filename = NULL;
-	} else if ((argc == 3) && (argv[1][0] == '-') && (argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+	} else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
 		strcpy(filename,argv[2]);
 	} else { // Use default configuration file
 		strcpy(filename,"spcbir.config");
 	}
 }
 SP_LOGGER_LEVEL parseLoggerLevel(int level){
-	switch(level){
+	switch(level) {
 	case 1:
 		return SP_LOGGER_ERROR_LEVEL;
 	case 2:
@@ -29,6 +29,7 @@ SP_LOGGER_LEVEL parseLoggerLevel(int level){
 	case 4:
 		return SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL;
 	}
+	return NULL;
 }
 bool initLogger(SPConfig config){
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "KDTreeNode.h"
+#include "SPconfig.h"
 #include "SPKDArray.h"
 
 // Tree datatype
@@ -12,10 +13,17 @@ struct kd_tree_node_t {
 };
 
 // creates one node tree with the value 'a'
-KDTreeNode* createNode(int a) {
-	KDTreeNode* node = malloc(sizeof(*node));
-	node->dim = NULL;
-	node->val = NULL;
+KDTreeNode createNode(int a) {
+	// Function variables
+	KDTreeNode node;
+	// Allocate memory
+	node = (KDTreeNode) malloc(sizeof(*node));
+	if (node == NULL) { // Memory allocation error
+		return NULL;
+	}
+	// Function body
+	node->dim = 0;
+	node->val = 0;
 	node->left = NULL;
 	node->right = NULL;
 	node->data = a;
@@ -25,9 +33,16 @@ KDTreeNode* createNode(int a) {
 /* Given an array 'arr' the function returns a new
  * tree with the values of 'arr'*/
 KDTreeNode* createFromArray(const SPConfig config, int* arr, int size) {
+	// Function variables
 	int mid;
 	SP_SPLIT_METHOD splitMethod;
 	KDTreeNode* root;
+	// Allocate memory
+	root = (KDTreeNode) malloc(sizeof(*root));
+	if (root == NULL) { // Memory allocation error
+			return NULL;
+	}
+	// Function body
 	if (size == 0 || !arr) {
 		root = NULL;
 	} else if (size == 1) {
@@ -58,7 +73,7 @@ KDTreeNode* createFromArray(const SPConfig config, int* arr, int size) {
 }
 
 // Frees all allocation associated with the tree given by root
-void destroyArray(KDTreeNode* root) {
+void destroyArray(KDTreeNode root) {
 	if (!root) {
 		return;
 	}

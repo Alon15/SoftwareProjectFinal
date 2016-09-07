@@ -1,6 +1,10 @@
 #ifndef SPKDARRAY_H_
 #define SPKDARRAY_H_
 
+#include "SPPoint.h"
+
+typedef struct kd_array_t *SPKDArray;
+
 /*
  * Initializes the kd-array with the data given by arr. The complexity of
  * this operation is O(d X nlog(n))
@@ -8,7 +12,7 @@
  * @param TODO
  * @return TODO
  */
-Init(SPPoint* arr, int size);
+SPKDArray Init(SPPoint* arr, int size, int** inptMtrx = NULL);
 
 /*
  * Returns two kd-arrays (kdLeft, kdRight) such that the first [n/2] points
@@ -18,6 +22,6 @@ Init(SPPoint* arr, int size);
  * @param TODO
  * @return TODO
  */
-Split(SPKDArray kdArr, int coor);
+SPKDArray* Split(SPKDArray kdArr, int coor);
 
 #endif /* SPKDARRAY_H_ */
