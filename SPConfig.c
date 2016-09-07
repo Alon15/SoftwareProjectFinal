@@ -33,7 +33,7 @@ struct sp_config_t {
 };
 
 void ConfigErrorMsg(const char* filename, int lineNumber, SP_CONFIG_MSG* msg, char* errorMsg) {
-	switch (*msg) {
+	switch (*msg) { // TODO try to make this function "smart" (with less duplication)
 		case SP_CONFIG_MISSING_DIR: // spImagesDirectory is missing
 			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spImagesDirectory is not set\n",filename, lineNumber);
 			break;
