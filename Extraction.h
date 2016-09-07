@@ -9,9 +9,9 @@
 bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats);
 
 /*
- * @@@@@@@@@@@ TODO
+ * @@@@@@@@@@@
  *
- * @@@@@@@@@@@ TODO
+ * @@@@@@@@@@@
  */
 SPPoint* ImportFeats(const char* path, int* numOfFeats);
 
