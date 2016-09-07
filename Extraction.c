@@ -10,7 +10,7 @@
 #define BUFFER_SIZE 1024
 #define MAX_FEATURE_DIM 28
 
-void WriteFeat(FILE* featsFile, SPPoint feature){
+bool WriteFeat(FILE* featsFile, SPPoint feature){
 	char storedFeat[STRING_LENGTH];
 	char dataTruc[50];
 	size_t success;
@@ -27,7 +27,9 @@ void WriteFeat(FILE* featsFile, SPPoint feature){
 	success = fwrite(storedFeat,1,strlen(storedFeat),featsFile);
 	if (success == 0) {
 		// TODO error
+		return false;
 	}
+	return true;
 }
 
 bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
@@ -51,7 +53,10 @@ bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
 		return false;
 	}
 	for (i=0;i<numOfFeats;i++) {
-		WriteFeat(featsFile,feats[i]);
+		if (!WriteFeat(featsFile,feats[i])){
+			//TODO error
+			return false;
+		}
 	}
 	fclose(featsFile);
 	return true;

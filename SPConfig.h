@@ -1,4 +1,3 @@
-// Notice - "The header file is not complete and you will probably need to extend it."
 #ifndef SPCONFIG_H_
 #define SPCONFIG_H_
 
@@ -200,6 +199,57 @@ SP_CONFIG_MSG spConfigGetFeatsPath(char* imagePath, const SPConfig config,int in
  *  - SP_CONFIG_SUCCESS - in case of success
  */
 SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config);
+
+
+/*
+ * Returns the split method chosen for the KDTree.
+ *
+ * @param config - the configuration structure
+ * @assert msg != NULL
+ * @param msg - pointer in which the msg returned by the function is stored
+ * @return SP_SPLIT_METHOD in success, BULL otherwise.
+ *
+ * - SP_CONFIG_INVALID_ARGUMENT - if config == NULL
+ * - SP_CONFIG_SUCCESS - in case of success
+ */
+SP_SPLIT_METHOD spConfigGetKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg);
+
+/*
+ * Returns the KNN parameter chosen for the KDTree.
+ *
+ * @param config - the configuration structure
+ * @assert msg != NULL
+ * @param msg - pointer in which the msg returned by the function is stored
+ * @return positive integer in success, negative integer otherwise.
+ *
+ * - SP_CONFIG_INVALID_ARGUMENT - if config == NULL
+ * - SP_CONFIG_SUCCESS - in case of success
+ */
+int spConfigGetKNN(const SPConfig config, SP_CONFIG_MSG* msg);
+
+/*
+ * Returns the logger level chosen for the logger.
+ *
+ * @param config - the configuration structure
+ * @assert msg != NULL
+ * @param msg - pointer in which the msg returned by the function is stored
+ * @return 1, 2, 3 or 4 in success, negative integer otherwise.
+ *
+ * - SP_CONFIG_INVALID_ARGUMENT - if config == NULL
+ * - SP_CONFIG_SUCCESS - in case of success
+ */
+int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg);
+
+/**
+ * The function stores in fileName the name of the logger file.
+ *
+ * @param fileName - an address to store the result in, it must contain enough space.
+ * @param config - the configuration structure
+ * @return
+ *  - SP_CONFIG_INVALID_ARGUMENT - if imagePath == NULL or config == NULL
+ *  - SP_CONFIG_SUCCESS - in case of success
+ */
+SP_CONFIG_MSG spConfigGetLoggerFileName(char* fileName, const SPConfig config);
 
 /**
  * Frees all memory resources associate with config. 
