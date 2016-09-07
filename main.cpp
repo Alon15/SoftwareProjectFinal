@@ -28,8 +28,10 @@ int main (int argc, char *argv[]) {
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	config = spConfigCreate(filename, &config_msg);
-	if (config_msg != SP_CONFIG_SUCCESS) {
-		//TODO print error
+	if (config_msg != SP_CONFIG_SUCCESS) { // Print error as regular message
+		// TODO print error as 'regular message'
+		// TODO Free memory (including the logger spLogger))
+		// TODO Terminate the program
 		return EXIT_FAILURE;
 	}
 	const char* testFile = "basicLoggerInfoTest.log";
