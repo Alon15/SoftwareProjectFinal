@@ -34,6 +34,6 @@
 # Eclipse
 /Default/
 /Debug/
-/.aettings/
+/.settings/
 .cproject
 .project
