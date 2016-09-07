@@ -27,7 +27,10 @@ int main (int argc, char *argv[]) {
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	if (config_msg != SP_CONFIG_SUCCESS) {
-		//TODO print error
+		// TODO Error already been printed at 'spConfigCreate'
+		// TODO Error printed as 'regular message'
+		// TODO Free memory (including the logger spLogger))
+		// TODO Terminate the program
 		return EXIT_FAILURE;
 	}
 	if(!initLogger(config)){
