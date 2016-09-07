@@ -200,19 +200,16 @@ SP_CONFIG_MSG spConfigGetFeatsPath(char* imagePath, const SPConfig config,int in
  */
 SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config);
 
-
-/*
+/**
  * Returns the split method chosen for the KDTree.
  *
+ * @param splitMethod - an address to store the result in.
  * @param config - the configuration structure
- * @assert msg != NULL
- * @param msg - pointer in which the msg returned by the function is stored
- * @return SP_SPLIT_METHOD in success, BULL otherwise.
- *
- * - SP_CONFIG_INVALID_ARGUMENT - if config == NULL
- * - SP_CONFIG_SUCCESS - in case of success
+ * @return
+ *  - SP_CONFIG_INVALID_ARGUMENT - if splitMethod == NULL or config == NULL
+ *  - SP_CONFIG_SUCCESS - in case of success
  */
-SP_SPLIT_METHOD spConfigGetKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg);
+SP_CONFIG_MSG spConfigGetKDTreeSplitMethod(SP_SPLIT_METHOD* splitMethod, const SPConfig config);
 
 /*
  * Returns the KNN parameter chosen for the KDTree.
@@ -246,7 +243,7 @@ int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg);
  * @param fileName - an address to store the result in, it must contain enough space.
  * @param config - the configuration structure
  * @return
- *  - SP_CONFIG_INVALID_ARGUMENT - if imagePath == NULL or config == NULL
+ *  - SP_CONFIG_INVALID_ARGUMENT - if fileName == NULL or config == NULL
  *  - SP_CONFIG_SUCCESS - in case of success
  */
 SP_CONFIG_MSG spConfigGetLoggerFileName(char* fileName, const SPConfig config);

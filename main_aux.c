@@ -10,7 +10,7 @@
 void getFileName(char* filename, int argc, char** argv){
 	if (argc > 3) {
 		filename = NULL;
-	} else if ((argc == 3) || (argv[1][0] == '-') || (argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+	} else if ((argc == 3) && (argv[1][0] == '-') && (argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
 		strcpy(filename,argv[2]);
 	} else { // Use default configuration file
 		strcpy(filename,"spcbir.config");
