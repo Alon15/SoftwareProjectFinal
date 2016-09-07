@@ -442,16 +442,15 @@ SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config) {
 	snprintf(pcaPath,STRING_LENGTH,"%s%s",config->spImagesDirectory,config->spPCAFilename);
 	return SP_CONFIG_SUCCESS;
 }
-SP_SPLIT_METHOD spConfigGetKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg){
-	assert(msg != NULL);
-	if (config == NULL) {
-		*msg = SP_CONFIG_INVALID_ARGUMENT;
-		return NULL;
-	} else {
-		*msg = SP_CONFIG_SUCCESS;
+
+SP_CONFIG_MSG spConfigGetKDTreeSplitMethod(SP_SPLIT_METHOD* splitMethod, const SPConfig config) {
+	if (splitMethod == NULL || config == NULL) {
+		return SP_CONFIG_INVALID_ARGUMENT;
 	}
-	return config->spKDTreeSplitMethod;
+	*splitMethod = config->spKDTreeSplitMethod;
+	return SP_CONFIG_SUCCESS;
 }
+
 int spConfigGetKNN(const SPConfig config, SP_CONFIG_MSG* msg) {
 	assert(msg != NULL);
 	if (config == NULL) {
@@ -462,6 +461,7 @@ int spConfigGetKNN(const SPConfig config, SP_CONFIG_MSG* msg) {
 	}
 	return config->spKNN;
 }
+
 int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg) {
 	assert(msg != NULL);
 	if (config == NULL) {

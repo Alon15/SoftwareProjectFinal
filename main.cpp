@@ -26,8 +26,6 @@ int main (int argc, char *argv[]) {
 	SPPoint* featuresArray;
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
-	config = spConfigCreate(filename, &config_msg); // Load the configuration file
-	config = spConfigCreate(filename, &config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		//TODO print error
 		return EXIT_FAILURE;
