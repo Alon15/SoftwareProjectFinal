@@ -6,13 +6,21 @@
 typedef struct kd_array_t *SPKDArray;
 
 /*
+ * TODO
+ *
+ * @param TODO
+ * @return TODO
+ */
+SPKDArray Init(SPPoint* arr, int size);
+
+/*
  * Initializes the kd-array with the data given by arr. The complexity of
  * this operation is O(d X nlog(n))
  *
  * @param TODO
  * @return TODO
  */
-SPKDArray Init(SPPoint* arr, int size, int** inptMtrx = NULL);
+SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx);
 
 /*
  * Returns two kd-arrays (kdLeft, kdRight) such that the first [n/2] points

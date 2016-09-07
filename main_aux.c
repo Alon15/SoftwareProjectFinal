@@ -29,7 +29,7 @@ SP_LOGGER_LEVEL parseLoggerLevel(int level){
 	case 4:
 		return SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL;
 	}
-	return NULL;
+	return SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL;
 }
 bool initLogger(SPConfig config){
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;

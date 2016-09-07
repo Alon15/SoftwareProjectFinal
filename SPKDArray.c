@@ -10,8 +10,13 @@ struct kd_array_t {
 	int** matrix; // Matrix for splitting purposes
 };
 
+//
+SPKDArray Init(SPPoint* arr, int size) {
+	return InitFast(arr,size,NULL);
+}
+
 // Initializes the kd-array with the data given by arr.
-SPKDArray Init(SPPoint* arr, int size, int** inptMtrx = NULL) {
+SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	// Function variables
 	int i,j; // Generic loop variable
 	SPKDArray KDarray;
@@ -62,7 +67,7 @@ SPKDArray* Split(SPKDArray kdArr, int coor) {
 	KDarrayLeft = (SPKDArray) malloc(sizeof(*KDarrayLeft));
 	KDarrayRight = (SPKDArray) malloc(sizeof(*KDarrayRight));
 	// Function body
-	KDarrayLeft = Init(kdArr,(kdArr->size)/2,kdArr->matrix); // TODO fix this line
-	KDarrayRight = Init(kdArr,(kdArr->size)-((kdArr->size)/2),kdArr->matrix); // TODO fix this line
+	KDarrayLeft = InitFast(kdArr,(kdArr->size)/2,kdArr->matrix); // TODO fix this line
+	KDarrayRight = InitFast(kdArr,(kdArr->size)-((kdArr->size)/2),kdArr->matrix); // TODO fix this line
 	return NULL; // TODO fix this line
 }

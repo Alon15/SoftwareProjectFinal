@@ -17,7 +17,7 @@ KDTreeNode createNode(int a);
  *
  * @@@@@@@@@@@ TODO
  */
-KDTreeNode* createFromArray(const SPConfig config, int* arr, int size);
+KDTreeNode* createFromArray(SPConfig config, int* arr, int size);
 
 /*
  * @@@@@@@@@@@ TODO

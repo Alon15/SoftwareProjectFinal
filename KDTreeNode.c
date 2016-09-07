@@ -32,12 +32,14 @@ KDTreeNode createNode(int a) {
 
 /* Given an array 'arr' the function returns a new
  * tree with the values of 'arr'*/
-KDTreeNode* createFromArray(const SPConfig config, int* arr, int size) {
+KDTreeNode* createFromArray(SPConfig config, int* arr, int size) {
 	// Function variables
 	int mid;
+	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	KDTreeNode* root;
 	// Allocate memory
+	config_msg = SP_CONFIG_SUCCESS;
 	root = (KDTreeNode) malloc(sizeof(*root));
 	if (root == NULL) { // Memory allocation error
 			return NULL;
@@ -48,10 +50,11 @@ KDTreeNode* createFromArray(const SPConfig config, int* arr, int size) {
 	} else if (size == 1) {
 		root = createNode(arr[0]);
 	} else {
-		if (spConfigGetKDTreeSplitMethod(splitMethod, config) != SP_CONFIG_SUCCESS) {
-			// TODO Error
+		config_msg = spConfigGetKDTreeSplitMethod(splitMethod,config);
+		if (config_msg != SP_CONFIG_SUCCESS) {
+			//TODO error
 		}
-		switch (*splitMethod) {
+		switch (splitMethod) {
 			case RANDOM:
 
 				break;
