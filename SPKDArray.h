@@ -8,7 +8,7 @@
  * @param TODO
  * @return TODO
  */
-Init(SPPoint* arr, int size)
+Init(SPPoint* arr, int size);
 
 /*
  * Returns two kd-arrays (kdLeft, kdRight) such that the first [n/2] points
@@ -18,6 +18,6 @@ Init(SPPoint* arr, int size)
  * @param TODO
  * @return TODO
  */
-Split(SPKDArray kdArr, int coor)
+Split(SPKDArray kdArr, int coor);
 
 #endif /* SPKDARRAY_H_ */
