@@ -13,7 +13,7 @@ struct kd_tree_node_t {
 };
 
 // creates one node tree with the value 'a'
-KDTreeNode createNode(int a) {
+KDTreeNode createKDNode(int a) {
 	// Function variables
 	KDTreeNode node;
 	// Allocate memory
@@ -50,7 +50,7 @@ KDTreeNode* createFromArray(SPConfig config, int* arr, int size) {
 	} else if (size == 1) {
 		root = createNode(arr[0]);
 	} else {
-		config_msg = spConfigGetKDTreeSplitMethod(splitMethod,config);
+		config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
 		if (config_msg != SP_CONFIG_SUCCESS) {
 			//TODO error
 		}
