@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 				//TODO free memory (logger + imageProc + config)
 				return EXIT_FAILURE;
 			}
-			if (ExportFeats(imagePath,featuresArray,numOfFeats)) {
+			if (!ExportFeats(imagePath,featuresArray,numOfFeats)) {
 				//TODO free memory (logger + imageProc + config + featuresArray and his elements)
 				return EXIT_FAILURE;
 			}
