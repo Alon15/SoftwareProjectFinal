@@ -40,4 +40,12 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx);
  */
 SPKDArray* Split(SPKDArray kdArr, int coor);
 
+int spKDArrayGetDimension(SPKDArray array);
+
+int spKDArrayGetSize(SPKDArray array);
+
+SPPoint* spKDArrayGetPoints(SPKDArray array);
+
+int** spKDArrayGetMatrix(SPKDArray array);
+
 #endif /* SPKDARRAY_H_ */

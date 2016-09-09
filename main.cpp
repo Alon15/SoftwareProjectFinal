@@ -5,6 +5,7 @@ extern "C" {
 #include "SPConfig.h"
 #include "SPLogger.h"
 #include "SPPoint.h"
+#include "SPKDArray.h" // TODO DEBUG DELME
 }
 #include <cstdio> // TODO Change 'stdio.h' to 'cstdio' ? I'm not sure we're allowed to use c++ libraries
 #include <cstdlib> // TODO Change 'stdlib.h' to 'cstdlib' ?
@@ -16,8 +17,8 @@ extern "C" {
 
 using namespace sp;
 
-
 int main (int argc, char *argv[]) {
+	tmpFunc1();
 	char filename[STRING_LENGTH], imagePath[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SPConfig config;
@@ -77,4 +78,36 @@ int main (int argc, char *argv[]) {
 	spConfigDestroy(config);
 	//TODO figure out why the program crash here instead of peacefully end
 	return (EXIT_SUCCESS);
+}
+
+void tmpFunc1() { // TODO DEBUG DELME
+	double d0[] = {1,2};
+	double d1[] = {123,70};
+	double d2[] = {2,7};
+	double d3[] = {9,11};
+	double d4[] = {3,4};
+	SPPoint p0 = spPointCreate(d0,2,0);
+	SPPoint p1 = spPointCreate(d1,2,1);
+	SPPoint p2 = spPointCreate(d2,2,2);
+	SPPoint p3 = spPointCreate(d3,2,3);
+	SPPoint p4 = spPointCreate(d4,2,4);
+	SPPoint p[] = {p0,p1,p2,p3,p4};
+	SPKDArray k = Init(p,5);
+	//int dim = k->dim;
+	printf("OK\n");
+	printf("A: %d\n",spPointGetIndex(p[0]));
+	printf("B: %d\n",spPointGetDimension(p[0]));
+	fflush(stdout);
+	int d = spKDArrayGetDimension(k);
+	int s = spKDArrayGetSize(k);
+	printf("C: %d\n",d);
+	printf("D: %d\n",s);
+	fflush(stdout);
+	int** mtrx = spKDArrayGetMatrix(k);
+	for (int i=0;i<s;i++) {
+		for (int j=0;j<d;j++) {
+			printf("E: matrix[%d][%d] = %d\n",j,i,mtrx[j][i]);
+		}
+	}
+	fflush(stdout);
 }

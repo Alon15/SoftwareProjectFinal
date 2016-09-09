@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "SPKDArray.h"
 #include "SPPoint.h"
 #include "sort_r.h"
@@ -17,7 +18,7 @@ struct kd_array_t {
 int compare(const void *aIn, const void *bIn, void *thunkIn)
 {
 	const int *a = aIn, *b = bIn;
-	const int *thunk = thunkIn;
+	const double *thunk = thunkIn;
 	//float a   = *((float*)aIn); // TODO DEBUG DELME
 	//float b   = *((float*)bIn); // TODO DEBUG DELME
 	//int thunk = *((int*)thunkIn); // TODO DEBUG DELME
@@ -90,11 +91,6 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	KDarray->matrix = matrix_i;
 	// Free memory
     for(i=0;i<size;i++) {
-    	//for(j=0;j<dim;j++) { // TODO dim = 2
-        //	if (matrix_v[i][j]) { // A tiny chance for errors in some compilers
-        //        free(matrix_v[i][j]);
-        //	}
-    	//}
         if (matrix_v[i]) { // A tiny chance for errors in some compilers
         	free(matrix_v[i]);
         }
@@ -110,15 +106,37 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 //
 SPKDArray* Split(SPKDArray kdArr, int coor) {
 	// Function variables
+	int spltr;
 	SPKDArray KDarrayLeft;
 	SPKDArray KDarrayRight;
 	// Allocate memory
-	KDarrayLeft = (SPKDArray) malloc(sizeof(*KDarrayLeft));
-	KDarrayRight = (SPKDArray) malloc(sizeof(*KDarrayRight));
+	//KDarrayLeft = (SPKDArray) malloc(sizeof(*KDarrayLeft));
+	//KDarrayRight = (SPKDArray) malloc(sizeof(*KDarrayRight));
 	// Function body
+	spltr = (kdArr->size)/2;
 	if (coor == 0) { // TODO fix this line
-		KDarrayLeft = InitFast(kdArr,(kdArr->size)/2,kdArr->matrix); // TODO fix this line
-		KDarrayRight = InitFast(kdArr,(kdArr->size)-((kdArr->size)/2),kdArr->matrix); // TODO fix this line
+		KDarrayLeft = InitFast(kdArr,spltr,kdArr->matrix); // TODO fix this line
+		KDarrayRight = InitFast(kdArr,(kdArr->size)-spltr,kdArr->matrix); // TODO fix this line
 	}
 	return NULL; // TODO fix this line
+}
+
+int spKDArrayGetDimension(SPKDArray array) {
+	assert(array != NULL);
+	return array->dim;
+}
+
+int spKDArrayGetSize(SPKDArray array) {
+	assert(array != NULL);
+	return array->size;
+}
+
+SPPoint* spKDArrayGetPoints(SPKDArray array) {
+	assert(array != NULL);
+	return array->points;
+}
+
+int** spKDArrayGetMatrix(SPKDArray array) {
+	assert(array != NULL);
+	return array->matrix;
 }
