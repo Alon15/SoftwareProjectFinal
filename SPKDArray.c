@@ -14,14 +14,15 @@ struct kd_array_t {
 	int** matrix; // Matrix for splitting purposes
 };
 
+struct kd_array_pair_t {
+	SPKDArray left, right;
+};
+
 //
 int compare(const void *aIn, const void *bIn, void *thunkIn)
 {
 	const int *a = aIn, *b = bIn;
 	const double *thunk = thunkIn;
-	//float a   = *((float*)aIn); // TODO DEBUG DELME
-	//float b   = *((float*)bIn); // TODO DEBUG DELME
-	//int thunk = *((int*)thunkIn); // TODO DEBUG DELME
 	if (thunk[*a] < thunk[*b]) {
 		return -1;
 	} else if (thunk[*a] > thunk[*b]) {
@@ -31,13 +32,8 @@ int compare(const void *aIn, const void *bIn, void *thunkIn)
 	}
 }
 
-//
-SPKDArray Init(SPPoint* arr, int size) {
-	return InitFast(arr,size,NULL);
-}
-
 // Initializes the kd-array with the data given by arr.
-SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
+SPKDArray Init(SPPoint* arr, int size) {
 	// Function variables
 	int i,j; // Generic loop variable
 	int dim; // Points array dimension
@@ -49,25 +45,22 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	KDarray = (SPKDArray) malloc(sizeof(*KDarray));
 	matrix_v = (double **)malloc(dim * sizeof(double*));
 	matrix_i = (int **)malloc(dim * sizeof(int*));
-	if ((KDarray == NULL)||(matrix_v == NULL)||(matrix_i == NULL)) { // Memory allocation error
-		return NULL;
-	}
 	KDarray->points = (SPPoint *) malloc(size * sizeof(*KDarray->points));
-	if (KDarray->points == NULL) { // Memory allocation error
+	if ((KDarray == NULL)||(matrix_v == NULL)||(matrix_i == NULL)||(KDarray->points == NULL)) { // Memory allocation error
 		free(KDarray);
 		free(matrix_v);
 		free(matrix_i);
+		free(KDarray->points);
 		return NULL;
 	}
-	// TODO only if inptMtrx == NULL :
 	for (i=0;i<dim;i++) {
 		matrix_v[i] = (double *)malloc(size * sizeof(double));
 		matrix_i[i] = (int *)malloc(size * sizeof(int));
 		if ((matrix_v[i] == NULL)||(matrix_i[i] == NULL)) { // Memory allocation error
-			free(KDarray->points);
 			free(KDarray);
 			free(matrix_v);
 			free(matrix_i);
+			free(KDarray->points);
 			return NULL;
 		}
 	}
@@ -81,12 +74,8 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 			matrix_i[j][i] = i; //										|   0 |   1 |   2 |   3 |   4 |
 		} //												 matrix_i = |   0 |   1 |   2 |   3 |   4 |
 	}
-	if (inptMtrx == NULL) {
-		for (i=0;i<dim;i++) { // Foreach dim
-			qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),compare,matrix_v[i]);
-		}
-	} else {
-		matrix_i = NULL;//inptMtrx; // TODO fix this line
+	for (i=0;i<dim;i++) { // Foreach dim
+		qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),compare,matrix_v[i]);
 	}
 	KDarray->matrix = matrix_i;
 	// Free memory
@@ -104,40 +93,103 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 }
 
 //
-SPKDArray* Split(SPKDArray kdArr, int coor) {
+SPKDArrayPair Split(SPKDArray kdArr, int coor) {
 	// Function variables
-	int i; // Generic loop variable
-	int spltr;
-	SPPoint* pointsLeft, pointsRight;
-	SPKDArray KDarrayLeft;
-	SPKDArray KDarrayRight;
+	int i,j; // Generic loop variable
+	int pointerLeft, pointerRight; // The pointers for the matrix splitting
+	int spltr, tmpIndex; // Variables that hold some repeated calculations
+	int* supportSide; // Two arrays that support the matrix splitting
+	int* supportSub; // Two arrays that support the matrix splitting
+	SPPoint* pointsLeft;
+	SPPoint* pointsRight;
+	int** matrixLeft;
+	int** matrixRight;
+	SPKDArrayPair res;
 	// Allocate memory
 	spltr = (kdArr->size)/2; // Ex. 5/2=3
+	supportSide = (int *) malloc(kdArr->size * sizeof(int));
+	supportSub = (int *) malloc(kdArr->size * sizeof(int));
 	pointsLeft = (SPPoint *) malloc(spltr * sizeof(*pointsLeft));
-	pointsRight = (SPPoint *) malloc(spltr * sizeof(*pointsRight));
-	if ((pointsLeft == NULL)||(pointsRight == NULL)) { // Memory allocation error
+	pointsRight = (SPPoint *) malloc(((kdArr->size)-spltr) * sizeof(*pointsRight));
+	matrixLeft = (int **)malloc(kdArr->dim * sizeof(int*));
+	matrixRight = (int **)malloc(kdArr->dim * sizeof(int*));
+	res = (SPKDArrayPair) malloc(sizeof(*res));
+	if ((supportSide == NULL)||(supportSub == NULL)||(pointsLeft == NULL)||(pointsRight == NULL)||(matrixLeft == NULL)||(matrixRight == NULL)||(res == NULL)) { // Memory allocation error
+		free(supportSide);
+		free(supportSub);
+		free(pointsLeft);
+		free(pointsRight);
+		free(matrixLeft);
+		free(matrixRight);
+		free(res);
 		return NULL;
 	}
-	//KDarrayLeft = (SPKDArray) malloc(sizeof(*KDarrayLeft));
-	//KDarrayRight = (SPKDArray) malloc(sizeof(*KDarrayRight));
-	// Function body
-	for (i=0;i<kdArr->size;i++) {
-		if (i < spltr) {
-			pointsLeft[i] = kdArr->points[kdArr->matrix[coor][i]];
-		} else {
-			pointsRight[i-spltr] = kdArr->points[kdArr->matrix[coor][i]];
+	for (i=0;i<kdArr->dim;i++) {
+		matrixLeft[i] = (int *)malloc(spltr * sizeof(int));
+		matrixRight[i] = (int *)malloc(((kdArr->size)-spltr) * sizeof(int));
+		if ((matrixLeft[i] == NULL)||(matrixRight[i] == NULL)) { // Memory allocation error
+			free(supportSide);
+			free(supportSub);
+			free(pointsLeft);
+			free(pointsRight);
+			free(matrixLeft);
+			free(matrixRight);
+			free(res);
+			return NULL;
 		}
 	}
-	//KDarrayLeft->dim = kdArr->dim;
-	//KDarrayRight->dim = kdArr->dim;
-	//KDarrayLeft->size = spltr;
-	//KDarrayRight->size = (kdArr->size)-spltr;
-	if (coor == 0) { // TODO fix this line
-		KDarrayLeft = InitFast(kdArr,spltr,kdArr->matrix,0); // TODO fix this line
-		KDarrayRight = InitFast(kdArr,(kdArr->size)-spltr,kdArr->matrix,spltr); // TODO fix this line
+	// Function body
+	for (i=0;i<kdArr->size;i++) {
+		tmpIndex = kdArr->matrix[coor][i];
+		if (i < spltr) { // This point go to the left
+			supportSide[tmpIndex] = 0;
+			supportSub[tmpIndex] = i-tmpIndex;
+			pointsLeft[i] = kdArr->points[tmpIndex];
+		} else { // This point go to the right
+			supportSide[tmpIndex] = 1;
+			supportSub[tmpIndex] = i-spltr-tmpIndex;
+			pointsRight[i-spltr] = kdArr->points[tmpIndex];
+		}
 	}
-	spKDArrayDestroy(kdArr);
-	return {KDarrayLeft, KDarrayRight};
+	// The example from FinalProject.pdf (page 10) will look like:
+	// supportSide = [0,1,0,1,0]
+	// supportSub = [0,0,-1,-3,-2]
+	// pointsLeft = [a,c,e]
+	// pointsRight = [d,b]
+	// So far the complexity is O( MAX(d,n) )
+	for (i=0;i<kdArr->dim;i++) {
+		pointerLeft = 0;
+		pointerRight = 0;
+		for (j=0;j<kdArr->size;j++) {
+			tmpIndex = kdArr->matrix[i][j];
+			if (supportSide[tmpIndex] == 0) { // This point go to the left
+				matrixLeft[i][pointerLeft] = tmpIndex+supportSub[tmpIndex];
+				pointerLeft+=1;
+			} else { // This point go to the right
+				matrixRight[i][pointerRight] = tmpIndex+supportSub[tmpIndex];
+				pointerRight+=1;
+			}
+		}
+	}
+	res->left->dim = kdArr->dim;
+	res->left->size = spltr;
+	res->left->points = pointsLeft;
+	res->left->matrix = matrixLeft;
+	res->right->dim = kdArr->dim;
+	res->right->size = (kdArr->size)-spltr;
+	res->right->points = pointsRight;
+	res->right->matrix = matrixRight;
+	// Free memory
+    if (supportSide) { // A tiny chance for errors in some compilers
+    	free(supportSide);
+    	supportSide = NULL; // Preventing a "double-free"
+    }
+    if (supportSub) { // A tiny chance for errors in some compilers
+    	free(supportSub);
+    	supportSub = NULL; // Preventing a "double-free"
+    }
+	// Finish
+	return res;
 }
 
 void spKDArrayDestroy(SPKDArray array) {
