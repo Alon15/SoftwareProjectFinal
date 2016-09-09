@@ -5,11 +5,7 @@
 #include <assert.h> // assert
 #include "SPConfig.h"
 #include "SPLogger.h"
-
-#define STRING_LENGTH 1025 // 1024 + \0
-#define BUFFER_SIZE 1024 // Size of the file read/write buffer
-#define NON_DEFAULT_CONFIG_PARAM 4 // Number of non default parameters in the config file
-#define CONFIG_PARAM 14 // Number of parameters in the config file
+#include "defines.h"
 
 struct sp_config_t {
 	// Input parameters

@@ -5,22 +5,14 @@ extern "C" {
 #include "SPConfig.h"
 #include "SPLogger.h"
 #include "SPPoint.h"
+#include "defines.h"
 }
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-#define STRING_LENGTH 1025 // 1024 + \0
-#define QUERY_IMG_MSG "Please enter an image path:\n"
-#define EXIT_MSG "Exiting...\n"
 
-// error messages
-#define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
-#define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
-#define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"
-
-//TODO move all the error messages and defines to new file?
-//TODO convery all the info messages literals to #define MSG format
+//TODO convert all the info messages literals to #define MSG format
 using namespace sp;
 
 int main (int argc, char *argv[]) {
