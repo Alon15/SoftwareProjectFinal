@@ -11,6 +11,14 @@ typedef struct kd_array_t *SPKDArray;
  * @param TODO
  * @return TODO
  */
+int compare(const void *aIn, const void *bIn, void *thunkIn);
+
+/*
+ * TODO
+ *
+ * @param TODO
+ * @return TODO
+ */
 SPKDArray Init(SPPoint* arr, int size);
 
 /*
