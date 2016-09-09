@@ -10,6 +10,11 @@ struct kd_array_t {
 	int** matrix; // Matrix for splitting purposes
 };
 
+int compare(const void *aIn, const void *bIn, void *thunkIn)
+{
+
+}
+
 //
 SPKDArray Init(SPPoint* arr, int size) {
 	return InitFast(arr,size,NULL);
@@ -20,11 +25,12 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	// Function variables
 	int i,j; // Generic loop variable
 	SPKDArray KDarray;
-	int **matrix;
+	int **matrix_v, **matrix_i; // Matrix of values + Matrix of index's
 	// Allocate memory
 	KDarray = (SPKDArray) malloc(sizeof(*KDarray));
-	matrix = (int **)malloc(2 * sizeof(int*)); // TODO dim = 2
-	if ((KDarray == NULL)||(matrix == NULL)) { // Memory allocation error
+	matrix_v = (int **)malloc(2 * sizeof(int*)); // TODO dim = 2
+	matrix_i = (int **)malloc(2 * sizeof(int*)); // TODO dim = 2
+	if ((KDarray == NULL)||(matrix_v == NULL)||(matrix_i == NULL)) { // Memory allocation error
 		return NULL;
 	}
 	KDarray->points = (SPPoint) malloc(sizeof(*KDarray->points));
@@ -34,8 +40,9 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	}
 	// TODO only if inptMtrx == NULL :
 	for (i=0;i<2;i++) { // TODO dim = 2
-		matrix[i] = (int *)malloc(size * sizeof(int));
-		if (matrix[i] == NULL) { // Memory allocation error
+		matrix_v[i] = (int *)malloc(size * sizeof(int));
+		matrix_i[i] = (int *)malloc(size * sizeof(int));
+		if ((matrix_v[i] == NULL)||(matrix_i[i] == NULL)) { // Memory allocation error
 			free(KDarray->points);
 			free(KDarray);
 			return NULL;
@@ -44,17 +51,37 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	// Function body
 	KDarray->dim = 2; // TODO dim = 2
 	KDarray->size = size;
-	KDarray->points = arr;
+	for (i=0;i<size;i++) {
+		KDarray->points[i] = arr[i]; // The example from FinalProject.pdf (page 10) will look like:
+		for (j=0;j<2;j++) { //										   |   0 |   1 |   2 |   3 |   4 |
+			matrix_i[j][i] = i; //							matrix_i = |   0 |   1 |   2 |   3 |   4 |
+			matrix_v[j][i] = KDarray->points[i]->data[j]; //		   |   1 | 123 |   2 |   9 |   3 |
+		} //												matrix_v = |   2 |  70 |   7 |  11 |   4 |
+	}
 	if (inptMtrx == NULL) {
 		for (i=0;i<2;i++) { // Foreach dim// TODO dim = 2
-			for (j=0;j<size;j++) { // TODO DEBUG DELME
-				matrix[i][j] = j; // TODO DEBUG DELME
-			} // TODO DEBUG DELME
+			qsort_r(matrix_i[i],size,sizeof(matrix_i[i][0]),compare,matrix_v[i]);
 		}
 	} else {
-		matrix = inptMtrx; // TODO fix this line
+		matrix_i = inptMtrx; // TODO fix this line
 	}
-	KDarray->matrix = matrix;
+	KDarray->matrix = matrix_i;
+	// Free memory
+    for(i=0;i<size;i++) {
+        for(j=0;j<2;j++) { // TODO dim = 2
+        	if (matrix_v[i][j]) { // A tiny chance for errors in some compilers
+                free(matrix_v[i][j]);
+        	}
+        }
+        if (matrix_v[i]) { // A tiny chance for errors in some compilers
+        	free(matrix_v[i]);
+        }
+    }
+    if (matrix_v) { // A tiny chance for errors in some compilers
+    	free(matrix_v);
+    	matrix_v = NULL; // Preventing a "double-free"
+    }
+	// Finish
 	return KDarray;
 }
 
