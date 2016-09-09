@@ -47,8 +47,8 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	// Allocate memory
 	dim = spPointGetDimension(arr[0]);
 	KDarray = (SPKDArray) malloc(sizeof(*KDarray));
-	matrix_v = (double **)malloc(dim * sizeof(double)); // TODO dim = 2
-	matrix_i = (int **)malloc(dim * sizeof(int*)); // TODO dim = 2
+	matrix_v = (double **)malloc(dim * sizeof(double*));
+	matrix_i = (int **)malloc(dim * sizeof(int*));
 	if ((KDarray == NULL)||(matrix_v == NULL)||(matrix_i == NULL)) { // Memory allocation error
 		return NULL;
 	}
@@ -60,7 +60,7 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 		return NULL;
 	}
 	// TODO only if inptMtrx == NULL :
-	for (i=0;i<dim;i++) { // TODO dim = 2
+	for (i=0;i<dim;i++) {
 		matrix_v[i] = (double *)malloc(size * sizeof(double));
 		matrix_i[i] = (int *)malloc(size * sizeof(int));
 		if ((matrix_v[i] == NULL)||(matrix_i[i] == NULL)) { // Memory allocation error
@@ -72,7 +72,7 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 		}
 	}
 	// Function body
-	KDarray->dim = dim; // TODO dim = 2
+	KDarray->dim = dim;
 	KDarray->size = size;
 	for (i=0;i<size;i++) {
 		KDarray->points[i] = spPointCopy(arr[i]); // The example from FinalProject.pdf (page 10) will look like:
@@ -82,7 +82,7 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 		} //												 matrix_i = |   0 |   1 |   2 |   3 |   4 |
 	}
 	if (inptMtrx == NULL) {
-		for (i=0;i<dim;i++) { // Foreach dim// TODO dim = 2
+		for (i=0;i<dim;i++) { // Foreach dim
 			qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),compare,matrix_v[i]);
 		}
 	} else {
@@ -90,7 +90,7 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 	}
 	KDarray->matrix = matrix_i;
 	// Free memory
-    for(i=0;i<size;i++) {
+    for(i=0;i<dim;i++) {
         if (matrix_v[i]) { // A tiny chance for errors in some compilers
         	free(matrix_v[i]);
         }
@@ -106,19 +106,58 @@ SPKDArray InitFast(SPPoint* arr, int size, int** inptMtrx) {
 //
 SPKDArray* Split(SPKDArray kdArr, int coor) {
 	// Function variables
+	int i; // Generic loop variable
 	int spltr;
+	SPPoint* pointsLeft, pointsRight;
 	SPKDArray KDarrayLeft;
 	SPKDArray KDarrayRight;
 	// Allocate memory
+	spltr = (kdArr->size)/2; // Ex. 5/2=3
+	pointsLeft = (SPPoint *) malloc(spltr * sizeof(*pointsLeft));
+	pointsRight = (SPPoint *) malloc(spltr * sizeof(*pointsRight));
+	if ((pointsLeft == NULL)||(pointsRight == NULL)) { // Memory allocation error
+		return NULL;
+	}
 	//KDarrayLeft = (SPKDArray) malloc(sizeof(*KDarrayLeft));
 	//KDarrayRight = (SPKDArray) malloc(sizeof(*KDarrayRight));
 	// Function body
-	spltr = (kdArr->size)/2;
-	if (coor == 0) { // TODO fix this line
-		KDarrayLeft = InitFast(kdArr,spltr,kdArr->matrix); // TODO fix this line
-		KDarrayRight = InitFast(kdArr,(kdArr->size)-spltr,kdArr->matrix); // TODO fix this line
+	for (i=0;i<kdArr->size;i++) {
+		if (i < spltr) {
+			pointsLeft[i] = kdArr->points[kdArr->matrix[coor][i]];
+		} else {
+			pointsRight[i-spltr] = kdArr->points[kdArr->matrix[coor][i]];
+		}
 	}
-	return NULL; // TODO fix this line
+	//KDarrayLeft->dim = kdArr->dim;
+	//KDarrayRight->dim = kdArr->dim;
+	//KDarrayLeft->size = spltr;
+	//KDarrayRight->size = (kdArr->size)-spltr;
+	if (coor == 0) { // TODO fix this line
+		KDarrayLeft = InitFast(kdArr,spltr,kdArr->matrix,0); // TODO fix this line
+		KDarrayRight = InitFast(kdArr,(kdArr->size)-spltr,kdArr->matrix,spltr); // TODO fix this line
+	}
+	spKDArrayDestroy(kdArr);
+	return {KDarrayLeft, KDarrayRight};
+}
+
+void spKDArrayDestroy(SPKDArray array) {
+	int i;
+	if (array != NULL) {
+	    for(i=0;i<array->dim;i++) {
+	        if (array->matrix[i]) { // A tiny chance for errors in some compilers
+	        	free(array->matrix[i]);
+	        }
+	    }
+	    if (array->matrix) { // A tiny chance for errors in some compilers
+	    	free(array->matrix);
+	    	array->matrix = NULL; // Preventing a "double-free"
+	    }
+	    if (array->points) { // A tiny chance for errors in some compilers
+	    	free(array->points);
+	    	array->points = NULL; // Preventing a "double-free"
+	    }
+		free(array);
+	}
 }
 
 int spKDArrayGetDimension(SPKDArray array) {
