@@ -1,26 +1,11 @@
 #include "SPConfig.h"
 #include "SPLogger.h"
 #include "SPPoint.h"
+#include "defines.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strcmp
-
-#define STRING_LENGTH 1025 // 1024 + \n
-#define BUFFER_SIZE 1024
-#define MAX_FEATURE_DIM 28
-#define CORRUPTED_FILE_ERROR_LIMIT 10
-
-// Error messages
-#define WRITE_FILE_ERROR "An error occurred - could not write to file"
-#define PATH_IS_NULL_ERROR "An error occurred - invalid path to file"
-#define OPEN_FILE_FAIL_ERROR "An error occurred - could not open file"
-#define STR_TO_INT_FAIL_WARNING "Feature corrupted - could not parse expected integer"
-#define STR_TO_DOUBLE_FAIL_WARNING "Feature corrupted - could not parse expected double"
-#define CORRUPTED_DATA_DIM_WARNING "Feature corrupted - Dimension and actual number coordinates does not match"
-#define CORRUPTED_FILE_ERROR "An error occurred - could not extract features from file, big part of the data is invalid"
-#define CORRUPTED_FILE_TOO_MANY_FEATURES "An error occurred - number of features parameter does not match the the actual features extracted"
-#define MEMORY_ALLOCATION_ERROR "An error occurred - allocation failure"
 
 bool WriteFeat(FILE* featsFile, SPPoint feature){
 	char storedFeat[STRING_LENGTH];

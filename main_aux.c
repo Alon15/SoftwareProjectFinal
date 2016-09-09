@@ -2,19 +2,12 @@
 #include "SPLogger.h"
 #include "SPPoint.h"
 #include "main_aux.h"
+#include "defines.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strcmp
 #include "SPKDArray.h" // TODO DEBUG DELME
-
-#define STRING_LENGTH 1025 // 1024 + \0
-
-// error messages
-#define GET_LOGGER_FILENAME_FAIL_ERROR "An error occurred - could not retrieve logger's filename from the configuration file"
-#define LOGGER_LEVEL_INVALID_ERROR "An error occurred - logger level is invalid"
-#define LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to file"
-#define DEFAULT_LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to stdout"
 
 void getFileName(char* filename, int argc, char** argv) {
 	if (argc > 3) {
