@@ -6,14 +6,21 @@ extern "C" {
 #include "SPLogger.h"
 #include "SPPoint.h"
 }
-#include <cstdio> // TODO Change 'stdio.h' to 'cstdio' ? I'm not sure we're allowed to use c++ libraries
-#include <cstdlib> // TODO Change 'stdlib.h' to 'cstdlib' ?
-#include <cstring> // TODO Change 'string.h' to 'cstring' ?
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #define STRING_LENGTH 1025 // 1024 + \0
 #define QUERY_IMG_MSG "Please enter an image path:\n"
 #define EXIT_MSG "Exiting...\n"
 
+// error messages
+#define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
+#define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
+#define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"
+
+//TODO move all the error messages and defines to new file?
+//TODO convery all the info messages literals to #define MSG format
 using namespace sp;
 
 
@@ -27,36 +34,42 @@ int main (int argc, char *argv[]) {
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	if (config_msg != SP_CONFIG_SUCCESS) {
-		// TODO Error already been printed at 'spConfigCreate'
-		// TODO Error printed as 'regular message'
-		// TODO Free memory (including the logger spLogger))
-		// TODO Terminate the program
+		// TODO Errors already been printed at 'spConfigCreate', no memory release required
 		return EXIT_FAILURE;
 	}
 	if(!initLogger(config)){
-		//TODO print error
 		return EXIT_FAILURE;
 	}
 	imageProc = new ImageProc(config);
+	spLoggerPrintInfo("imageProc was successfully initialized");
 	if (spConfigIsExtractionMode(config,&config_msg)) {
+		spLoggerPrintInfo("Run extraction mode");
 		numOfImages = spConfigGetNumOfImages(config,&config_msg);
 		for (index=0;index<numOfImages;index++) {
 			config_msg = spConfigGetImagePath(imagePath,config,index);
 			if (config_msg != SP_CONFIG_SUCCESS) {
-				//TODO error
+				spLoggerPrintError(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+				//TODO free memory (logger + imageProc + config)
+				return EXIT_FAILURE;
 			}
-			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats); //TODO can't move this function from the main because of imageProc
+			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats);
 			if (featuresArray == NULL) {
-				//TODO error
+				spLoggerPrintError(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+				//TODO free memory (logger + imageProc + config)
+				return EXIT_FAILURE;
 			}
 			config_msg = spConfigGetFeatsPath(imagePath,config,index);
 			if (config_msg != SP_CONFIG_SUCCESS) {
-				//TODO error
+				spLoggerPrintError(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+				//TODO free memory (logger + imageProc + config)
+				return EXIT_FAILURE;
 			}
 			if (ExportFeats(imagePath,featuresArray,numOfFeats)) {
-				//TODO error
+				//TODO free memory (logger + imageProc + config + featuresArray and his elements)
+				return EXIT_FAILURE;
 			}
 		}
+		spLoggerPrintInfo("Extraction mode finished successfully");
 	}
 	// TODO import the extracted features
 	// TODO build the KDtree

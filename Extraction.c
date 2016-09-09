@@ -9,6 +9,18 @@
 #define STRING_LENGTH 1025 // 1024 + \n
 #define BUFFER_SIZE 1024
 #define MAX_FEATURE_DIM 28
+#define CORRUPTED_FILE_ERROR_LIMIT 10
+
+// Error messages
+#define WRITE_FILE_ERROR "An error occurred - could not write to file"
+#define PATH_IS_NULL_ERROR "An error occurred - invalid path to file"
+#define OPEN_FILE_FAIL_ERROR "An error occurred - could not open file"
+#define STR_TO_INT_FAIL_WARNING "Feature corrupted - could not parse expected integer"
+#define STR_TO_DOUBLE_FAIL_WARNING "Feature corrupted - could not parse expected double"
+#define CORRUPTED_DATA_DIM_WARNING "Feature corrupted - Dimension and actual number coordinates does not match"
+#define CORRUPTED_FILE_ERROR "An error occurred - could not extract features from file, big part of the data is invalid"
+#define CORRUPTED_FILE_TOO_MANY_FEATURES "An error occurred - number of features parameter does not match the the actual features extracted"
+#define MEMORY_ALLOCATION_ERROR "An error occurred - allocation failure"
 
 bool WriteFeat(FILE* featsFile, SPPoint feature){
 	char storedFeat[STRING_LENGTH];
@@ -26,43 +38,47 @@ bool WriteFeat(FILE* featsFile, SPPoint feature){
 	storedFeat[j-1] = '\n';
 	success = fwrite(storedFeat,1,strlen(storedFeat),featsFile);
 	if (success == 0) {
-		// TODO error
+		spLoggerPrintError(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	return true;
 }
 
-bool ExportFeats(const char* path, SPPoint* feats, int numOfFeats){
+bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
 	int i;
 	FILE* featsFile;
 	size_t success;
 	char firstLine[STRING_LENGTH];
-	if (path == NULL) {
-		//TODO error
+	char infoLoggerMsg[STRING_LENGTH];
+	sprintf(infoLoggerMsg,"Features export of: %s started",filename);
+	spLoggerPrintInfo(infoLoggerMsg);
+	if (filename == NULL) {
+		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
-	featsFile = fopen(path,"w");
+	featsFile = fopen(filename,"w");
 	if (featsFile == NULL) {
-		//TODO error
+		spLoggerPrintError(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	sprintf(firstLine,"%d,%d\n",numOfFeats,spPointGetIndex(*feats)); // number of features and index of the image
 	success = fwrite(firstLine,1,strlen(firstLine),featsFile);
 	if (success == 0) {
-		// TODO error
+		spLoggerPrintError(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	for (i=0;i<numOfFeats;i++) {
 		if (!WriteFeat(featsFile,feats[i])){
-			//TODO error
 			return false;
 		}
 	}
 	fclose(featsFile);
+	sprintf(infoLoggerMsg,"Features export of: %s ended",filename);
+	spLoggerPrintInfo(infoLoggerMsg);
 	return true;
 }
 
-bool ParseFeature(char* feature,int* dim,double* data) {
+bool ParseFeature(char* feature,int* dim,double* data, int line,const char* filename) {
 	char storedDim[50], storedData[STRING_LENGTH];
 	char* success;
 	int i = 0, j = 0, featsExtracted = 0;
@@ -74,7 +90,7 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 	storedDim[j] = '\0';
 	*dim = strtol(storedDim,&success,10);
 	if (storedDim >= success) {
-		//TODO error, failed to convert
+		spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
 		return false;
 	}
 	i++;
@@ -88,7 +104,7 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 		storedData[j] = '\0';
 		data[featsExtracted] = strtod(storedData,&success);
 		if (storedData >= success) {
-			//TODO error, failed to convert
+			spLoggerPrintWarning(STR_TO_DOUBLE_FAIL_WARNING,filename,__func__,line);
 			return false;
 		}
 		featsExtracted++;
@@ -96,24 +112,37 @@ bool ParseFeature(char* feature,int* dim,double* data) {
 			i++;
 	}
 	if (featsExtracted != *dim) {
-		//TODO error corrupted data
+		spLoggerPrintWarning(CORRUPTED_DATA_DIM_WARNING,filename,__func__,line);
 		return false;
 	}
 	return true;
 }
 
-SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
-	char* buffer, *feature, *header, *ptr;
-	double* data;
-	int numOfChar = 0, i = 0, p = 0, j = 0, ind, dim, featsExtracted = 0;
-	SPPoint* features;
+void FreeParseFeats(char* buffer, char* feature, char* header, double* data) {
+	if (buffer)
+		free(buffer);
+	if (feature)
+		free(feature);
+	if (header)
+		free(header);
+	if (data)
+		free(data);
+}
+
+SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
+	char* buffer = NULL, *feature = NULL, *header = NULL, *ptr;
+	double* data = NULL;
+	int numOfChar = 0, i = 0, p = 0, j = 0, ind, dim, featsExtracted = 0, line = 0, featsFailed = 0;
+	SPPoint* features = NULL;
 	bool parseSuccess, firstLine = true;
 	data = (double*) malloc(MAX_FEATURE_DIM*sizeof(double));
 	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
 	feature = (char*) calloc(STRING_LENGTH,sizeof(char));
 	header = (char*) calloc(STRING_LENGTH,sizeof(char));
 	if (buffer == NULL || feature == NULL || data == NULL || header == NULL){
-		// TODO free memory
+		FreeParseFeats(buffer, feature, header, data);
+		spLoggerPrintError(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		return NULL;
 	}
 	while ((numOfChar = fread(buffer,sizeof(char),BUFFER_SIZE,featsFile)) > 0) {
 		for (i=0;i<numOfChar;i++) {
@@ -130,6 +159,10 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 					}
 					header[j] = '\0';
 					*numOfFeats = strtol(header, &ptr, 10);
+					if (header >= ptr) {
+						spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
+						return NULL;
+					}
 					j = 0;
 					while (feature[p] != '\n') {
 						header[j] = feature[p];
@@ -138,39 +171,65 @@ SPPoint* ParseFeats(FILE* featsFile, int* numOfFeats) {
 					}
 					header[j] = '\0';
 					ind = strtol(header, &ptr, 10);
+					if (header >= ptr) {
+						spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
+						return NULL;
+					}
 					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL) {
-						// TODO free memory
+						spLoggerPrintError(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+						FreeParseFeats(buffer, feature, header, data);
+						return NULL;
 					}
 				} else {
-					parseSuccess = ParseFeature(feature,&dim,data);
+					parseSuccess = ParseFeature(feature,&dim,data,line,filename);
 					if (parseSuccess == false) {
-						// TODO free memory
-						// TODO count how many failed
+						featsFailed++;
+						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT){
+							spLoggerPrintError(CORRUPTED_FILE_ERROR,filename,__func__,0);
+							FreeParseFeats(buffer, feature, header, data);
+							// TODO free memory of features (the array, and all his elements) featsExtracted = number of elements to free
+							// TODO should be defined in main_aux
+						}
+					} else {
+						if(featsExtracted > *numOfFeats){
+							spLoggerPrintError(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
+							FreeParseFeats(buffer, feature, header, data);
+							// TODO free memory of features (the array, and all his elements) featsExtracted = number of elements to free
+							// TODO should be defined in main_aux
+							return NULL;
+						}
+						features[featsExtracted] = spPointCreate(data,dim,ind);
+						featsExtracted++;
 					}
-					features[featsExtracted] = spPointCreate(data,dim,ind);
-					featsExtracted++;
 				}
+				line++;
 				p = 0;
 			}
 		}
 	}
+	FreeParseFeats(buffer, feature, header, data);
 	return features;
 }
 
-SPPoint* ImportFeats(const char* path, int* numOfFeats) {
+SPPoint* ImportFeats(const char* filename, int* numOfFeats) {
 	FILE* featsFile;
 	SPPoint* features;
-	if (path == NULL) {
-		//TODO error
+	char infoLoggerMsg[STRING_LENGTH];
+	sprintf(infoLoggerMsg,"Features import of: %s started",filename);
+	spLoggerPrintInfo(infoLoggerMsg);
+	if (filename == NULL) {
+		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
-	featsFile = fopen(path,"r");
+	featsFile = fopen(filename,"r");
 	if (featsFile == NULL) {
-		//TODO error
+		spLoggerPrintError(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
-	features = ParseFeats(featsFile,numOfFeats);
+	features = ParseFeats(featsFile,filename,numOfFeats);
 	fclose(featsFile);
+	sprintf(infoLoggerMsg,"Features import of: %s ended",filename);
+	spLoggerPrintInfo(infoLoggerMsg);
 	return features;
 }
