@@ -16,7 +16,7 @@ extern "C" {
 using namespace sp;
 
 int main (int argc, char *argv[]) {
-	tmpFunc1();
+	//tmpFunc1(); //TODO it cause the program to crash, probably memory issue
 	char filename[STRING_LENGTH], imagePath[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SPConfig config;
@@ -26,16 +26,17 @@ int main (int argc, char *argv[]) {
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	if (config_msg != SP_CONFIG_SUCCESS) {
-		// TODO Errors already been printed at 'spConfigCreate', no memory release required
 		return EXIT_FAILURE;
 	}
 	if(!initLogger(config)){
+		//TODO free memory (config)
 		return EXIT_FAILURE;
 	}
 	imageProc = new ImageProc(config);
-	spLoggerPrintInfo("imageProc was successfully initialized");
+	spLoggerPrintInfo(IMAGE_PROC_SUCCESS);
+	//TODO move this section into a function in the main.cpp (can't move to main_aux)
 	if (spConfigIsExtractionMode(config,&config_msg)) {
-		spLoggerPrintInfo("Run extraction mode");
+		spLoggerPrintInfo(EXTRACTION_MODE_START);
 		numOfImages = spConfigGetNumOfImages(config,&config_msg);
 		for (index=0;index<numOfImages;index++) {
 			config_msg = spConfigGetImagePath(imagePath,config,index);
@@ -61,7 +62,7 @@ int main (int argc, char *argv[]) {
 				return EXIT_FAILURE;
 			}
 		}
-		spLoggerPrintInfo("Extraction mode finished successfully");
+		spLoggerPrintInfo(EXTRACTION_MODE_SUCCESS);
 	}
 	// TODO import the extracted features
 	// TODO build the KDtree

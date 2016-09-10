@@ -40,4 +40,9 @@
 #define LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to file"
 #define DEFAULT_LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to stdout"
 
+// info messages
+#define IMAGE_PROC_SUCCESS "imageProc was successfully initialized"
+#define EXTRACTION_MODE_START "Run extraction mode"
+#define EXTRACTION_MODE_SUCCESS "Extraction mode finished successfully"
+
 #endif /* DEFINES_H_ */
