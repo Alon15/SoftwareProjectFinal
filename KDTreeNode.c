@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "KDTreeNode.h"
-#include "SPconfig.h"
+#include "SPConfig.h"
 #include "SPKDArray.h"
 
 // Tree datatype

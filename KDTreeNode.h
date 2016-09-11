@@ -1,7 +1,7 @@
 #ifndef KDTREENODE_H_
 #define KDTREENODE_H_
 
-#include "SPconfig.h"
+#include "SPConfig.h"
 
 typedef struct kd_tree_node_t *KDTreeNode;
 

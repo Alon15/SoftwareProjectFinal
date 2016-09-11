@@ -24,7 +24,7 @@ main.o: main.cpp SPImageProc.h Extraction.h main_aux.h SPConfig.h SPLogger.h SPP
 SPImageProc.o: SPImageProc.cpp SPImageProc.h SPConfig.h SPPoint.h SPLogger.h
 	$(CPP) $(CPP_COMP_FLAG) -I$(INCLUDEPATH) -c $*.cpp
 # C Files
-main_aux.o: main_aux.c main_aux.h SPConfig.h SPLoggger.h SPPoint.h defines.h
+main_aux.o: main_aux.c main_aux.h SPConfig.h SPLogger.h SPPoint.h defines.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
 SPPoint.o: SPPoint.c SPPoint.h
 	$(CC) $(C_COMP_FLAG) -c $*.c

@@ -82,7 +82,6 @@ void ConfigErrorMsg(const char* filename, int lineNumber, SP_CONFIG_MSG* msg, ch
  */
 void SetDefaultConfigValues(SPConfig config) {
 	config->spPCADimension = 20;
-	config->spPCAFilename = "pca.yml";
 	config->spNumOfFeatures = 100;
 	config->spExtractionMode = true;
 	config->spNumOfSimilarImages = 1;
@@ -90,7 +89,33 @@ void SetDefaultConfigValues(SPConfig config) {
 	config->spKNN = 1;
 	config->spMinimalGUI = false;
 	config->spLoggerLevel = 3;
-	config->spLoggerFilename = "stdout";
+	config->spLoggerFilename = NULL;
+	config->spPCAFilename = NULL;
+}
+
+/*
+ * The function set the default values to the string parameters in the config.
+ *
+ * @param config - The configuration structure.
+ */
+bool SetDefaultConfigString(SPConfig config, SP_CONFIG_MSG* msg){
+	if (config->spPCAFilename == NULL){
+		config->spPCAFilename = (char*) malloc(strlen("pca.yml")+1);
+		if (config->spPCAFilename == NULL){
+			*msg = SP_CONFIG_ALLOC_FAIL;
+			return false;
+		}
+		strcpy(config->spPCAFilename, "pca.yml");
+	}
+	if (config->spLoggerFilename == NULL){
+		config->spLoggerFilename = (char*) malloc(strlen("stdout")+1);
+		if (config->spLoggerFilename == NULL){
+			*msg = SP_CONFIG_ALLOC_FAIL;
+			return false;
+		}
+		strcpy(config->spLoggerFilename, "stdout");
+	}
+	return true;
 }
 /*
  * The function sets a given value to his field in the configuration structure.
@@ -119,7 +144,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		return true;
 	}
 	if (strcmp(variableName,"spImagesDirectory") == 0) {
-		config->spImagesDirectory = (char*) malloc(strlen(value));
+		config->spImagesDirectory = (char*) malloc(strlen(value)+1);
 		if (config->spImagesDirectory == NULL){
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
@@ -127,7 +152,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		strcpy(config->spImagesDirectory, value);
 		*nonDefaultParam = true;
 	} else if (strcmp(variableName,"spImagesPrefix") == 0) {
-		config->spImagesPrefix = (char*) malloc(strlen(value));
+		config->spImagesPrefix = (char*) malloc(strlen(value)+1);
 		if (config->spImagesPrefix == NULL){
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
@@ -136,7 +161,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		*(nonDefaultParam+1) = true;
 	} else if (strcmp(variableName,"spImagesSuffix") == 0) {
 		if ((strcmp(value,".jpg") || strcmp(value,".png") || strcmp(value,".bmp") || strcmp(value,".gif")) != false) {
-			config->spImagesSuffix = (char*) malloc(strlen(value));
+			config->spImagesSuffix = (char*) malloc(strlen(value)+1);
 			if (config->spImagesSuffix == NULL){
 				*msg = SP_CONFIG_ALLOC_FAIL;
 				return false;
@@ -163,7 +188,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 			config->spPCADimension = atoi(value);
 		}
 	} else if (strcmp(variableName,"spPCAFilename") == 0) {
-		config->spPCAFilename = (char*) malloc(strlen(value));
+		config->spPCAFilename = (char*) malloc(strlen(value)+1);
 		if (config->spPCAFilename == NULL){
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
@@ -227,7 +252,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 			config->spLoggerLevel = atoi(value);
 		}
 	} else if (strcmp(variableName,"spLoggerFilename") == 0) {
-		config->spLoggerFilename = (char*) malloc(strlen(value));
+		config->spLoggerFilename = (char*) malloc(strlen(value)+1);
 		if (config->spLoggerFilename == NULL){
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
@@ -447,8 +472,8 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 	// Function code
 	SetDefaultConfigValues(config); // set default values to config
 	success = ParseConfig(configFile,config,msg,&lineNumber); // parse config file
-	if (success == false) { // configuration file parsing failed
-		spConfigDestroy(config);
+	if (!success || !SetDefaultConfigString(config, msg)) { // set default strings if not set
+		spConfigDestroy(config); // configuration file parsing failed
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
 		PRINT(errorMsg);
 		fclose(configFile);

@@ -67,8 +67,7 @@ freeMainMemory(config,featuresArray,numOfFeats,true);
 
 // print and messages
 //TODO fix print or delete it completely
-#define PRINT(msg) printf(msg);\
-fflush(stdout);
+#define PRINT(msg) printf("%s",msg);
 #define LOGGER_INFO_EXTRACTION_MSG(buffer,msg,filename) sprintf(buffer,msg,filename);\
 PRINT_INFO_LOGGER(buffer);
 #define PRINT_ERROR_LOGGER(msg,file,func,line) if(spLoggerPrintError(msg,file,func,line)!= SP_LOGGER_SUCCESS){\
