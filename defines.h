@@ -1,11 +1,16 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+/*
+ * Constants
+ */
+
 // general
 #define STRING_LENGTH 1025 // 1024 + \0
 #define BUFFER_SIZE 1024 // Size of the file read/write buffer
 
-// main
+// main and main_aux
+#define DEFAULT_CONFIG_FILE "spcbir.config"
 #define QUERY_IMG_MSG "Please enter an image path:\n"
 #define EXIT_MSG "Exiting...\n"
 
@@ -16,14 +21,16 @@
 // SPConfig
 #define NON_DEFAULT_CONFIG_PARAM 4 // Number of non default parameters in the config file
 #define CONFIG_PARAM 14 // Number of parameters in the config file
+
 /*
- * messages
+ * Messages
  */
 
 // main messages
 #define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
 #define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
 #define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"
+
 // Extraction messages
 #define WRITE_FILE_ERROR "An error occurred - could not write to file"
 #define PATH_IS_NULL_ERROR "An error occurred - invalid path to file"
@@ -34,6 +41,7 @@
 #define CORRUPTED_FILE_ERROR "An error occurred - could not extract features from file, big part of the data is invalid"
 #define CORRUPTED_FILE_TOO_MANY_FEATURES "An error occurred - number of features parameter does not match the the actual features extracted"
 #define MEMORY_ALLOCATION_ERROR "An error occurred - allocation failure"
+
 // main_aux messages
 #define GET_LOGGER_FILENAME_FAIL_ERROR "An error occurred - could not retrieve logger's filename from the configuration file"
 #define LOGGER_LEVEL_INVALID_ERROR "An error occurred - logger level is invalid"
@@ -44,5 +52,21 @@
 #define IMAGE_PROC_SUCCESS "imageProc was successfully initialized"
 #define EXTRACTION_MODE_START "Run extraction mode"
 #define EXTRACTION_MODE_SUCCESS "Extraction mode finished successfully"
+#define LOGGER_INIT_SUCCESS "Logger was successfully initialized"
 
+/*
+ * Macros
+ */
+// TODO macro for logger failure
+// free memory
+#define FREE_FEATURES_ARRAY(featuresArray,numOfFeats) freeMainMemory(NULL,featuresArray,numOfFeats,false)
+#define FREE_CONFIG(config) freeMainMemory(config,NULL,0,false)
+#define FREE_ALL(config,featuresArray,numOfFeats) delete imageProc;\
+freeMainMemory(config,featuresArray,numOfFeats,true);
+
+// print and messages
+#define PRINT(msg) printf(msg);\
+fflush(stdout);
+#define LOGGER_INFO_EXTRACTION_MSG(buffer,msg,filename) sprintf(buffer,msg,filename);\
+spLoggerPrintInfo(infoLoggerMsg);
 #endif /* DEFINES_H_ */

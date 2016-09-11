@@ -15,7 +15,7 @@ void getFileName(char* filename, int argc, char** argv) {
 	} else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
 		strcpy(filename,argv[2]);
 	} else { // Use default configuration file
-		strcpy(filename,"spcbir.config");
+		strcpy(filename,DEFAULT_CONFIG_FILE);
 	}
 }
 SP_LOGGER_LEVEL parseLoggerLevel(int level){
@@ -56,7 +56,7 @@ bool initLogger(SPConfig config){
 			return false;
 	}
 	}
-	spLoggerPrintInfo("Logger was successfully initialized");
+	spLoggerPrintInfo(LOGGER_INIT_SUCCESS);
 	return true;
 }
 

@@ -50,8 +50,7 @@ bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
 	size_t success;
 	char firstLine[STRING_LENGTH], infoLoggerMsg[STRING_LENGTH];
 	// Function code
-	sprintf(infoLoggerMsg,"Features export of: %s started",filename);
-	spLoggerPrintInfo(infoLoggerMsg);
+	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features export of: %s started",filename)
 	if (filename == NULL) {
 		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
@@ -73,8 +72,7 @@ bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
 		}
 	}
 	fclose(featsFile);
-	sprintf(infoLoggerMsg,"Features export of: %s ended",filename);
-	spLoggerPrintInfo(infoLoggerMsg);
+	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features export of: %s ended",filename)
 	return true;
 }
 /*
@@ -249,8 +247,7 @@ SPPoint* ImportFeats(const char* filename, int* numOfFeats) {
 	SPPoint* features;
 	char infoLoggerMsg[STRING_LENGTH];
 	// Function code
-	sprintf(infoLoggerMsg,"Features import of: %s started",filename);
-	spLoggerPrintInfo(infoLoggerMsg);
+	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features import of: %s started",filename)
 	if (filename == NULL) {
 		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
@@ -262,7 +259,6 @@ SPPoint* ImportFeats(const char* filename, int* numOfFeats) {
 	}
 	features = ParseFeats(featsFile,filename,numOfFeats);
 	fclose(featsFile);
-	sprintf(infoLoggerMsg,"Features import of: %s ended",filename);
-	spLoggerPrintInfo(infoLoggerMsg);
+	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features import of: %s ended",filename)
 	return features;
 }

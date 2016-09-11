@@ -409,8 +409,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 	if (filename == NULL) {
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
-		printf(errorMsg);
-		fflush(stdout);
+		PRINT(errorMsg);
 		return NULL;
 	}
 	configFile = fopen(filename,"r");
@@ -420,16 +419,14 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 		else
 			*msg = SP_CONFIG_CANNOT_OPEN_FILE;
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
-		printf(errorMsg);
-		fflush(stdout);
+		PRINT(errorMsg);
 		return NULL;
 	}
 	config = (SPConfig) malloc(sizeof(struct sp_config_t));
 	if (config == NULL) {
 		*msg = SP_CONFIG_ALLOC_FAIL;
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
-		printf(errorMsg);
-		fflush(stdout);
+		PRINT(errorMsg);
 		fclose(configFile);
 		return NULL;
 	}
@@ -439,8 +436,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 	if (success == false) { // configuration file parsing failed
 		spConfigDestroy(config);
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
-		printf(errorMsg);
-		fflush(stdout);
+		PRINT(errorMsg);
 		fclose(configFile);
 		return NULL;
 	}

@@ -38,7 +38,7 @@ bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,
 			return false;
 		}
 	}
-	freeMainMemory(NULL,featuresArray,*numOfFeats,false);
+	FREE_FEATURES_ARRAY(featuresArray,*numOfFeats);
 	spLoggerPrintInfo(EXTRACTION_MODE_SUCCESS);
 	return true;
 }
@@ -56,24 +56,22 @@ int main (int argc, char *argv[]) {
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		return EXIT_FAILURE;
 	}
-	if(!initLogger(config)){
-		freeMainMemory(config,NULL,0,false);
+	if(!initLogger(config)){ // initialize the logger
+		FREE_CONFIG(config);
 		return EXIT_FAILURE;
 	}
-	imageProc = new ImageProc(config);
+	imageProc = new ImageProc(config); // initialize imageProc
 	spLoggerPrintInfo(IMAGE_PROC_SUCCESS);
-	if (spConfigIsExtractionMode(config,&config_msg)) {
+	if (spConfigIsExtractionMode(config,&config_msg)) { // Extraction mode
 		if(!extractionMode(config, featuresArray, imageProc,config_msg,&numOfFeats)){
-			delete imageProc;
-			freeMainMemory(config,featuresArray,numOfFeats,true);
+			FREE_ALL(config,featuresArray,numOfFeats)
 			return EXIT_FAILURE;
 		}
 	}
 	// TODO import the extracted features
 	// TODO build the KDtree
 	while (strcmp(query,"<>") != 0) { //TODO move the query loop to main_aux or to new function in main.cpp
-		printf(QUERY_IMG_MSG);
-		fflush(stdout);
+		PRINT(QUERY_IMG_MSG); //TODO figure out why this line is red (does not crash the program or cause compilation error)
 		scanf("%1024s",query);
 		//TODO check if the query path is valid
 		//TODO get features of the new image
@@ -81,9 +79,7 @@ int main (int argc, char *argv[]) {
 		//TODO show matches (GUI or stdout)
 		//TODO reset variable of the current query (clear the features)
 	}
-	printf(EXIT_MSG);
-	fflush(stdout);
-	delete imageProc;
-	freeMainMemory(config,featuresArray,numOfFeats,true);
+	PRINT(EXIT_MSG);
+	FREE_ALL(config,featuresArray,numOfFeats)
 	return (EXIT_SUCCESS);
 }
