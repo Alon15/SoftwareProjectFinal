@@ -37,22 +37,22 @@ bool initLogger(SPConfig config){
 	char filename[STRING_LENGTH];
 	config_msg = spConfigGetLoggerFileName(filename,config); // get the logger filename
 	if (config_msg != SP_CONFIG_SUCCESS){
-		spLoggerPrintError(GET_LOGGER_FILENAME_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		PRINT(GET_LOGGER_FILENAME_FAIL_ERROR);
 		return false;
 	}
 	loggerLevel = parseLoggerLevel(spConfigGetLoggerLevel(config, &config_msg)); // parse the logger level
 	if (config_msg != SP_CONFIG_SUCCESS){
-		spLoggerPrintError(LOGGER_LEVEL_INVALID_ERROR,__FILE__,__func__,__LINE__);
+		PRINT(LOGGER_LEVEL_INVALID_ERROR);
 		return false;
 	}
 	if (strcmp(filename,"stdout") == 0){ // check if stdout was chosen to be output stream
 		if (spLoggerCreate(NULL,loggerLevel) != SP_LOGGER_SUCCESS){ // create a logger that writes to stdout
-			spLoggerPrintError(DEFAULT_LOGGER_CREATE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			PRINT(DEFAULT_LOGGER_CREATE_FAIL_ERROR);
 			return false;
 		}
 	} else {
 		if (spLoggerCreate(filename,loggerLevel) != SP_LOGGER_SUCCESS){ // create a logger that writes to file
-			spLoggerPrintError(LOGGER_CREATE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			PRINT(LOGGER_CREATE_FAIL_ERROR);
 			return false;
 	}
 	}

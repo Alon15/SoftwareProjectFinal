@@ -37,7 +37,7 @@ bool WriteFeat(FILE* featsFile, SPPoint feature){
 	storedFeat[j-1] = '\n';
 	success = fwrite(storedFeat,1,strlen(storedFeat),featsFile); // write the line to file
 	if (success == 0) {
-		spLoggerPrintError(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	return true;
@@ -52,18 +52,18 @@ bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
 	// Function code
 	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features export of: %s started",filename)
 	if (filename == NULL) {
-		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	featsFile = fopen(filename,"w");
 	if (featsFile == NULL) {
-		spLoggerPrintError(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	sprintf(firstLine,"%d,%d\n",numOfFeats,spPointGetIndex(*feats)); // number of features and index of the image
 	success = fwrite(firstLine,1,strlen(firstLine),featsFile);
 	if (success == 0) {
-		spLoggerPrintError(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(WRITE_FILE_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
 	for (i=0;i<numOfFeats;i++) {
@@ -101,7 +101,7 @@ bool ParseFeature(char* feature,int* dim,double* data, int line,const char* file
 	storedDim[j] = '\0';
 	*dim = strtol(storedDim,&success,10); // assign dimension to dim
 	if (storedDim >= success) {
-		spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
+		PRINT_WARNING_LOGGER(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
 		return false;
 	}
 	i++;
@@ -115,7 +115,7 @@ bool ParseFeature(char* feature,int* dim,double* data, int line,const char* file
 		storedData[j] = '\0';
 		data[coordExtracted] = strtod(storedData,&success); // assign a coordinate to the data array
 		if (storedData >= success) {
-			spLoggerPrintWarning(STR_TO_DOUBLE_FAIL_WARNING,filename,__func__,line);
+			PRINT_WARNING_LOGGER(STR_TO_DOUBLE_FAIL_WARNING,filename,__func__,line);
 			return false;
 		}
 		coordExtracted++;
@@ -123,7 +123,7 @@ bool ParseFeature(char* feature,int* dim,double* data, int line,const char* file
 			i++;
 	}
 	if (coordExtracted != *dim) { // dimension is not equal to the number of coordinates extracted
-		spLoggerPrintWarning(CORRUPTED_DATA_DIM_WARNING,filename,__func__,line);
+		PRINT_WARNING_LOGGER(CORRUPTED_DATA_DIM_WARNING,filename,__func__,line);
 		return false;
 	}
 	return true;
@@ -170,7 +170,7 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 	header = (char*) calloc(STRING_LENGTH,sizeof(char));
 	if (buffer == NULL || feature == NULL || data == NULL || header == NULL){
 		FreeParseFeats(buffer, feature, header, data);
-		spLoggerPrintError(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	// Function code
@@ -190,7 +190,7 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 					header[j] = '\0';
 					*numOfFeats = strtol(header, &ptr, 10);
 					if (header >= ptr) {
-						spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
+						PRINT_WARNING_LOGGER(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
 						return NULL;
 					}
 					j = 0;
@@ -202,13 +202,13 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 					header[j] = '\0';
 					ind = strtol(header, &ptr, 10);
 					if (header >= ptr) {
-						spLoggerPrintWarning(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
+						PRINT_WARNING_LOGGER(STR_TO_INT_FAIL_WARNING,filename,__func__,line);
 						return NULL;
 					}
 					// memory allocation
 					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL) {
-						spLoggerPrintError(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+						PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 						FreeParseFeats(buffer, feature, header, data);
 						return NULL;
 					}
@@ -217,13 +217,13 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 					if (parseSuccess == false) {
 						featsFailed++; // count how many feature failed to be extracted
 						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT){ // too many features failed to be extracted
-							spLoggerPrintError(CORRUPTED_FILE_ERROR,filename,__func__,0);
+							PRINT_ERROR_LOGGER(CORRUPTED_FILE_ERROR,filename,__func__,0);
 							FreeParseFeats(buffer, feature, header, data);
 							freeMainMemory(NULL,features,*numOfFeats,false);
 						}
 					} else {
 						if(featsExtracted > *numOfFeats){ // checks if we are trying to extract more features then expected
-							spLoggerPrintError(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
+							PRINT_ERROR_LOGGER(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
 							FreeParseFeats(buffer, feature, header, data);
 							freeMainMemory(NULL,features,*numOfFeats,false);
 							return NULL;
@@ -249,12 +249,12 @@ SPPoint* ImportFeats(const char* filename, int* numOfFeats) {
 	// Function code
 	LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features import of: %s started",filename)
 	if (filename == NULL) {
-		spLoggerPrintError(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(PATH_IS_NULL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	featsFile = fopen(filename,"r");
 	if (featsFile == NULL) {
-		spLoggerPrintError(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		PRINT_ERROR_LOGGER(OPEN_FILE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	features = ParseFeats(featsFile,filename,numOfFeats);

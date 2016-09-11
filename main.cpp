@@ -21,17 +21,17 @@ bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,
 	for (index=0;index<numOfImages;index++) {
 		config_msg = spConfigGetImagePath(imagePath,config,index);
 		if (config_msg != SP_CONFIG_SUCCESS) {
-			spLoggerPrintError(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			PRINT_ERROR_LOGGER(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
 			return false;
 		}
 		featuresArray = imageProc->getImageFeatures(imagePath,index,numOfFeats);
 		if (featuresArray == NULL) {
-			spLoggerPrintError(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			PRINT_ERROR_LOGGER(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 			return false;
 		}
 		config_msg = spConfigGetFeatsPath(imagePath,config,index);
 		if (config_msg != SP_CONFIG_SUCCESS) {
-			spLoggerPrintError(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			PRINT_ERROR_LOGGER(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
 			return false;
 		}
 		if (!ExportFeats(imagePath,featuresArray,*numOfFeats)) {

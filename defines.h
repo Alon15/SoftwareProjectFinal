@@ -12,6 +12,7 @@
 // main and main_aux
 #define DEFAULT_CONFIG_FILE "spcbir.config"
 #define QUERY_IMG_MSG "Please enter an image path:\n"
+#define LOGGER_PRINT_FAILURE "An error occurred - Logger print failure"
 #define EXIT_MSG "Exiting...\n"
 
 // Extraction
@@ -57,7 +58,7 @@
 /*
  * Macros
  */
-// TODO macro for logger failure
+
 // free memory
 #define FREE_FEATURES_ARRAY(featuresArray,numOfFeats) freeMainMemory(NULL,featuresArray,numOfFeats,false)
 #define FREE_CONFIG(config) freeMainMemory(config,NULL,0,false)
@@ -65,8 +66,19 @@
 freeMainMemory(config,featuresArray,numOfFeats,true);
 
 // print and messages
+//TODO fix print or delete it completely
 #define PRINT(msg) printf(msg);\
 fflush(stdout);
 #define LOGGER_INFO_EXTRACTION_MSG(buffer,msg,filename) sprintf(buffer,msg,filename);\
-spLoggerPrintInfo(infoLoggerMsg);
+PRINT_INFO_LOGGER(buffer);
+#define PRINT_ERROR_LOGGER(msg,file,func,line) if(spLoggerPrintError(msg,file,func,line)!= SP_LOGGER_SUCCESS){\
+	PRINT(LOGGER_PRINT_FAILURE)\
+	}
+#define PRINT_WARNING_LOGGER(msg,file,func,line) if(spLoggerPrintWarning(msg,file,func,line)!= SP_LOGGER_SUCCESS){\
+	PRINT(LOGGER_PRINT_FAILURE)\
+	}
+#define PRINT_INFO_LOGGER(msg) if(spLoggerPrintInfo(msg)!= SP_LOGGER_SUCCESS){\
+	PRINT(LOGGER_PRINT_FAILURE)\
+	}
+
 #endif /* DEFINES_H_ */

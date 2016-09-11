@@ -266,7 +266,6 @@ int skipTabsAndWhitespace(const char* line, int lineC) {
  * 		   False if the line is invalid configuration line, msg will be set with the right error msg.
  *
  */
-//TODO check if \r\n is valid newline char
 bool ParseLine(char* line, char* variableName, char* value, SP_CONFIG_MSG* msg) {
 	// Function variables
 	int lineC = 0, varC = 0, valC = 0;
@@ -323,6 +322,20 @@ void FreeParseConfig(char* buffer, char* line, char* value, char* variableName) 
 		free(line);
 }
 /*
+ * The function remove all the occurrences of a given character from a given string
+ *
+ * @param str - a pointer to the string we want to modify
+ * @param c - the character we want to remove from the string
+ */
+void removeAllCharOccurrences(char* str, char c) {
+    char *pr = str, *pw = str; // read point and write pointer
+    while (*pr) {
+        *pw = *pr++;
+        pw += (*pw != c); // write over the given character
+    }
+    *pw = '\0';
+}
+/*
  * The function gets a configuration file and a configuration structure and set the structure with
  * the data in the file.
  *
@@ -359,6 +372,7 @@ bool ParseConfig(FILE* configFile, const SPConfig config, SP_CONFIG_MSG* msg, in
 			*(line+p) = *(buffer+i); // copy a line from the buffer
 			p++;
 			if (*(buffer+i)=='\n') {
+				removeAllCharOccurrences(line,'\r'); // delete all the \r characters
 				parseSuccess = ParseLine(line,variableName,value, msg); // parse the line
 				if (parseSuccess == false) { // invalid line error
 					FreeParseConfig(buffer,line,value,variableName);
