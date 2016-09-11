@@ -15,6 +15,13 @@ void getFileName(char* filename, int argc, char** argv);
  */
 bool initLogger(SPConfig config);
 
+/*
+ * @@@@@@@@@@@ TODO
+ *
+ * @@@@@@@@@@@ TODO
+ */
+void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger);
+
 void tmpFunc1();
 
 #endif /* MAIN_AUX_H_ */

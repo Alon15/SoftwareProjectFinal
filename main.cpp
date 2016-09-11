@@ -11,62 +11,67 @@ extern "C" {
 #include <cstdlib>
 #include <cstring>
 
-
-//TODO convert all the info messages literals to #define MSG format
 using namespace sp;
+
+bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,SP_CONFIG_MSG config_msg,int* numOfFeats){
+	int index, numOfImages;
+	char imagePath[STRING_LENGTH];
+	spLoggerPrintInfo(EXTRACTION_MODE_START);
+	numOfImages = spConfigGetNumOfImages(config,&config_msg);
+	for (index=0;index<numOfImages;index++) {
+		config_msg = spConfigGetImagePath(imagePath,config,index);
+		if (config_msg != SP_CONFIG_SUCCESS) {
+			spLoggerPrintError(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			return false;
+		}
+		featuresArray = imageProc->getImageFeatures(imagePath,index,numOfFeats);
+		if (featuresArray == NULL) {
+			spLoggerPrintError(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			return false;
+		}
+		config_msg = spConfigGetFeatsPath(imagePath,config,index);
+		if (config_msg != SP_CONFIG_SUCCESS) {
+			spLoggerPrintError(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			return false;
+		}
+		if (!ExportFeats(imagePath,featuresArray,*numOfFeats)) {
+			return false;
+		}
+	}
+	freeMainMemory(NULL,featuresArray,*numOfFeats,false);
+	spLoggerPrintInfo(EXTRACTION_MODE_SUCCESS);
+	return true;
+}
 
 int main (int argc, char *argv[]) {
 	//tmpFunc1(); //TODO it cause the program to crash, probably memory issue
-	char filename[STRING_LENGTH], imagePath[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
+	char filename[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SPConfig config;
-	ImageProc *imageProc = NULL;
-	int index, numOfImages, numOfFeats;
-	SPPoint* featuresArray;
+	ImageProc* imageProc = NULL;
+	int numOfFeats;
+	SPPoint* featuresArray = NULL;
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		return EXIT_FAILURE;
 	}
 	if(!initLogger(config)){
-		//TODO free memory (config)
+		freeMainMemory(config,NULL,0,false);
 		return EXIT_FAILURE;
 	}
 	imageProc = new ImageProc(config);
 	spLoggerPrintInfo(IMAGE_PROC_SUCCESS);
-	//TODO move this section into a function in the main.cpp (can't move to main_aux)
 	if (spConfigIsExtractionMode(config,&config_msg)) {
-		spLoggerPrintInfo(EXTRACTION_MODE_START);
-		numOfImages = spConfigGetNumOfImages(config,&config_msg);
-		for (index=0;index<numOfImages;index++) {
-			config_msg = spConfigGetImagePath(imagePath,config,index);
-			if (config_msg != SP_CONFIG_SUCCESS) {
-				spLoggerPrintError(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
-				//TODO free memory (logger + imageProc + config)
-				return EXIT_FAILURE;
-			}
-			featuresArray = imageProc->getImageFeatures(imagePath,index,&numOfFeats);
-			if (featuresArray == NULL) {
-				spLoggerPrintError(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
-				//TODO free memory (logger + imageProc + config)
-				return EXIT_FAILURE;
-			}
-			config_msg = spConfigGetFeatsPath(imagePath,config,index);
-			if (config_msg != SP_CONFIG_SUCCESS) {
-				spLoggerPrintError(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
-				//TODO free memory (logger + imageProc + config)
-				return EXIT_FAILURE;
-			}
-			if (!ExportFeats(imagePath,featuresArray,numOfFeats)) {
-				//TODO free memory (logger + imageProc + config + featuresArray and his elements)
-				return EXIT_FAILURE;
-			}
+		if(!extractionMode(config, featuresArray, imageProc,config_msg,&numOfFeats)){
+			delete imageProc;
+			freeMainMemory(config,featuresArray,numOfFeats,true);
+			return EXIT_FAILURE;
 		}
-		spLoggerPrintInfo(EXTRACTION_MODE_SUCCESS);
 	}
 	// TODO import the extracted features
 	// TODO build the KDtree
-	while (strcmp(query,"<>") != 0) {
+	while (strcmp(query,"<>") != 0) { //TODO move the query loop to main_aux or to new function in main.cpp
 		printf(QUERY_IMG_MSG);
 		fflush(stdout);
 		scanf("%1024s",query);
@@ -78,9 +83,7 @@ int main (int argc, char *argv[]) {
 	}
 	printf(EXIT_MSG);
 	fflush(stdout);
-	//TODO free memory
 	delete imageProc;
-	spConfigDestroy(config);
-	//TODO figure out why the program crash here instead of peacefully end
+	freeMainMemory(config,featuresArray,numOfFeats,true);
 	return (EXIT_SUCCESS);
 }

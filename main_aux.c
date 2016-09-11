@@ -60,6 +60,21 @@ bool initLogger(SPConfig config){
 	return true;
 }
 
+void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger){
+	int i;
+	if (config)
+		spConfigDestroy(config);
+	if (logger)
+		spLoggerDestroy();
+	if (featuresArray){
+		for (i=0;i<numOfFeats;i++){
+			spPointDestroy(featuresArray[i]);
+		}
+		free (featuresArray);
+	}
+	//TODO free KDTree and KDArray here
+}
+
 void tmpFunc1() { // TODO DEBUG DELME
 	double d0[] = {1,2};
 	double d1[] = {123,70};

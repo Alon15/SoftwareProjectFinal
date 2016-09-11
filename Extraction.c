@@ -2,6 +2,7 @@
 #include "SPLogger.h"
 #include "SPPoint.h"
 #include "defines.h"
+#include "main_aux.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
@@ -220,15 +221,13 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT){ // too many features failed to be extracted
 							spLoggerPrintError(CORRUPTED_FILE_ERROR,filename,__func__,0);
 							FreeParseFeats(buffer, feature, header, data);
-							// TODO free memory of features (the array, and all his elements) featsExtracted = number of elements to free
-							// TODO should be defined in main_aux
+							freeMainMemory(NULL,features,*numOfFeats,false);
 						}
 					} else {
 						if(featsExtracted > *numOfFeats){ // checks if we are trying to extract more features then expected
 							spLoggerPrintError(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
 							FreeParseFeats(buffer, feature, header, data);
-							// TODO free memory of features (the array, and all his elements) featsExtracted = number of elements to free
-							// TODO should be defined in main_aux
+							freeMainMemory(NULL,features,*numOfFeats,false);
 							return NULL;
 						}
 						features[featsExtracted] = spPointCreate(data,dim,ind); // create the feature
