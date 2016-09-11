@@ -3,6 +3,7 @@
 #include "SPPoint.h"
 #include "defines.h"
 #include "main_aux.h"
+#include "Extraction.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
