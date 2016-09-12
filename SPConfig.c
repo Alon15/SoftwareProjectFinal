@@ -14,18 +14,18 @@ struct sp_config_t {
 	char* spImagesSuffix;
 	int spNumOfImages;
 	// Image processing parameters
-	int spPCADimension;			// default value = 20
-	char* spPCAFilename;			// default value = pca.yml
-	int spNumOfFeatures;			// default value = 100
-	bool spExtractionMode;			// default value = true
-	int spNumOfSimilarImages;		// default value= 1
+	int spPCADimension;						// default value = 20
+	char* spPCAFilename;					// default value = pca.yml
+	int spNumOfFeatures;					// default value = 100
+	bool spExtractionMode;					// default value = true
+	int spNumOfSimilarImages;				// default value= 1
 	// KDTree parameters
 	SP_SPLIT_METHOD spKDTreeSplitMethod;	// default value= MAX_SPREAD
-	int spKNN;				// default value= 1
+	int spKNN;								// default value= 1
 	// Output parameters
-	bool spMinimalGUI;			// default value = false
-	int spLoggerLevel;			// default value= 3
-	char* spLoggerFilename;			// default value= stdout
+	bool spMinimalGUI;						// default value = false
+	int spLoggerLevel;						// default value= 3
+	char* spLoggerFilename;					// default value= stdout
 };
 
 /*
@@ -37,39 +37,39 @@ struct sp_config_t {
  * @param errorMsg - String of the formatted error message.
  */
 void ConfigErrorMsg(const char* filename, int lineNumber, SP_CONFIG_MSG* msg, char* errorMsg) {
-	switch (*msg) { // TODO try to make this function "smart" (with less duplication)
+	switch (*msg) {
 		case SP_CONFIG_MISSING_DIR: // spImagesDirectory is missing
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spImagesDirectory is not set\n",filename, lineNumber);
+			CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesDirectory");
 			break;
 		case SP_CONFIG_MISSING_PREFIX: // spImagesPrefix is missing
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spImagesPrefix is not set\n",filename, lineNumber);
+			CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesPrefix");
 			break;
 		case SP_CONFIG_MISSING_SUFFIX: // spImagesSuffix is missing 
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spImagesSuffix is not set\n",filename, lineNumber);
+			CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesSuffix");
 			break;
 		case SP_CONFIG_MISSING_NUM_IMAGES: // spNumOfImages is missing
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter spNumOfImages is not set\n",filename, lineNumber);
+			CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spNumOfImages");
 			break;
 		case SP_CONFIG_CANNOT_OPEN_FILE: // The configuration file given by filename cannot be open
-			snprintf(errorMsg,STRING_LENGTH,"The configuration file %s couldn't be open\n",filename);
+			CONFIG_CANT_OPEN_FILE(errorMsg,filename);
 			break;
 		case SP_CONFIG_DEFAULT_CANNOT_OPEN_FILE: // The default configuration file cannot be open
-			snprintf(errorMsg,STRING_LENGTH,"The default configuration file spcbir.config couldn't be open\n");
+			CONFIG_DEFAULT_CANT_OPEN_FILE(errorMsg);
 			break;
 		case SP_CONFIG_ALLOC_FAIL: // An allocation failure occurred
-			snprintf(errorMsg,STRING_LENGTH,"An error occurred - allocation failure\n");
+			CONFIG_ALLOC_FAIL(errorMsg);
 			break;
 		case SP_CONFIG_INVALID_LINE: // A line in the config file has invalid structure
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid configuration line\n",filename, lineNumber);
+			CONFIG_INVALID_LINE(errorMsg,filename,lineNumber);
 			break;
 		case SP_CONFIG_INVALID_INTEGER: // A line in the config file contains invalid integer
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid value - constraint not met\n",filename, lineNumber);
+			CONFIG_INVALID_VALUE(errorMsg,filename,lineNumber);
 			break;
 		case SP_CONFIG_INVALID_STRING: // A line in the config file contains invalid string
-			snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid value - constraint not met\n",filename, lineNumber);
+			CONFIG_INVALID_VALUE(errorMsg,filename,lineNumber);
 			break;
 		case SP_CONFIG_INVALID_ARGUMENT: // filename == NULL
-			snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c <config_filename>\n");
+			CONFIG_INVALID_ARGUMENT(errorMsg);
 			break;
 		default:
 			break;

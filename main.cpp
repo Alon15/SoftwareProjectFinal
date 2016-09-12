@@ -60,8 +60,9 @@ int main (int argc, char *argv[]) {
 		FREE_CONFIG(config);
 		return EXIT_FAILURE;
 	}
+	PRINT_INFO_LOGGER(IMAGE_PROC_INIT);
 	imageProc = new ImageProc(config); // initialize imageProc
-	spLoggerPrintInfo(IMAGE_PROC_SUCCESS);
+	PRINT_INFO_LOGGER(IMAGE_PROC_SUCCESS);
 	if (spConfigIsExtractionMode(config,&config_msg)) { // Extraction mode
 		if(!extractionMode(config, featuresArray, imageProc,config_msg,&numOfFeats)){
 			FREE_ALL(config,featuresArray,numOfFeats)

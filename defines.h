@@ -11,9 +11,6 @@
 
 // main and main_aux
 #define DEFAULT_CONFIG_FILE "spcbir.config"
-#define QUERY_IMG_MSG "Please enter an image path:\n"
-#define LOGGER_PRINT_FAILURE "An error occurred - Logger print failure"
-#define EXIT_MSG "Exiting...\n"
 
 // Extraction
 #define MAX_FEATURE_DIM 28
@@ -31,6 +28,9 @@
 #define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
 #define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
 #define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"
+#define QUERY_IMG_MSG "Please enter an image path:\n"
+#define LOGGER_PRINT_FAILURE "An error occurred - Logger print failure"
+#define EXIT_MSG "Exiting...\n"
 
 // Extraction messages
 #define WRITE_FILE_ERROR "An error occurred - could not write to file"
@@ -49,9 +49,19 @@
 #define LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to file"
 #define DEFAULT_LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to stdout"
 
+// SPConfig messages
+#define CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,file,lineNum,param) snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter %s is not set\n",file,lineNum,param)
+#define CONFIG_CANT_OPEN_FILE(errorMsg,filename) snprintf(errorMsg,STRING_LENGTH,"The configuration file %s couldn't be open\n",filename)
+#define CONFIG_DEFAULT_CANT_OPEN_FILE(errorMsg) snprintf(errorMsg,STRING_LENGTH,"The default configuration file %s couldn't be open\n",DEFAULT_CONFIG_FILE)
+#define CONFIG_ALLOC_FAIL(errorMsg) snprintf(errorMsg,STRING_LENGTH,"%s\n",MEMORY_ALLOCATION_ERROR)
+#define CONFIG_INVALID_LINE(errorMsg,filename,lineNumber) snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid configuration line\n",filename, lineNumber)
+#define CONFIG_INVALID_VALUE(errorMsg,filename,lineNumber) snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid value - constraint not met\n",filename, lineNumber)
+#define CONFIG_INVALID_ARGUMENT(errorMsg) snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c <config_filename>\n")
+
 // info messages
-#define IMAGE_PROC_SUCCESS "imageProc was successfully initialized"
-#define EXTRACTION_MODE_START "Run extraction mode"
+#define IMAGE_PROC_INIT "Initializing imageProc"
+#define IMAGE_PROC_SUCCESS "ImageProc was successfully initialized"
+#define EXTRACTION_MODE_START "Starting extraction mode"
 #define EXTRACTION_MODE_SUCCESS "Extraction mode finished successfully"
 #define LOGGER_INIT_SUCCESS "Logger was successfully initialized"
 
