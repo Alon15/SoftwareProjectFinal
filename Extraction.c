@@ -195,6 +195,7 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 						return NULL;
 					}
 					j = 0;
+					p++;
 					while (feature[p] != '\n') {
 						header[j] = feature[p]; // copy the index of the image
 						p++;

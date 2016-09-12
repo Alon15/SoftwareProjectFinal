@@ -3,6 +3,8 @@
 #include "SPPoint.h"
 #include "main_aux.h"
 #include "defines.h"
+#include "KDTreeNode.h"
+#include "Extraction.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
@@ -73,8 +75,106 @@ void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool 
 			spPointDestroy(featuresArray[i]);
 		}
 		free (featuresArray);
+		featuresArray = NULL;
 	}
-	//TODO free KDTree and KDArray here
+	//TODO free KDTree here
+}
+
+/*
+ * Free the memory allocted in 'extractAllFeatures'
+ *
+ * Freeing featuresArray will also free the memory of all the points stored in the array.
+ * Freeing imageArray will also free the memory of all the arrays stored in it, and all
+ * the points stored in those arrays.
+ * If a parameter is NULL, then it won't be freed .
+ *
+ */
+void freeExtractAllFeaturesMemory(SPPoint** imageArray,int numOfImages,int* numOfFeatsArray,
+		SPPoint* featuresArray,int totalNumOfFeatures){
+	int i;
+	if (imageArray && numOfFeatsArray){
+		for (i=0;i<numOfImages;i++){
+			FREE_FEATURES_ARRAY(imageArray[i],numOfFeatsArray[i]); // free the sub-arrays
+		}
+		free(imageArray);
+		free(numOfFeatsArray);
+		imageArray = NULL;
+		numOfFeatsArray = NULL;
+	}
+	if (imageArray) // numOfFeatsArray might be NULL, so only imageArray need to be freed
+		free(imageArray);
+	if (featuresArray)
+		FREE_FEATURES_ARRAY(featuresArray,totalNumOfFeatures);
+}
+/*
+ * Extract all the features from the ".feats" files of all the images in the directory, and store
+ * the features extracted in 'featuresArray', also store the number of features extracted in 'numOfFeats'
+ *
+ *  @param config - the configuration structure
+ *  @param featuresArray - a pointer to the array that will store the eatures
+ *  @param numOfFeats - a pointer to a integer that will store the number of features extracted
+ *
+ *  @return True if the features successfully extracted
+ *  		False if extraction failed (an error message will be displayed)
+ */
+bool extractAllFeatures(SPConfig config,SPPoint* featuresArray,int* numOfFeats){
+	// Function variables
+	int numOfImages, i, j, k;
+	int* numOfFeatsArray = NULL; // array of number of feature (correspond to a feature array)
+	SPPoint** imageArray = NULL; // array of feature arrays
+	char featurePath[STRING_LENGTH];
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
+	numOfImages = spConfigGetNumOfImages(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		return false;
+	}
+	// Memory allocation
+	imageArray = (SPPoint**) malloc(sizeof(SPPoint*)*numOfImages);
+	numOfFeatsArray = (int*) malloc(sizeof(int)*numOfImages);
+	if (imageArray == NULL || numOfFeatsArray == NULL){
+		freeExtractAllFeaturesMemory(imageArray,0,numOfFeatsArray,NULL,0);
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		return false;
+	}
+	// Function code
+	*numOfFeats = 0;
+	for (i=0;i<numOfImages;i++){
+		config_msg = spConfigGetFeatsPath(featurePath,config,i);
+		if (config_msg != SP_CONFIG_SUCCESS) {
+			PRINT_ERROR_LOGGER(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,0);
+			return false;
+		}
+		imageArray[i] = ImportFeats(featurePath,&(numOfFeatsArray[i]));
+		*numOfFeats += numOfFeatsArray[i];
+	}
+	featuresArray = (SPPoint*) malloc((*numOfFeats)*sizeof(SPPoint*));
+	if (featuresArray == NULL){
+		freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,featuresArray,0);
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		return false;
+	}
+	k = 0;
+	for (i=0;i<numOfImages;i++){
+		for (j=0;j<numOfFeatsArray[i];j++){
+			featuresArray[k] = imageArray[i][j];
+			k++;
+		}
+	}
+	freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,NULL,0);
+	return true;
+}
+
+bool initKDTree(SPConfig config, KDTreeNode kdTree){
+	SPPoint* featuresArray;
+	int numOfFeats;
+	if (!extractAllFeatures(config,featuresArray,&numOfFeats)){
+		return false;
+	}
+	kdTree = NULL;
+	//TODO init the KDTree here
+	return true;
 }
 
 void tmpFunc1() { // TODO DEBUG DELME

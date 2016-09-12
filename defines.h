@@ -25,6 +25,7 @@
  */
 
 // main messages
+#define GET_NUM_OF_IMAGES_FAIL_ERROR "An error occurred - could not retrieve the number of images from the configuration file"
 #define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
 #define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
 #define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"

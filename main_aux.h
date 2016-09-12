@@ -1,6 +1,8 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 
+#include "KDTreeNode.h"
+
 /*
  * The function gets the configuration filename from the command line arguments or sets it to
  * the default file name if no arguments were given.
@@ -20,7 +22,7 @@ void getFileName(char* filename, int argc, char** argv);
  * @param config - the configuration structure
  *
  * @return True if the logger was successfully initialized
- * 		   False if the logger failed to initialize (an error message will be displayed)
+ * 		   False if the initialization failed (an error message will be displayed)
  */
 bool initLogger(SPConfig config);
 
@@ -37,6 +39,17 @@ bool initLogger(SPConfig config);
  *
  */
 void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger);
+
+/*
+ *  Initialize the KDTree data structure
+ *
+ *  @param config - the configuration structure
+ *  @param kdTree - the data structure we are initializing
+ *
+ *  @return True if the KDTree was successfully initialized
+ *  		False if the initialization failed
+ */
+bool initKDTree(SPConfig config, KDTreeNode kdTree);
 
 void tmpFunc1();
 
