@@ -13,8 +13,8 @@ struct kd_tree_node_t {
 	SPPoint data; // Pointer to a point (only if the current node is a leaf) otherwise this field value is NULL
 };
 
-// creates one node tree with the value 'a'
-KDTreeNode createKDNode(SPPoint a) {
+// Recursively creates KD tree from KD array
+KDTreeNode createKDTree(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	KDTreeNode node;
 	// Allocate memory
@@ -23,38 +23,16 @@ KDTreeNode createKDNode(SPPoint a) {
 		return NULL;
 	}
 	// Function body
-	node->dim = 0;
-	node->val = 0;
-	node->left = NULL;
-	node->right = NULL;
-	node->data = a;
-	return node;
-}
-
-/* Given an array 'arr' the function returns a new
- * tree with the values of 'arr'*/
-KDTreeNode* createFromArray(SPConfig config, int* arr, int size) {
-	// Function variables
-	int mid;
-	SP_CONFIG_MSG config_msg;
-	SP_SPLIT_METHOD splitMethod;
-	KDTreeNode* root;
-	// Allocate memory
-	config_msg = SP_CONFIG_SUCCESS;
-	root = (KDTreeNode) malloc(sizeof(*root));
-	if (root == NULL) { // Memory allocation error
-			return NULL;
-	}
-	// Function body
-	if (size == 0 || !arr) {
-		root = NULL;
-	} else if (size == 1) {
-		root = createNode(arr[0]);
+	if (spKDArrayGetSize(kdarray) == 0) {
+		free(node);
+		return NULL;
+	} else if (spKDArrayGetSize(kdarray) == 1) {
+		node->dim = 0;
+		node->val = 0;
+		node->left = NULL;
+		node->right = NULL;
+		node->data = spKDArrayGetPoints(kdarray)[0];
 	} else {
-		config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
-		if (config_msg != SP_CONFIG_SUCCESS) {
-			//TODO error
-		}
 		switch (splitMethod) {
 			case RANDOM:
 
@@ -65,14 +43,42 @@ KDTreeNode* createFromArray(SPConfig config, int* arr, int size) {
 			case INCREMENTAL:
 
 				break;
+			default: // Just in case
+				free(node);
+				return NULL;
+		}
+		node->dim = 0; // TODO
+		node->val = 0; // TODO
+		node->left = createKDTree(kdarray,i+1,splitMethod); // TODO
+		node->right = createKDTree(kdarray,i+1,splitMethod); // TODO
+		node->data = NULL;
+		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
+			free(node);
+			return NULL;
 		}
 	}
-	//mid = size / 2;
-	//KDTreeNode* left = createFromArray(arr, size / 2);
-	//KDTreeNode* right = createFromArray(arr + size / 2 + 1, size - size / 2 - 1);
-	//KDTreeNode* root = createNode(arr[mid]);
-	//root->left = left;
-	//root->right = right;
+	return node;
+}
+
+//
+KDTreeNode createFromArray(SPConfig config) {
+	// Function variables
+	SP_CONFIG_MSG config_msg;
+	SP_SPLIT_METHOD splitMethod;
+	KDTreeNode root;
+	// Allocate memory
+	config_msg = SP_CONFIG_SUCCESS;
+	//root = (KDTreeNode) malloc(sizeof(*root));
+	//if (root == NULL) { // Memory allocation error
+	//		return NULL;
+	//}
+	// Function body
+	config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		//TODO error
+	}
+	// TODO Create KD array from features
+	root = createKDTree(NULL,0,splitMethod); // TODO
 	return root;
 }
 
