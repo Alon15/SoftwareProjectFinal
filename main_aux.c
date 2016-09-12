@@ -193,10 +193,10 @@ void tmpFunc1() { // TODO DEBUG DELME
 	SPPoint pR1[] = {p2,p2,p1,p1,p3};
 	SPPoint pR2[] = {p2,p3,p3,p4,p4};
 	SPPoint pR3[] = {p2,p3,p2,p2,p3};
-	SPKDArray k0 = Init(pR0,5);
-	SPKDArray k1 = Init(pR1,5);
-	SPKDArray k2 = Init(pR2,5);
-	SPKDArray k3 = Init(pR3,5);
+	SPKDArray k0 = spKDArrayInit(pR0,5);
+	SPKDArray k1 = spKDArrayInit(pR1,5);
+	SPKDArray k2 = spKDArrayInit(pR2,5);
+	SPKDArray k3 = spKDArrayInit(pR3,5);
 	//int dim = k->dim;
 	printf("OK\n");
 	printf("A: %d\n",spPointGetIndex(pR0[0]));
@@ -215,7 +215,7 @@ void tmpFunc1() { // TODO DEBUG DELME
 		printf("|\n");
 	}
 	fflush(stdout);
-	SPKDArrayPair kP[] = {Split(k0,0),Split(k1,0),Split(k2,0),Split(k3,0)};
+	SPKDArrayPair kP[] = {spKDArraySplit(k0,0),spKDArraySplit(k1,0),spKDArraySplit(k2,0),spKDArraySplit(k3,0)};
 	printf("tt1\n");
 	fflush(stdout);
 	for (int k=0;k<4;k++) {

@@ -60,22 +60,23 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	return node;
 }
 
-bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, KDTreeNode kdTree) {
+bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode kdTree) {
 	// Function variables
-	int numOfFeats;
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	SPKDArray kdArray;
 	// Allocate memory
 	kdTree = NULL;
-	numOfFeats = 0;
 	config_msg = SP_CONFIG_SUCCESS;
 	// Function body
 	config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		return false;
 	}
-	kdArray = spKDArrayInit(featuresArray,0); // TODO
+	kdArray = spKDArrayInit(featuresArray,size);
+	if (kdArray == NULL) {
+		return false;
+	}
 	kdTree = spKDTreeRecursion(kdArray,0,splitMethod); // TODO
 	return true;
 }

@@ -14,7 +14,7 @@ extern "C" {
 
 using namespace sp;
 
-bool extractionMode(SPConfig config,ImageProc* imageProc){
+bool extractionMode(SPConfig config,ImageProc* imageProc) {
 	// Function variables
 	int index, numOfImages;
 	char imagePath[STRING_LENGTH];
@@ -53,7 +53,7 @@ bool extractionMode(SPConfig config,ImageProc* imageProc){
 	return true;
 }
 
-bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* query){
+bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* query) {
 	// Function variables
 	char imagePath[STRING_LENGTH];
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
@@ -71,10 +71,10 @@ bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* qu
 		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return false;
 	}
-	if (!minimalGui){
+	if (!minimalGui) {
 		PRINT_NON_MINIMAL_GUI_MSG(query);
 	}
-	for (i=0;i<numOfSimilarImages;i++){
+	for (i=0;i<numOfSimilarImages;i++) {
 		config_msg = spConfigGetImagePath(imagePath,config,closestImages[i]);
 		if (config_msg != SP_CONFIG_SUCCESS) {
 			PRINT_ERROR_LOGGER(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
@@ -111,7 +111,7 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 			PRINT_INFO_LOGGER(SEARCH_FOR_SIMILAR_IMAGES);
 			//TODO to use kdTree and numOfSimilarImages\config here
 			closestImages = NULL; //TODO get closest images int array (index array)
-			if (closestImages == NULL){ //TODO print the error inside the function
+			if (closestImages == NULL) { //TODO print the error inside the function
 				return false;
 			}
 			PRINT_INFO_LOGGER(SIMILAR_IMAGES_FOUND);
@@ -125,15 +125,13 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 int main (int argc, char *argv[]) {
 	//tmpFunc1(); //TODO DEBUG DELME
 	//return EXIT_FAILURE; //TODO DEBUG DELME
-	// Program variables
-	SPConfig config;
-	ImageProc* imageProc = NULL;
-	SPPoint* featuresArray = NULL;
-	KDTreeNode kdTree = NULL;
 	// Function variables
 	char filename[STRING_LENGTH];
-	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	int numOfFeats = 0;
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
+	KDTreeNode kdTree = NULL;
+	SPConfig config;
+	ImageProc* imageProc = NULL;
 	SPPoint* featuresArray = NULL;
 	// Function code
 	getFileName(filename,argc,argv);
@@ -141,7 +139,7 @@ int main (int argc, char *argv[]) {
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		return EXIT_FAILURE;
 	}
-	if(!initLogger(config)){ // initialize the logger
+	if (!initLogger(config)) { // initialize the logger
 		FREE_CONFIG(config);
 		return EXIT_FAILURE;
 	}
@@ -158,13 +156,13 @@ int main (int argc, char *argv[]) {
 		return false;
 	}
 	PRINT_INFO_LOGGER(KDTREE_INIT);
-	if(!spKDTreeInit(config,featuresArray,kdTree)){ // initialize KDTree
+	if (!spKDTreeInit(config,featuresArray,numOfFeats,kdTree)) { // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return EXIT_FAILURE;
 	}
 	PRINT_INFO_LOGGER(KDTREE_SUCCESS);
 	PRINT_INFO_LOGGER(QUERY_START);
-	if(!query(config,imageProc,kdTree)){ // start query
+	if (!query(config,imageProc,kdTree)) { // start query
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return (EXIT_SUCCESS);
 	}
