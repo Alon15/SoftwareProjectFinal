@@ -12,14 +12,19 @@ typedef struct kd_tree_node_t *KDTreeNode;
  *
  * @@@@@@@@@@@ TODO
  */
-KDTreeNode createKDTree(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod);
+KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod);
 
 /*
- * @@@@@@@@@@@ TODO
+ *  Initialize the KDTree data structure
  *
- * @@@@@@@@@@@ TODO
+ *  @param config - The configuration structure
+ *  @param featuresArray - A pointer to the array that will store the features
+ *  @param kdTree - The data structure we are initializing
+ *
+ *  @return True if the KDTree was successfully initialized
+ *  		False if the initialization failed
  */
-KDTreeNode createFromArray(SPConfig config);
+bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, KDTreeNode kdTree);
 
 /*
  * @@@@@@@@@@@ TODO

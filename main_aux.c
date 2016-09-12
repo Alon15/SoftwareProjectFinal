@@ -21,7 +21,7 @@ void getFileName(char* filename, int argc, char** argv) {
 		strcpy(filename,DEFAULT_CONFIG_FILE);
 	}
 }
-SP_LOGGER_LEVEL parseLoggerLevel(int level){
+SP_LOGGER_LEVEL parseLoggerLevel(int level) {
 	switch(level) {
 	case 1:
 		return SP_LOGGER_ERROR_LEVEL;
@@ -65,7 +65,7 @@ bool initLogger(SPConfig config){
 	return true;
 }
 
-void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger){
+void freeMainMemory(SPConfig config, SPPoint* featuresArray, int numOfFeats, bool logger) {
 	int i;
 	if (config)
 		spConfigDestroy(config);
@@ -90,8 +90,7 @@ void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool 
  * If a parameter is NULL, then it won't be freed .
  *
  */
-void freeExtractAllFeaturesMemory(SPPoint** imageArray,int numOfImages,int* numOfFeatsArray,
-		SPPoint* featuresArray,int totalNumOfFeatures){
+void freeExtractAllFeaturesMemory(SPPoint** imageArray, int numOfImages, int* numOfFeatsArray, SPPoint* featuresArray, int totalNumOfFeatures) {
 	int i;
 	if (imageArray && numOfFeatsArray){
 		for (i=0;i<numOfImages;i++){
@@ -111,14 +110,14 @@ void freeExtractAllFeaturesMemory(SPPoint** imageArray,int numOfImages,int* numO
  * Extract all the features from the ".feats" files of all the images in the directory, and store
  * the features extracted in 'featuresArray', also store the number of features extracted in 'numOfFeats'
  *
- *  @param config - the configuration structure
- *  @param featuresArray - a pointer to the array that will store the eatures
- *  @param numOfFeats - a pointer to a integer that will store the number of features extracted
+ *  @param config - The configuration structure
+ *  @param featuresArray - A pointer to the array that will store the features
+ *  @param numOfFeats - A pointer to a integer that will store the number of features extracted
  *
  *  @return True if the features successfully extracted
  *  		False if extraction failed (an error message will be displayed)
  */
-bool extractAllFeatures(SPConfig config,SPPoint* featuresArray,int* numOfFeats){
+bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats) {
 	// Function variables
 	int numOfImages, i, j, k;
 	int* numOfFeatsArray = NULL; // array of number of feature (correspond to a feature array)
@@ -164,17 +163,6 @@ bool extractAllFeatures(SPConfig config,SPPoint* featuresArray,int* numOfFeats){
 		}
 	}
 	freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,NULL,0);
-	return true;
-}
-
-bool initKDTree(SPConfig config, KDTreeNode kdTree){
-	SPPoint* featuresArray = NULL;
-	int numOfFeats = 0;
-	if (!extractAllFeatures(config,featuresArray,&numOfFeats)){
-		return false;
-	}
-	kdTree = NULL;
-	//TODO init the KDTree here
 	return true;
 }
 

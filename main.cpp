@@ -128,6 +128,7 @@ int main (int argc, char *argv[]) {
 	// Program variables
 	SPConfig config;
 	ImageProc* imageProc = NULL;
+	SPPoint* featuresArray = NULL;
 	KDTreeNode kdTree = NULL;
 	// Function variables
 	char filename[STRING_LENGTH];
@@ -153,8 +154,11 @@ int main (int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 	}
+	if (!extractAllFeatures(config,featuresArray,&numOfFeats)) {
+		return false;
+	}
 	PRINT_INFO_LOGGER(KDTREE_INIT);
-	if(!initKDTree(config,kdTree)){ // initialize KDTree
+	if(!spKDTreeInit(config,featuresArray,kdTree)){ // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return EXIT_FAILURE;
 	}

@@ -19,7 +19,7 @@ void getFileName(char* filename, int argc, char** argv);
 /*
  * Initialize the logger.
  *
- * @param config - the configuration structure
+ * @param config - The configuration structure
  *
  * @return True if the logger was successfully initialized
  * 		   False if the initialization failed (an error message will be displayed)
@@ -32,29 +32,23 @@ bool initLogger(SPConfig config);
  * Freeing featuresArray will also free the memory of all the points stored in the array
  * If a parameter is NULL, then it won't be freed
  *
- * @param config - the configuration structure to be freed
- * @param featuresArray - array of SPPoints
- * @param numOfFeats - the number of elements in the featuresArray
- * @param logger - a boolean that indicate if the logger will be freed
+ * @param config - The configuration structure to be freed
+ * @param featuresArray - Array of SPPoints
+ * @param numOfFeats - The number of elements in the featuresArray
+ * @param logger - A boolean that indicate if the logger will be freed
  *
  */
 void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger);
 
-/*
- *  Initialize the KDTree data structure
- *
- *  @param config - the configuration structure
- *  @param kdTree - the data structure we are initializing
- *
- *  @return True if the KDTree was successfully initialized
- *  		False if the initialization failed
+/* TODO
+ * TODO
  */
-bool initKDTree(SPConfig config, KDTreeNode kdTree);
+bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats);
 
 /*
  * Checks if the file exists and if it is readable
  *
- * @param fileName - path to the file
+ * @param fileName - Path to the file
  *
  * @return True if the file exists and readable
  * 		   False otherwise

@@ -14,7 +14,7 @@ struct kd_tree_node_t {
 };
 
 // Recursively creates KD tree from KD array
-KDTreeNode createKDTree(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
+KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	KDTreeNode node;
 	// Allocate memory
@@ -49,8 +49,8 @@ KDTreeNode createKDTree(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 		}
 		node->dim = 0; // TODO
 		node->val = 0; // TODO
-		node->left = createKDTree(kdarray,i+1,splitMethod); // TODO
-		node->right = createKDTree(kdarray,i+1,splitMethod); // TODO
+		node->left = spKDTreeRecursion(kdarray,i+1,splitMethod); // TODO
+		node->right = spKDTreeRecursion(kdarray,i+1,splitMethod); // TODO
 		node->data = NULL;
 		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
 			free(node);
@@ -60,26 +60,24 @@ KDTreeNode createKDTree(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	return node;
 }
 
-//
-KDTreeNode createFromArray(SPConfig config) {
+bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, KDTreeNode kdTree) {
 	// Function variables
+	int numOfFeats;
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
-	KDTreeNode root;
+	SPKDArray kdArray;
 	// Allocate memory
+	kdTree = NULL;
+	numOfFeats = 0;
 	config_msg = SP_CONFIG_SUCCESS;
-	//root = (KDTreeNode) malloc(sizeof(*root));
-	//if (root == NULL) { // Memory allocation error
-	//		return NULL;
-	//}
 	// Function body
 	config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
 	if (config_msg != SP_CONFIG_SUCCESS) {
-		//TODO error
+		return false;
 	}
-	// TODO Create KD array from features
-	root = createKDTree(NULL,0,splitMethod); // TODO
-	return root;
+	kdArray = spKDArrayInit(featuresArray,0); // TODO
+	kdTree = spKDTreeRecursion(kdArray,0,splitMethod); // TODO
+	return true;
 }
 
 // Frees all allocation associated with the tree given by root

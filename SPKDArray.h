@@ -13,7 +13,7 @@ typedef struct kd_array_pair_t *SPKDArrayPair;
  * @param TODO
  * @return TODO
  */
-int compare(const void *aIn, const void *bIn, void *thunkIn);
+int spKDArrayCompare(const void *aIn, const void *bIn, void *thunkIn);
 
 /*
  * Initializes the kd-array with the data given by arr. The complexity of
@@ -22,7 +22,7 @@ int compare(const void *aIn, const void *bIn, void *thunkIn);
  * @param TODO
  * @return TODO
  */
-SPKDArray Init(SPPoint* arr, int size);
+SPKDArray spKDArrayInit(SPPoint* arr, int size);
 
 /*
  * Returns two kd-arrays (kdLeft, kdRight) such that the first [n/2] points
@@ -32,7 +32,7 @@ SPKDArray Init(SPPoint* arr, int size);
  * @param TODO
  * @return TODO
  */
-SPKDArrayPair Split(SPKDArray kdArr, int coor);
+SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor);
 
 void spKDArrayDestroy(SPKDArray array);
 

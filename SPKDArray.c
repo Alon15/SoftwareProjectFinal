@@ -20,7 +20,7 @@ struct kd_array_pair_t {
 };
 
 //
-int compare(const void *aIn, const void *bIn, void *thunkIn)
+int spKDArrayCompare(const void *aIn, const void *bIn, void *thunkIn)
 {
 	const int *a = aIn, *b = bIn;
 	const double *thunk = thunkIn;
@@ -34,7 +34,7 @@ int compare(const void *aIn, const void *bIn, void *thunkIn)
 }
 
 // Initializes the kd-array with the data given by arr.
-SPKDArray Init(SPPoint* arr, int size) {
+SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	// Function variables
 	int i,j; // Generic loop variable
 	int dim; // Points array dimension
@@ -76,7 +76,7 @@ SPKDArray Init(SPPoint* arr, int size) {
 		} //												 matrix_i = |   0 |   1 |   2 |   3 |   4 |
 	}
 	for (i=0;i<dim;i++) { // Foreach dim
-		qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),compare,matrix_v[i]);
+		qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),spKDArrayCompare,matrix_v[i]);
 	}
 	KDarray->matrix = matrix_i;
 	// Free memory
@@ -94,7 +94,7 @@ SPKDArray Init(SPPoint* arr, int size) {
 }
 
 //
-SPKDArrayPair Split(SPKDArray kdArr, int coor) {
+SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	// Function variables
 	int i,j; // Generic loop variable
 	int pointerLeft, pointerRight; // The pointers for the matrix splitting
