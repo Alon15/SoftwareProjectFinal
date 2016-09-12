@@ -40,19 +40,20 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	} else {
 		switch (splitMethod) {
 			case RANDOM:
-				nodeSons = spKDArraySplit(kdarray,0);
+				i = 0; // TODO
 				break;
 			case MAX_SPREAD:
-
+				i = 0; // TODO
 				break;
 			case INCREMENTAL:
-
+				i = 0; // TODO
 				break;
 			default: // Just in case
 				free(node);
+				free(nodeSons);
 				return NULL;
 		}
-		nodeSons = spKDArraySplit(kdarray,0);
+		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
 		node->dim = 0; // TODO
 		node->val = 0; // TODO
 		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i+1,splitMethod); // TODO
