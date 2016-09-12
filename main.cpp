@@ -54,10 +54,13 @@ bool extractionMode(SPConfig config,ImageProc* imageProc){
 }
 
 bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* query){
+	// Function variables
 	char imagePath[STRING_LENGTH];
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	int i, numOfSimilarImages;
 	bool minimalGui;
+	// Function code
+	PRINT_INFO_LOGGER(SHOW_SIMILAR_IMAGES);
 	minimalGui = spConfigMinimalGui(config,&config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		PRINT_ERROR_LOGGER(GET_GUI_FAIL_ERROR,__FILE__,__func__,__LINE__);
@@ -105,11 +108,13 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 				PRINT_ERROR_LOGGER(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 				return false;
 			}
+			PRINT_INFO_LOGGER(SEARCH_FOR_SIMILAR_IMAGES);
 			//TODO to use kdTree and numOfSimilarImages\config here
 			closestImages = NULL; //TODO get closest images int array (index array)
 			if (closestImages == NULL){ //TODO print the error inside the function
 				return false;
 			}
+			PRINT_INFO_LOGGER(SIMILAR_IMAGES_FOUND);
 			showImages(config,imageProc,closestImages,query);
 			FREE_FEATURES_ARRAY(featuresArray,numOfFeats); // free the query features
 		}
@@ -149,12 +154,13 @@ int main (int argc, char *argv[]) {
 		}
 	}
 	PRINT_INFO_LOGGER(KDTREE_INIT);
-	if(!initKDTree(config,kdTree)){
+	if(!initKDTree(config,kdTree)){ // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return EXIT_FAILURE;
 	}
 	PRINT_INFO_LOGGER(KDTREE_SUCCESS);
-	if(!query(config,imageProc,kdTree)){
+	PRINT_INFO_LOGGER(QUERY_START);
+	if(!query(config,imageProc,kdTree)){ // start query
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return (EXIT_SUCCESS);
 	}

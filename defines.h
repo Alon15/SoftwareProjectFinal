@@ -33,6 +33,10 @@
 #define PRINT_NON_MINIMAL_GUI_MSG(path) printf("Best candidates for - %s - are:\n",path)
 #define PRINT_NON_MINIMAL_GUI_RESULT(path) printf("%s\n",path)
 #define QUERY_IMG_MSG "Please enter an image path:\n"
+#define QUERY_START "Getting queries from the user"
+#define SEARCH_FOR_SIMILAR_IMAGES "Similar images search started"
+#define SIMILAR_IMAGES_FOUND "Similar images found successfully"
+#define SHOW_SIMILAR_IMAGES "Showing similar images"
 #define LOGGER_PRINT_FAILURE "An error occurred - Logger print failure"
 #define EXIT_MSG "Exiting...\n"
 
