@@ -51,6 +51,16 @@ void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool 
  */
 bool initKDTree(SPConfig config, KDTreeNode kdTree);
 
+/*
+ * Checks if the file exists and if it is readable
+ *
+ * @param fileName - path to the file
+ *
+ * @return True if the file exists and readable
+ * 		   False otherwise
+ */
+bool fileCheck(const char* fileName);
+
 void tmpFunc1();
 
 #endif /* MAIN_AUX_H_ */

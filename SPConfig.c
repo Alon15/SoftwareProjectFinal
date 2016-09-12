@@ -607,6 +607,17 @@ SP_CONFIG_MSG spConfigGetLoggerFileName(char* fileName, const SPConfig config) {
 	return SP_CONFIG_SUCCESS;
 }
 
+int spConfigGetNumOfSimilarImages(const SPConfig config, SP_CONFIG_MSG* msg) {
+	assert(msg != NULL);
+	if (config == NULL) {
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
+	} else {
+		*msg = SP_CONFIG_SUCCESS;
+	}
+	return config->spNumOfSimilarImages;
+}
+
 void spConfigDestroy(SPConfig config) {
 	if (config != NULL) {
 		free(config->spImagesDirectory);

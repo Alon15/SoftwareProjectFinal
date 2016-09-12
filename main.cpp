@@ -53,6 +53,70 @@ bool extractionMode(SPConfig config,ImageProc* imageProc){
 	return true;
 }
 
+bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* query){
+	char imagePath[STRING_LENGTH];
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
+	int i, numOfSimilarImages;
+	bool minimalGui;
+	minimalGui = spConfigMinimalGui(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		PRINT_ERROR_LOGGER(GET_GUI_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		return false;
+	}
+	numOfSimilarImages = spConfigGetNumOfSimilarImages(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		return false;
+	}
+	if (!minimalGui){
+		PRINT_NON_MINIMAL_GUI_MSG(query);
+	}
+	for (i=0;i<numOfSimilarImages;i++){
+		config_msg = spConfigGetImagePath(imagePath,config,closestImages[i]);
+		if (config_msg != SP_CONFIG_SUCCESS) {
+			PRINT_ERROR_LOGGER(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
+			return false;
+		}
+		if (!minimalGui)
+			PRINT_NON_MINIMAL_GUI_RESULT(imagePath);
+		else
+			imageProc->showImage(imagePath);
+	}
+	return true;
+}
+
+bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
+	// Function variables
+	char query[STRING_LENGTH] = {'\0'};
+	int numOfFeats = 0,numOfSimilarImages;
+	int* closestImages;
+	SPPoint* featuresArray = NULL;
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
+	// Function code
+	numOfSimilarImages = spConfigGetNumOfSimilarImages(config,&config_msg);
+	while (true) {
+		PRINT(QUERY_IMG_MSG);
+		scanf("%1024s",query);
+		if(strcmp(query,"<>") == 0)
+			break;
+		if (fileCheck(query)){
+			featuresArray = imageProc->getImageFeatures(query,-1,&numOfFeats);
+			if (featuresArray == NULL) {
+				PRINT_ERROR_LOGGER(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
+				return false;
+			}
+			//TODO to use kdTree and numOfSimilarImages\config here
+			closestImages = NULL; //TODO get closest images int array (index array)
+			if (closestImages == NULL){ //TODO print the error inside the function
+				return false;
+			}
+			showImages(config,imageProc,closestImages,query);
+			FREE_FEATURES_ARRAY(featuresArray,numOfFeats); // free the query features
+		}
+	}
+	return true;
+}
+
 int main (int argc, char *argv[]) {
 	//tmpFunc1(); //TODO DEBUG DELME
 	//return EXIT_FAILURE; //TODO DEBUG DELME
@@ -61,9 +125,9 @@ int main (int argc, char *argv[]) {
 	ImageProc* imageProc = NULL;
 	KDTreeNode kdTree = NULL;
 	// Function variables
-	char filename[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
+	char filename[STRING_LENGTH];
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
-	int numOfFeats;
+	int numOfFeats = 0;
 	SPPoint* featuresArray = NULL;
 	// Function code
 	getFileName(filename,argc,argv);
@@ -84,18 +148,15 @@ int main (int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 	}
+	PRINT_INFO_LOGGER(KDTREE_INIT);
 	if(!initKDTree(config,kdTree)){
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return EXIT_FAILURE;
 	}
-	while (strcmp(query,"<>") != 0) { //TODO move the query loop to main_aux or to new function in main.cpp
-		PRINT(QUERY_IMG_MSG);
-		scanf("%1024s",query);
-		//TODO check if the query path is valid
-		//TODO get features of the new image
-		//TODO find matches (KDTree search)
-		//TODO show matches (GUI or stdout)
-		//TODO reset variable of the current query (clear the features)
+	PRINT_INFO_LOGGER(KDTREE_SUCCESS);
+	if(!query(config,imageProc,kdTree)){
+		FREE_ALL(config,featuresArray,numOfFeats)
+		return (EXIT_SUCCESS);
 	}
 	PRINT(EXIT_MSG);
 	FREE_ALL(config,featuresArray,numOfFeats)

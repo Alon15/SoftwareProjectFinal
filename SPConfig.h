@@ -249,6 +249,19 @@ int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg);
 SP_CONFIG_MSG spConfigGetLoggerFileName(char* fileName, const SPConfig config);
 
 /**
+ * Returns the number of similar image we want to show.
+ *
+ * @param config - the configuration structure
+ * @assert msg != NULL
+ * @param msg - pointer in which the msg returned by the function is stored
+ * @return positive integer in success, negative integer otherwise.
+ *
+ * - SP_CONFIG_INVALID_ARGUMENT - if config == NULL
+ * - SP_CONFIG_SUCCESS - in case of success
+ */
+int spConfigGetNumOfSimilarImages(const SPConfig config, SP_CONFIG_MSG* msg);
+
+/**
  * Frees all memory resources associate with config. 
  * If config == NULL nothig is done.
  */

@@ -29,6 +29,9 @@
 #define GET_IMAGE_PATH_FAIL_ERROR "An error occurred - could not retrieve image path from the configuration file"
 #define GET_FEATS_PATH_FAIL_ERROR "An error occurred - could not retrieve feats path from the configuration file"
 #define FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR "An error occurred - could not extract features from an image"
+#define GET_GUI_FAIL_ERROR "An error occurred - could not retrieve gui property from the configuration file"
+#define PRINT_NON_MINIMAL_GUI_MSG(path) printf("Best candidates for - %s - are:\n",path)
+#define PRINT_NON_MINIMAL_GUI_RESULT(path) printf("%s\n",path)
 #define QUERY_IMG_MSG "Please enter an image path:\n"
 #define LOGGER_PRINT_FAILURE "An error occurred - Logger print failure"
 #define EXIT_MSG "Exiting...\n"
@@ -49,6 +52,8 @@
 #define LOGGER_LEVEL_INVALID_ERROR "An error occurred - logger level is invalid"
 #define LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to file"
 #define DEFAULT_LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to stdout"
+#define FILE_NOT_EXISTS "Invalid query - file is not exists\n"
+#define FILE_CANT_READ "Invalid query - file cannot be read\n"
 
 // SPConfig messages
 #define CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,file,lineNum,param) snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Parameter %s is not set\n",file,lineNum,param)
@@ -65,6 +70,8 @@
 #define EXTRACTION_MODE_START "Starting extraction mode"
 #define EXTRACTION_MODE_SUCCESS "Extraction mode finished successfully"
 #define LOGGER_INIT_SUCCESS "Logger was successfully initialized"
+#define KDTREE_INIT "Initializing KDTree"
+#define KDTREE_SUCCESS "KDTree was successfully initialized"
 
 /*
  * Macros

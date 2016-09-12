@@ -9,6 +9,7 @@
 #include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strcmp
+#include <unistd.h> // filecheck
 #include "SPKDArray.h" // TODO DEBUG DELME
 
 void getFileName(char* filename, int argc, char** argv) {
@@ -167,14 +168,26 @@ bool extractAllFeatures(SPConfig config,SPPoint* featuresArray,int* numOfFeats){
 }
 
 bool initKDTree(SPConfig config, KDTreeNode kdTree){
-	SPPoint* featuresArray;
-	int numOfFeats;
+	SPPoint* featuresArray = NULL;
+	int numOfFeats = 0;
 	if (!extractAllFeatures(config,featuresArray,&numOfFeats)){
 		return false;
 	}
 	kdTree = NULL;
 	//TODO init the KDTree here
 	return true;
+}
+
+bool fileCheck(const char* fileName){
+	if(access(fileName, F_OK )){
+		PRINT(FILE_NOT_EXISTS);
+		return false;
+	}
+	if(access(fileName, R_OK )){
+		PRINT(FILE_CANT_READ);
+			return false;
+	}
+    return true;
 }
 
 void tmpFunc1() { // TODO DEBUG DELME
