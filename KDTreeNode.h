@@ -31,6 +31,6 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
  *
  * @@@@@@@@@@@ TODO
  */
-void destroyArray(KDTreeNode root);
+void spKDTreeDestroy(KDTreeNode root);
 
 #endif /* KDTREENODE_H_ */

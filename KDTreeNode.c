@@ -17,14 +17,19 @@ struct kd_tree_node_t {
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	KDTreeNode node;
+	SPKDArrayPair nodeSons;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
-	if (node == NULL) { // Memory allocation error
+	nodeSons = (SPKDArrayPair) malloc(sizeof(*nodeSons));
+	if ((node == NULL)||(nodeSons == NULL)) { // Memory allocation error
+		free(node);
+		free(nodeSons);
 		return NULL;
 	}
 	// Function body
 	if (spKDArrayGetSize(kdarray) == 0) {
 		free(node);
+		free(nodeSons);
 		return NULL;
 	} else if (spKDArrayGetSize(kdarray) == 1) {
 		node->dim = 0;
@@ -35,7 +40,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	} else {
 		switch (splitMethod) {
 			case RANDOM:
-
+				nodeSons = spKDArraySplit(kdarray,0);
 				break;
 			case MAX_SPREAD:
 
@@ -47,10 +52,11 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				free(node);
 				return NULL;
 		}
+		nodeSons = spKDArraySplit(kdarray,0);
 		node->dim = 0; // TODO
 		node->val = 0; // TODO
-		node->left = spKDTreeRecursion(kdarray,i+1,splitMethod); // TODO
-		node->right = spKDTreeRecursion(kdarray,i+1,splitMethod); // TODO
+		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i+1,splitMethod); // TODO
+		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i+1,splitMethod); // TODO
 		node->data = NULL;
 		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
 			free(node);
@@ -82,7 +88,7 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 }
 
 // Frees all allocation associated with the tree given by root
-void destroyArray(KDTreeNode root) {
+void spKDTreeDestroy(KDTreeNode root) {
 	if (!root) {
 		return;
 	}
