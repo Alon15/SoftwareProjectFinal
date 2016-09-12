@@ -15,7 +15,8 @@ struct kd_array_t {
 };
 
 struct kd_array_pair_t {
-	SPKDArray left, right;
+	SPKDArray left;
+	SPKDArray right;
 };
 
 //
@@ -106,7 +107,7 @@ SPKDArrayPair Split(SPKDArray kdArr, int coor) {
 	int** matrixRight;
 	SPKDArrayPair res;
 	// Allocate memory
-	spltr = (kdArr->size)/2; // Ex. 5/2=3
+	spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
 	supportSide = (int *) malloc(kdArr->size * sizeof(int));
 	supportSub = (int *) malloc(kdArr->size * sizeof(int));
 	pointsLeft = (SPPoint *) malloc(spltr * sizeof(*pointsLeft));
@@ -114,7 +115,9 @@ SPKDArrayPair Split(SPKDArray kdArr, int coor) {
 	matrixLeft = (int **)malloc(kdArr->dim * sizeof(int*));
 	matrixRight = (int **)malloc(kdArr->dim * sizeof(int*));
 	res = (SPKDArrayPair) malloc(sizeof(*res));
-	if ((supportSide == NULL)||(supportSub == NULL)||(pointsLeft == NULL)||(pointsRight == NULL)||(matrixLeft == NULL)||(matrixRight == NULL)||(res == NULL)) { // Memory allocation error
+	res->left = (SPKDArray) malloc(sizeof(*res->left));
+	res->right = (SPKDArray) malloc(sizeof(*res->right));
+	if ((supportSide == NULL)||(supportSub == NULL)||(pointsLeft == NULL)||(pointsRight == NULL)||(matrixLeft == NULL)||(matrixRight == NULL)||(res == NULL)||(res->left == NULL)||(res->right == NULL)) { // Memory allocation error
 		free(supportSide);
 		free(supportSub);
 		free(pointsLeft);
@@ -230,4 +233,14 @@ SPPoint* spKDArrayGetPoints(SPKDArray array) {
 int** spKDArrayGetMatrix(SPKDArray array) {
 	assert(array != NULL);
 	return array->matrix;
+}
+
+SPKDArray spKDArrayPairGetLeft(SPKDArrayPair array) {
+	assert(array != NULL);
+	return array->left;
+}
+
+SPKDArray spKDArrayPairGetRight(SPKDArrayPair array) {
+	assert(array != NULL);
+	return array->right;
 }

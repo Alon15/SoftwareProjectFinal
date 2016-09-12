@@ -88,23 +88,54 @@ void tmpFunc1() { // TODO DEBUG DELME
 	SPPoint p2 = spPointCreate(d2,2,2);
 	SPPoint p3 = spPointCreate(d3,2,3);
 	SPPoint p4 = spPointCreate(d4,2,4);
-	SPPoint p[] = {p0,p1,p2,p3,p4};
-	SPKDArray k = Init(p,5);
+	SPPoint pR0[] = {p0,p1,p2,p3,p4};
+	SPPoint pR1[] = {p2,p2,p1,p1,p3};
+	SPPoint pR2[] = {p2,p3,p3,p4,p4};
+	SPPoint pR3[] = {p2,p3,p2,p2,p3};
+	SPKDArray k0 = Init(pR0,5);
+	SPKDArray k1 = Init(pR1,5);
+	SPKDArray k2 = Init(pR2,5);
+	SPKDArray k3 = Init(pR3,5);
 	//int dim = k->dim;
 	printf("OK\n");
-	printf("A: %d\n",spPointGetIndex(p[0]));
-	printf("B: %d\n",spPointGetDimension(p[0]));
+	printf("A: %d\n",spPointGetIndex(pR0[0]));
+	printf("B: %d\n",spPointGetDimension(pR0[0]));
 	fflush(stdout);
-	int d = spKDArrayGetDimension(k);
-	int s = spKDArrayGetSize(k);
+	int d = spKDArrayGetDimension(k0);
+	int s = spKDArrayGetSize(k0);
 	printf("C: %d\n",d);
 	printf("D: %d\n",s);
 	fflush(stdout);
-	int** mtrx = spKDArrayGetMatrix(k);
-	for (int i=0;i<s;i++) {
-		for (int j=0;j<d;j++) {
-			printf("E: matrix[%d][%d] = %d\n",j,i,mtrx[j][i]);
+	int** mtrx = spKDArrayGetMatrix(k0);
+	for (int j=0;j<d;j++) {
+		for (int i=0;i<s;i++) {
+			printf("| %d ",mtrx[j][i]);
 		}
+		printf("|\n");
 	}
 	fflush(stdout);
+	SPKDArrayPair kP[] = {Split(k0,0),Split(k1,0),Split(k2,0),Split(k3,0)};
+	printf("tt1\n");
+	fflush(stdout);
+	for (int k=0;k<4;k++) {
+		mtrx = spKDArrayGetMatrix(spKDArrayPairGetLeft(kP[k]));
+		printf("Test %d Left\n",k);
+		fflush(stdout);
+		for (int j=0;j<d;j++) {
+			for (int i=0;i<s;i++) {
+				printf("| %d ",mtrx[j][i]);
+			}
+			printf("|\n");
+		}
+		printf("Test %d Right\n",k);
+		fflush(stdout);
+		mtrx = spKDArrayGetMatrix(spKDArrayPairGetRight(kP[k]));
+		for (int j=0;j<d;j++) {
+			for (int i=0;i<s;i++) {
+				printf("| %d ",mtrx[j][i]);
+			}
+			printf("|\n");
+		}
+		fflush(stdout);
+	}
 }

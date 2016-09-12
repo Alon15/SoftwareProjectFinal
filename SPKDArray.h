@@ -44,4 +44,8 @@ SPPoint* spKDArrayGetPoints(SPKDArray array);
 
 int** spKDArrayGetMatrix(SPKDArray array);
 
+SPKDArray spKDArrayPairGetLeft(SPKDArrayPair array);
+
+SPKDArray spKDArrayPairGetRight(SPKDArrayPair array);
+
 #endif /* SPKDARRAY_H_ */

@@ -2,6 +2,7 @@
 #include "KDTreeNode.h"
 #include "SPConfig.h"
 #include "SPKDArray.h"
+#include "SPPoint.h"
 
 // Tree datatype
 struct kd_tree_node_t {
@@ -9,11 +10,11 @@ struct kd_tree_node_t {
 	int val; // The median value of the splitting dimension
 	struct kd_tree_node_t* left; // Pointer to the left subtree
 	struct kd_tree_node_t* right; // Pointer to the right subtree
-	int data; // Pointer to a point (only if the current node is a leaf) otherwise this field value is NULL
+	SPPoint data; // Pointer to a point (only if the current node is a leaf) otherwise this field value is NULL
 };
 
 // creates one node tree with the value 'a'
-KDTreeNode createKDNode(int a) {
+KDTreeNode createKDNode(SPPoint a) {
 	// Function variables
 	KDTreeNode node;
 	// Allocate memory

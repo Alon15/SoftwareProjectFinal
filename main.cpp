@@ -46,7 +46,8 @@ bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,
 }
 
 int main (int argc, char *argv[]) {
-	//tmpFunc1(); //TODO it cause the program to crash, probably memory issue
+	//tmpFunc1(); //TODO DEBUG DELME
+	//return EXIT_FAILURE; //TODO DEBUG DELME
 	// Program variables
 	SPConfig config;
 	ImageProc* imageProc = NULL;
