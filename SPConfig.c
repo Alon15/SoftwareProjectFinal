@@ -18,14 +18,14 @@ struct sp_config_t {
 	char* spPCAFilename;					// default value = pca.yml
 	int spNumOfFeatures;					// default value = 100
 	bool spExtractionMode;					// default value = true
-	int spNumOfSimilarImages;				// default value= 1
+	int spNumOfSimilarImages;				// default value = 1
 	// KDTree parameters
-	SP_SPLIT_METHOD spKDTreeSplitMethod;	// default value= MAX_SPREAD
-	int spKNN;								// default value= 1
+	SP_SPLIT_METHOD spKDTreeSplitMethod;	// default value = MAX_SPREAD
+	int spKNN;								// default value = 1
 	// Output parameters
 	bool spMinimalGUI;						// default value = false
-	int spLoggerLevel;						// default value= 3
-	char* spLoggerFilename;					// default value= stdout
+	int spLoggerLevel;						// default value = 3
+	char* spLoggerFilename;					// default value = stdout
 };
 
 /*

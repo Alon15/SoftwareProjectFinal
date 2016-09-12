@@ -32,9 +32,11 @@ SP_LOGGER_LEVEL parseLoggerLevel(int level){
 	return SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL;
 }
 bool initLogger(SPConfig config){
+	// Function variables
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	SP_LOGGER_LEVEL loggerLevel;
 	char filename[STRING_LENGTH];
+	// Function code
 	config_msg = spConfigGetLoggerFileName(filename,config); // get the logger filename
 	if (config_msg != SP_CONFIG_SUCCESS){
 		PRINT(GET_LOGGER_FILENAME_FAIL_ERROR);

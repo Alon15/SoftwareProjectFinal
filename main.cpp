@@ -14,8 +14,10 @@ extern "C" {
 using namespace sp;
 
 bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,SP_CONFIG_MSG config_msg,int* numOfFeats){
+	// Function variables
 	int index, numOfImages;
 	char imagePath[STRING_LENGTH];
+	// Function code
 	spLoggerPrintInfo(EXTRACTION_MODE_START);
 	numOfImages = spConfigGetNumOfImages(config,&config_msg);
 	for (index=0;index<numOfImages;index++) {
@@ -45,12 +47,15 @@ bool extractionMode(SPConfig config,SPPoint* featuresArray,ImageProc* imageProc,
 
 int main (int argc, char *argv[]) {
 	//tmpFunc1(); //TODO it cause the program to crash, probably memory issue
-	char filename[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
-	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
+	// Program variables
 	SPConfig config;
 	ImageProc* imageProc = NULL;
+	// Function variables
+	char filename[STRING_LENGTH], query[STRING_LENGTH] = {'\0'};
+	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	int numOfFeats;
 	SPPoint* featuresArray = NULL;
+	// Function code
 	getFileName(filename,argc,argv);
 	config = spConfigCreate(filename, &config_msg); // Load the configuration file
 	if (config_msg != SP_CONFIG_SUCCESS) {
