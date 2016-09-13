@@ -139,11 +139,11 @@ SP_LOGGER_MSG spLoggerPrintMsg(const char* msg) {
 		printf("%s\n",out);
 		fflush(stdout);
 	} else {
-	    strcat(out, "\n");
-	    stat = fwrite(out,1, strlen(out),logger->outputChannel);
-	    if (stat == 0) {
-	    	return SP_LOGGER_WRITE_FAIL;
-	    }
+		strcat(out, "\n");
+		stat = fwrite(out,1, strlen(out),logger->outputChannel);
+		if (stat == 0) {
+			return SP_LOGGER_WRITE_FAIL;
+		}
 	}
 	return SP_LOGGER_SUCCESS;
 }

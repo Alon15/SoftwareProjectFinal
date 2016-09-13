@@ -38,54 +38,54 @@ int spKDArrayCompare(const void *aIn, const void *bIn, void *thunkIn)
 }
 
 void specificMemoryFree(int* v0, int* v1, double* v2, double* v3, int** v4, int** v5, double** v6, double** v7, SPKDArray v8, SPKDArrayPair v9, SPPoint* v10, SPPoint* v11) {
-    if (v0) { // A tiny chance for errors in some compilers
-    	free(v0);
-    	v0 = NULL; // Preventing a "double-free"
-    }
-    if (v1) { // A tiny chance for errors in some compilers
-    	free(v1);
-    	v1 = NULL; // Preventing a "double-free"
-    }
-    if (v2) { // A tiny chance for errors in some compilers
-    	free(v2);
-    	v2 = NULL; // Preventing a "double-free"
-    }
-    if (v3) { // A tiny chance for errors in some compilers
-    	free(v3);
-    	v3 = NULL; // Preventing a "double-free"
-    }
-    if (v4) { // A tiny chance for errors in some compilers
-    	free(v4);
-    	v4 = NULL; // Preventing a "double-free"
-    }
-    if (v5) { // A tiny chance for errors in some compilers
-    	free(v5);
-    	v5 = NULL; // Preventing a "double-free"
-    }
-    if (v6) { // A tiny chance for errors in some compilers
-    	free(v6);
-    	v6 = NULL; // Preventing a "double-free"
-    }
-    if (v7) { // A tiny chance for errors in some compilers
-    	free(v7);
-    	v7 = NULL; // Preventing a "double-free"
-    }
-    if (v8) { // A tiny chance for errors in some compilers
-    	free(v8);
-    	v8 = NULL; // Preventing a "double-free"
-    }
-    if (v9) { // A tiny chance for errors in some compilers
-    	free(v9);
-    	v9 = NULL; // Preventing a "double-free"
-    }
-    if (v10) { // A tiny chance for errors in some compilers
-    	free(v10);
-    	v10 = NULL; // Preventing a "double-free"
-    }
-    if (v11) { // A tiny chance for errors in some compilers
-    	free(v11);
-    	v11 = NULL; // Preventing a "double-free"
-    }
+	if (v0) { // A tiny chance for errors in some compilers
+		free(v0);
+		v0 = NULL; // Preventing a "double-free"
+	}
+	if (v1) { // A tiny chance for errors in some compilers
+		free(v1);
+		v1 = NULL; // Preventing a "double-free"
+	}
+	if (v2) { // A tiny chance for errors in some compilers
+		free(v2);
+		v2 = NULL; // Preventing a "double-free"
+	}
+	if (v3) { // A tiny chance for errors in some compilers
+		free(v3);
+		v3 = NULL; // Preventing a "double-free"
+	}
+	if (v4) { // A tiny chance for errors in some compilers
+		free(v4);
+		v4 = NULL; // Preventing a "double-free"
+	}
+	if (v5) { // A tiny chance for errors in some compilers
+		free(v5);
+		v5 = NULL; // Preventing a "double-free"
+	}
+	if (v6) { // A tiny chance for errors in some compilers
+		free(v6);
+		v6 = NULL; // Preventing a "double-free"
+	}
+	if (v7) { // A tiny chance for errors in some compilers
+		free(v7);
+		v7 = NULL; // Preventing a "double-free"
+	}
+	if (v8) { // A tiny chance for errors in some compilers
+		free(v8);
+		v8 = NULL; // Preventing a "double-free"
+	}
+	if (v9) { // A tiny chance for errors in some compilers
+		free(v9);
+		v9 = NULL; // Preventing a "double-free"
+	}
+	if (v10) { // A tiny chance for errors in some compilers
+		free(v10);
+		v10 = NULL; // Preventing a "double-free"
+	}
+	if (v11) { // A tiny chance for errors in some compilers
+		free(v11);
+		v11 = NULL; // Preventing a "double-free"
+	}
 }
 
 // Initializes the kd-array with the data given by arr.
@@ -138,15 +138,15 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	}
 	KDarray->matrix = matrix_i;
 	// Free memory
-    for(i=0;i<dim;i++) {
-        if (matrix_v[i]) { // A tiny chance for errors in some compilers
-        	free(matrix_v[i]);
-        }
-    }
-    if (matrix_v) { // A tiny chance for errors in some compilers
-    	free(matrix_v);
-    	matrix_v = NULL; // Preventing a "double-free"
-    }
+	for(i=0;i<dim;i++) {
+		if (matrix_v[i]) { // A tiny chance for errors in some compilers
+			free(matrix_v[i]);
+		}
+	}
+	if (matrix_v) { // A tiny chance for errors in some compilers
+		free(matrix_v);
+		matrix_v = NULL; // Preventing a "double-free"
+	}
 	// Finish
 	return KDarray;
 }
@@ -257,14 +257,14 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	res->right->points = pointsRight;
 	res->right->matrix = matrixRight;
 	// Free memory
-    if (supportSide) { // A tiny chance for errors in some compilers
-    	free(supportSide);
-    	supportSide = NULL; // Preventing a "double-free"
-    }
-    if (supportSub) { // A tiny chance for errors in some compilers
-    	free(supportSub);
-    	supportSub = NULL; // Preventing a "double-free"
-    }
+	if (supportSide) { // A tiny chance for errors in some compilers
+		free(supportSide);
+		supportSide = NULL; // Preventing a "double-free"
+	}
+	if (supportSub) { // A tiny chance for errors in some compilers
+		free(supportSub);
+		supportSub = NULL; // Preventing a "double-free"
+	}
 	// Finish
 	return res;
 }
@@ -272,27 +272,27 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 void spKDArrayDestroy(SPKDArray array) {
 	int i;
 	if (array != NULL) {
-	    for(i=0;i<array->dim;i++) {
-	        if (array->matrix[i]) { // A tiny chance for errors in some compilers
-	        	free(array->matrix[i]);
-	        }
-	    }
-	    if (array->matrix) { // A tiny chance for errors in some compilers
-	    	free(array->matrix);
-	    	array->matrix = NULL; // Preventing a "double-free"
-	    }
-	    if (array->minSpread) { // A tiny chance for errors in some compilers
-	    	free(array->minSpread);
-	    	array->minSpread = NULL; // Preventing a "double-free"
-	    }
-	    if (array->maxSpread) { // A tiny chance for errors in some compilers
-	    	free(array->maxSpread);
-	    	array->maxSpread = NULL; // Preventing a "double-free"
-	    }
-	    if (array->points) { // A tiny chance for errors in some compilers
-	    	free(array->points);
-	    	array->points = NULL; // Preventing a "double-free"
-	    }
+		for(i=0;i<array->dim;i++) {
+			if (array->matrix[i]) { // A tiny chance for errors in some compilers
+				free(array->matrix[i]);
+			}
+		}
+		if (array->matrix) { // A tiny chance for errors in some compilers
+			free(array->matrix);
+			array->matrix = NULL; // Preventing a "double-free"
+		}
+		if (array->minSpread) { // A tiny chance for errors in some compilers
+			free(array->minSpread);
+			array->minSpread = NULL; // Preventing a "double-free"
+		}
+		if (array->maxSpread) { // A tiny chance for errors in some compilers
+			free(array->maxSpread);
+			array->maxSpread = NULL; // Preventing a "double-free"
+		}
+		if (array->points) { // A tiny chance for errors in some compilers
+			free(array->points);
+			array->points = NULL; // Preventing a "double-free"
+		}
 		free(array);
 	}
 }

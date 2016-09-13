@@ -20,7 +20,7 @@
  * @return True if the feature was written to file successfully to file
  * 	 	   False if the writing failed
  */
-bool WriteFeat(FILE* featsFile, SPPoint feature){
+bool WriteFeat(FILE* featsFile, SPPoint feature) {
 	// Function variables
 	char storedFeat[STRING_LENGTH], dataTruc[50];
 	size_t success;
@@ -43,7 +43,7 @@ bool WriteFeat(FILE* featsFile, SPPoint feature){
 	return true;
 }
 
-bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
+bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats) {
 	// Function variables
 	int i;
 	FILE* featsFile;
@@ -67,7 +67,7 @@ bool ExportFeats(const char* filename, SPPoint* feats, int numOfFeats){
 		return false;
 	}
 	for (i=0;i<numOfFeats;i++) {
-		if (!WriteFeat(featsFile,feats[i])){ // write the features to the file
+		if (!WriteFeat(featsFile,feats[i])) { // write the features to the file
 			return false;
 		}
 	}
@@ -119,8 +119,9 @@ bool ParseFeature(char* feature,int* dim,double* data, int line,const char* file
 			return false;
 		}
 		coordExtracted++;
-		if (feature[i] != '\n')
+		if (feature[i] != '\n') {
 			i++;
+		}
 	}
 	if (coordExtracted != *dim) { // dimension is not equal to the number of coordinates extracted
 		PRINT_WARNING_LOGGER(CORRUPTED_DATA_DIM_WARNING,filename,__func__,line);
@@ -135,14 +136,22 @@ bool ParseFeature(char* feature,int* dim,double* data, int line,const char* file
  * If any parameter is NULL pointer (allocation fail or never allocated), then the function ignore it.
  */
 void FreeParseFeats(char* buffer, char* feature, char* header, double* data) {
-	if (buffer)
+	if (buffer) { // A tiny chance for errors in some compilers
 		free(buffer);
-	if (feature)
+		buffer = NULL; // Preventing a "double-free"
+	}
+	if (feature) { // A tiny chance for errors in some compilers
 		free(feature);
-	if (header)
+		feature = NULL; // Preventing a "double-free"
+	}
+	if (header) { // A tiny chance for errors in some compilers
 		free(header);
-	if (data)
+		header = NULL; // Preventing a "double-free"
+	}
+	if (data) { // A tiny chance for errors in some compilers
 		free(data);
+		data = NULL; // Preventing a "double-free"
+	}
 }
 
 /*
@@ -164,11 +173,11 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 	SPPoint* features = NULL;
 	bool parseSuccess, firstLine = true;
 	// Memory allocation
-	data = (double*) malloc(MAX_FEATURE_DIM*sizeof(double));
-	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
-	feature = (char*) calloc(STRING_LENGTH,sizeof(char));
-	header = (char*) calloc(STRING_LENGTH,sizeof(char));
-	if (buffer == NULL || feature == NULL || data == NULL || header == NULL){
+	data = (double*)malloc(MAX_FEATURE_DIM*sizeof(double));
+	buffer = (char*)calloc(BUFFER_SIZE,sizeof(char));
+	feature = (char*)calloc(STRING_LENGTH,sizeof(char));
+	header = (char*)calloc(STRING_LENGTH,sizeof(char));
+	if (buffer == NULL || feature == NULL || data == NULL || header == NULL) {
 		FreeParseFeats(buffer, feature, header, data);
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
@@ -207,7 +216,7 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 						return NULL;
 					}
 					// memory allocation
-					features = (SPPoint*) malloc(sizeof(SPPoint)*(*numOfFeats));
+					features = (SPPoint*)malloc(sizeof(SPPoint)*(*numOfFeats));
 					if (features == NULL) {
 						PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 						FreeParseFeats(buffer, feature, header, data);
@@ -217,13 +226,13 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 					parseSuccess = ParseFeature(feature,&dim,data,line,filename); // parse the line
 					if (parseSuccess == false) {
 						featsFailed++; // count how many feature failed to be extracted
-						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT){ // too many features failed to be extracted
+						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT) { // too many features failed to be extracted
 							PRINT_ERROR_LOGGER(CORRUPTED_FILE_ERROR,filename,__func__,0);
 							FreeParseFeats(buffer, feature, header, data);
 							freeMainMemory(NULL,features,featsExtracted,false);
 						}
 					} else {
-						if(featsExtracted > *numOfFeats){ // checks if we are trying to extract more features then expected
+						if(featsExtracted > *numOfFeats) { // checks if we are trying to extract more features then expected
 							PRINT_ERROR_LOGGER(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
 							FreeParseFeats(buffer, feature, header, data);
 							freeMainMemory(NULL,features,featsExtracted,false);

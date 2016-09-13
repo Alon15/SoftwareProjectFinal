@@ -1,6 +1,6 @@
-#include "SPBPriorityQueue.h"
-#include "SPList.h"
-#include "SPListElement.h"
+#include "DEL_SPBPriorityQueue.h"
+#include "DEL_SPList.h"
+#include "DEL_SPListElement.h"
 #include <stdlib.h> // malloc, free, NULL
 #include <assert.h> // assert
 

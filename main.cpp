@@ -14,6 +14,7 @@ extern "C" {
 
 using namespace sp;
 
+// C function that use C++ file (SPImageProc)
 bool extractionMode(SPConfig config,ImageProc* imageProc) {
 	// Function variables
 	int index, numOfImages;
@@ -53,6 +54,7 @@ bool extractionMode(SPConfig config,ImageProc* imageProc) {
 	return true;
 }
 
+// C function that use C++ file (SPImageProc)
 bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* query) {
 	// Function variables
 	char imagePath[STRING_LENGTH];
@@ -88,7 +90,8 @@ bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* qu
 	return true;
 }
 
-bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
+// C function that use C++ file (SPImageProc)
+bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree) {
 	// Function variables
 	char query[STRING_LENGTH] = {'\0'};
 	int numOfFeats = 0;
@@ -98,9 +101,10 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 	while (true) {
 		PRINT(QUERY_IMG_MSG);
 		scanf("%1024s",query);
-		if(strcmp(query,"<>") == 0)
+		if(strcmp(query,"<>") == 0) {
 			break;
-		if (fileCheck(query)){
+		}
+		if (fileCheck(query)) {
 			featuresArray = imageProc->getImageFeatures(query,-1,&numOfFeats);
 			if (featuresArray == NULL) {
 				PRINT_ERROR_LOGGER(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
@@ -144,7 +148,7 @@ int main (int argc, char *argv[]) {
 	imageProc = new ImageProc(config); // initialize imageProc
 	PRINT_INFO_LOGGER(IMAGE_PROC_SUCCESS);
 	if (spConfigIsExtractionMode(config,&config_msg)) { // Extraction mode
-		if(!extractionMode(config,imageProc)){
+		if (!extractionMode(config,imageProc)) {
 			FREE_ALL(config,featuresArray,numOfFeats)
 			return EXIT_FAILURE;
 		}

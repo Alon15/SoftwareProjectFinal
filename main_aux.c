@@ -174,7 +174,7 @@ bool fileCheck(const char* fileName){
 		PRINT(FILE_CANT_READ);
 			return false;
 	}
-    return true;
+	return true;
 }
 
 void tmpFunc1() { // TODO DEBUG DELME

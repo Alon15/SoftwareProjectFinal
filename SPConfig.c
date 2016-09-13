@@ -353,12 +353,12 @@ void FreeParseConfig(char* buffer, char* line, char* value, char* variableName) 
  * @param c - the character we want to remove from the string
  */
 void removeAllCharOccurrences(char* str, char c) {
-    char *pr = str, *pw = str; // read point and write pointer
-    while (*pr) {
-        *pw = *pr++;
-        pw += (*pw != c); // write over the given character
-    }
-    *pw = '\0';
+	char *pr = str, *pw = str; // read point and write pointer
+	while (*pr) {
+		*pw = *pr++;
+		pw += (*pw != c); // write over the given character
+	}
+	*pw = '\0';
 }
 /*
  * The function gets a configuration file and a configuration structure and set the structure with
@@ -382,10 +382,10 @@ bool ParseConfig(FILE* configFile, const SPConfig config, SP_CONFIG_MSG* msg, in
 	bool nonDefaultParam[NON_DEFAULT_CONFIG_PARAM] = {0}; // init the array to false
 	bool parseSuccess;
 	// Memory allocation
-	variableName = (char*) malloc(STRING_LENGTH);
-	value = (char*) malloc(STRING_LENGTH);
-	buffer = (char*) calloc(BUFFER_SIZE,sizeof(char));
-	line = (char*) calloc(STRING_LENGTH,sizeof(char));
+	variableName = (char*)malloc(STRING_LENGTH);
+	value = (char*)malloc(STRING_LENGTH);
+	buffer = (char*)calloc(BUFFER_SIZE,sizeof(char));
+	line = (char*)calloc(STRING_LENGTH,sizeof(char));
 	if (variableName == NULL || value == NULL || buffer == NULL || line == NULL) {
 		*msg = SP_CONFIG_ALLOC_FAIL;
 		FreeParseConfig(buffer,line,value,variableName);
@@ -416,18 +416,18 @@ bool ParseConfig(FILE* configFile, const SPConfig config, SP_CONFIG_MSG* msg, in
 	for (i=0;i<NON_DEFAULT_CONFIG_PARAM;i++) {
 		if (nonDefaultParam[i] == false) { // a non default parameter is not set in the configuration file
 			switch (i) {
-			case 0:
-				*msg = SP_CONFIG_MISSING_DIR;
-				break;
-			case 1:
-				*msg = SP_CONFIG_MISSING_PREFIX;
-				break;
-			case 2:
-				*msg = SP_CONFIG_MISSING_SUFFIX;
-				break;
-			case 3:
-				*msg = SP_CONFIG_MISSING_NUM_IMAGES;
-				break;
+				case 0:
+					*msg = SP_CONFIG_MISSING_DIR;
+					break;
+				case 1:
+					*msg = SP_CONFIG_MISSING_PREFIX;
+					break;
+				case 2:
+					*msg = SP_CONFIG_MISSING_SUFFIX;
+					break;
+				case 3:
+					*msg = SP_CONFIG_MISSING_NUM_IMAGES;
+					break;
 			}
 			FreeParseConfig(buffer,line,value,variableName);
 			return false;
@@ -453,10 +453,11 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 	}
 	configFile = fopen(filename,"r");
 	if (configFile == NULL) { // failed to open the file
-		if (strcmp(filename,"spcbir.config") == 0)
+		if (strcmp(filename,"spcbir.config") == 0) {
 			*msg = SP_CONFIG_DEFAULT_CANNOT_OPEN_FILE;
-		else
+		} else {
 			*msg = SP_CONFIG_CANNOT_OPEN_FILE;
+		}
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
 		PRINT(errorMsg);
 		return NULL;
@@ -511,7 +512,7 @@ int spConfigGetNumOfImages(const SPConfig config, SP_CONFIG_MSG* msg) {
 	if (config == NULL) {
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		return -1;
-	} else{
+	} else {
 		*msg = SP_CONFIG_SUCCESS;
 	}
 	return config->spNumOfImages;

@@ -8,12 +8,12 @@ struct sp_point_t {
 	int index;
 };
 
-SPPoint spPointCreate(double* data, int dim, int index){
+SPPoint spPointCreate(double* data, int dim, int index) {
 	// Function variables
 	SPPoint point;
 	double* pointData;
 	int i; // Generic loop variable
-	if (index < 0 || dim <= 0 || data == NULL){
+	if (index < 0 || dim <= 0 || data == NULL) {
 		return NULL; // Invalid parameters
 	}
 	point = (SPPoint) malloc(sizeof(struct sp_point_t));
