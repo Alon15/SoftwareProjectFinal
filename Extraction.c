@@ -2,12 +2,10 @@
 #include <stdio.h> // FILE, fopen, fclose, sprintf, printf, fwrite
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strlen
-//#include "SPConfig.h" // TODO Can we delete this line?
 #include "SPLogger.h"
 #include "SPPoint.h"
 #include "defines.h"
 #include "main_aux.h"
-//#include "Extraction.h" // TODO Can we delete this line?
 
 /*
  * The function writes a SPPoint (feature) to a file

@@ -3,7 +3,7 @@ CPP = g++
 # put your object files here
 OBJS = main.o SPImageProc.o main_aux.o SPPoint.o SPLogger.o SPListElement.o SPList.o SPBPriorityQueue.o \
 sort_r.o SPConfig.o Extraction.o KDTreeNode.o SPKDArray.o
-# The executabel filename
+# The executable filename
 EXEC = SPCBIR
 INCLUDEPATH=/usr/local/lib/opencv-3.1.0/include/
 LIBPATH=/usr/local/lib/opencv-3.1.0/lib/
@@ -40,9 +40,9 @@ sort_r.o: sort_r.c sort_r.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
 SPConfig.o: SPConfig.c SPConfig.h SPLogger.h defines.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
-Extraction.o: Extraction.c Extraction.h SPConfig.h SPLogger.h SPPoint.h main_aux.h defines.h
+Extraction.o: Extraction.c Extraction.h SPLogger.h SPPoint.h main_aux.h defines.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
-KDTreeNode.o: KDTreeNode.c KDTreeNode.h SPConfig.h SPKDArray.h
+KDTreeNode.o: KDTreeNode.c KDTreeNode.h SPConfig.h SPKDArray.h SPPoint.h defines.h SPBPriorityQueue.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
 SPKDArray.o: SPKDArray.c SPKDArray.h SPPoint.h sort_r.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
