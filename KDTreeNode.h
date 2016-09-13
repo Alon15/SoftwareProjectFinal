@@ -34,9 +34,15 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 int* kNearestNeighnorSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature);
 
 /*
- * @@@@@@@@@@@ TODO
+ * Find the closest images to the query image
  *
- * @@@@@@@@@@@ TODO
+ * @param config - The configuration structure
+ * @param kdTree - The data structure
+ * @param queryArray - Array of the features of the query image
+ * @param numOfFeat - The number of features in the queryArray
+ *
+ * @return Pointer to the array that contain the indexes of the closest images
+ * 		   The size of the array is detriment by the 'numOfSimilarImages' field in the config
  */
 int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray, int numOfFeat);
 

@@ -229,13 +229,13 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 						if (featsFailed > CORRUPTED_FILE_ERROR_LIMIT) { // too many features failed to be extracted
 							PRINT_ERROR_LOGGER(CORRUPTED_FILE_ERROR,filename,__func__,0);
 							FreeParseFeats(buffer, feature, header, data);
-							freeMainMemory(NULL,features,featsExtracted,false);
+							FREE_FEATURES_ARRAY(features,featsExtracted);
 						}
 					} else {
 						if(featsExtracted > *numOfFeats) { // checks if we are trying to extract more features then expected
 							PRINT_ERROR_LOGGER(CORRUPTED_FILE_TOO_MANY_FEATURES,__FILE__,__func__,__LINE__);
 							FreeParseFeats(buffer, feature, header, data);
-							freeMainMemory(NULL,features,featsExtracted,false);
+							FREE_FEATURES_ARRAY(features,featsExtracted);
 							return NULL;
 						}
 						features[featsExtracted] = spPointCreate(data,dim,ind); // create the feature

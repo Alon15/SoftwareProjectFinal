@@ -148,7 +148,7 @@ int main (int argc, char *argv[]) {
 	PRINT_INFO_LOGGER(IMAGE_PROC_SUCCESS);
 	if (spConfigIsExtractionMode(config,&config_msg)) { // Extraction mode
 		if (!extractionMode(config,imageProc)) {
-			FREE_ALL(config,featuresArray,numOfFeats)
+			FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 			return EXIT_FAILURE;
 		}
 	}
@@ -158,16 +158,16 @@ int main (int argc, char *argv[]) {
 	PRINT_INFO_LOGGER(KDTREE_INIT);
 	//TODO the program crash here
 	if (!spKDTreeInit(config,featuresArray,numOfFeats,kdTree)) { // initialize KDTree
-		FREE_ALL(config,featuresArray,numOfFeats)
+		FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 		return EXIT_FAILURE;
 	}
 	PRINT_INFO_LOGGER(KDTREE_SUCCESS);
 	PRINT_INFO_LOGGER(QUERY_START);
 	if (!query(config,imageProc,kdTree)) { // start query
-		FREE_ALL(config,featuresArray,numOfFeats)
+		FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 		return (EXIT_SUCCESS);
 	}
 	PRINT(EXIT_MSG);
-	FREE_ALL(config,featuresArray,numOfFeats)
+	FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 	return (EXIT_SUCCESS);
 }

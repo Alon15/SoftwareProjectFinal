@@ -1,8 +1,8 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 
-//#include "KDTreeNode.h" // TODO Can we delete this line?
 #include "SPConfig.h"
+#include "KDTreeNode.h"
 
 /*
  * The function gets the configuration filename from the command line arguments or sets it to
@@ -39,10 +39,18 @@ bool initLogger(SPConfig config);
  * @param logger - A boolean that indicate if the logger will be freed
  *
  */
-void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger);
+void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger,KDTreeNode kdTree);
 
-/* TODO
- * TODO
+/*
+ * Extract all the features from the ".feats" files of all the images in the directory, and store
+ * the features extracted in 'featuresArray', also store the number of features extracted in 'numOfFeats'
+ *
+ *  @param config - The configuration structure
+ *  @param featuresArray - A pointer to the array that will store the features
+ *  @param numOfFeats - A pointer to a integer that will store the number of features extracted
+ *
+ *  @return True if the extraction finished successfully
+ *  		False if extraction failed (an error message will be displayed)
  */
 bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats);
 

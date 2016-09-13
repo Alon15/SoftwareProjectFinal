@@ -1,5 +1,4 @@
 #include <stdlib.h> // malloc, free, NULL
-#include <stdio.h> // printf, fflush
 #include <stdbool.h> // bool, true, false
 #include <string.h> // strcmp, strcpy
 #include <unistd.h> // F_OK, R_OK
@@ -20,6 +19,7 @@ void getFileName(char* filename, int argc, char** argv) {
 		strcpy(filename,DEFAULT_CONFIG_FILE);
 	}
 }
+
 SP_LOGGER_LEVEL parseLoggerLevel(int level) {
 	switch(level) {
 	case 1:
@@ -33,6 +33,7 @@ SP_LOGGER_LEVEL parseLoggerLevel(int level) {
 	}
 	return SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL;
 }
+
 bool initLogger(SPConfig config){
 	// Function variables
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
@@ -64,7 +65,7 @@ bool initLogger(SPConfig config){
 	return true;
 }
 
-void freeMainMemory(SPConfig config, SPPoint* featuresArray, int numOfFeats, bool logger) {
+void freeMainMemory(SPConfig config, SPPoint* featuresArray, int numOfFeats, bool logger,KDTreeNode kdTree) {
 	int i;
 	if (config)
 		spConfigDestroy(config);
@@ -77,7 +78,8 @@ void freeMainMemory(SPConfig config, SPPoint* featuresArray, int numOfFeats, boo
 		free (featuresArray);
 		featuresArray = NULL;
 	}
-	//TODO free KDTree here
+	if (kdTree)
+		spKDTreeDestroy(kdTree);
 }
 
 /*
@@ -105,17 +107,7 @@ void freeExtractAllFeaturesMemory(SPPoint** imageArray, int numOfImages, int* nu
 	if (featuresArray)
 		FREE_FEATURES_ARRAY(featuresArray,totalNumOfFeatures);
 }
-/*
- * Extract all the features from the ".feats" files of all the images in the directory, and store
- * the features extracted in 'featuresArray', also store the number of features extracted in 'numOfFeats'
- *
- *  @param config - The configuration structure
- *  @param featuresArray - A pointer to the array that will store the features
- *  @param numOfFeats - A pointer to a integer that will store the number of features extracted
- *
- *  @return True if the features successfully extracted
- *  		False if extraction failed (an error message will be displayed)
- */
+
 bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats) {
 	// Function variables
 	int numOfImages, i, j, k;

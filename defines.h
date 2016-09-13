@@ -82,10 +82,10 @@
  */
 
 // free memory
-#define FREE_FEATURES_ARRAY(featuresArray,numOfFeats) freeMainMemory(NULL,featuresArray,numOfFeats,false)
-#define FREE_CONFIG(config) freeMainMemory(config,NULL,0,false)
-#define FREE_ALL(config,featuresArray,numOfFeats) delete imageProc;\
-freeMainMemory(config,featuresArray,numOfFeats,true);
+#define FREE_FEATURES_ARRAY(featuresArray,numOfFeats) freeMainMemory(NULL,featuresArray,numOfFeats,false,NULL)
+#define FREE_CONFIG(config) freeMainMemory(config,NULL,0,false,NULL)
+#define FREE_ALL(config,featuresArray,numOfFeats,kdTree) delete imageProc;\
+freeMainMemory(config,featuresArray,numOfFeats,true,kdTree);
 
 // print and messages
 //TODO fix print or delete it completely
