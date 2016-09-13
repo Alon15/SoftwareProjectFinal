@@ -7,7 +7,7 @@
 
 // Tree datatype
 struct kd_tree_node_t {
-	int dim; // The splitting dimension
+	double dim; // The splitting dimension
 	int val; // The median value of the splitting dimension
 	struct kd_tree_node_t* left; // Pointer to the left subtree
 	struct kd_tree_node_t* right; // Pointer to the right subtree
@@ -67,9 +67,13 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				free(nodeSons);
 				return NULL;
 		}
+		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even
+			node->dim = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i); // TODO
+		} else { // Size is odd
+			node->dim = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
+		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
-		node->dim = i;
-		node->val = 0; // The median according the dimension i // TODO
+		node->val = spKDArrayGetMatrix(kdarray)[i]; // The median according the dimension i // TODO
 		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO verify
 		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO verify
 		node->data = NULL;
@@ -99,7 +103,7 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 	if (kdArray == NULL) {
 		return false;
 	}
-	kdTree = spKDTreeRecursion(kdArray,0,splitMethod); // TODO
+	kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
 	if (kdTree == NULL) {
 		return false;
 	} else {
