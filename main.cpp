@@ -91,12 +91,10 @@ bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* qu
 bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 	// Function variables
 	char query[STRING_LENGTH] = {'\0'};
-	int numOfFeats = 0,numOfSimilarImages;
+	int numOfFeats = 0;
 	int* closestImages;
 	SPPoint* featuresArray = NULL;
-	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	// Function code
-	numOfSimilarImages = spConfigGetNumOfSimilarImages(config,&config_msg);
 	while (true) {
 		PRINT(QUERY_IMG_MSG);
 		scanf("%1024s",query);
@@ -109,9 +107,8 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree){
 				return false;
 			}
 			PRINT_INFO_LOGGER(SEARCH_FOR_SIMILAR_IMAGES);
-			//TODO to use kdTree and numOfSimilarImages\config here
-			closestImages = NULL; //TODO get closest images int array (index array)
-			if (closestImages == NULL) { //TODO print the error inside the function
+			closestImages = closestImagesQuery(config,kdTree,featuresArray,numOfFeats); // find the closest images
+			if (closestImages == NULL) {
 				return false;
 			}
 			PRINT_INFO_LOGGER(SIMILAR_IMAGES_FOUND);

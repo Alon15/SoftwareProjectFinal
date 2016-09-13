@@ -31,6 +31,20 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
  *
  * @@@@@@@@@@@ TODO
  */
+int* kNearestNeighnorSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature);
+
+/*
+ * @@@@@@@@@@@ TODO
+ *
+ * @@@@@@@@@@@ TODO
+ */
+int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray, int numOfFeat);
+
+/*
+ * @@@@@@@@@@@ TODO
+ *
+ * @@@@@@@@@@@ TODO
+ */
 void spKDTreeDestroy(KDTreeNode root);
 
 #endif /* KDTREENODE_H_ */

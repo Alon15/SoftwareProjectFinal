@@ -3,6 +3,7 @@
 #include "SPConfig.h"
 #include "SPKDArray.h"
 #include "SPPoint.h"
+#include "defines.h"
 
 // Tree datatype
 struct kd_tree_node_t {
@@ -20,7 +21,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	SPKDArrayPair nodeSons;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
-	nodeSons = (SPKDArrayPair) malloc(sizeof(*nodeSons));
+	//nodeSons = (SPKDArrayPair) malloc(sizeof(*nodeSons)); //TODO compilation error
 	if ((node == NULL)||(nodeSons == NULL)) { // Memory allocation error
 		free(node);
 		free(nodeSons);
@@ -87,13 +88,70 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 	kdTree = spKDTreeRecursion(kdArray,0,splitMethod); // TODO
 	return true;
 }
+int* kNearestNeighnorSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature){
+	//TODO implement the KNN search.
+	return NULL;
+}
+int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray, int numOfFeat){
+	// Function variables
+	int i,j; // Generic loop variables
+	int max, numOfSimilarImages, numOfImages;
+	int* imageHitsArray, *bestMatches, *closestImages;
+	SP_CONFIG_MSG config_msg;
+	// Allocate memory
+	numOfImages = spConfigGetNumOfImages(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		return NULL;
+	}
+	numOfSimilarImages = spConfigGetNumOfSimilarImages(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS) {
+		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
+		return NULL;
+	}
+	imageHitsArray = (int*)calloc(numOfImages,sizeof(int)); // Feature's hit counter
+	closestImages = (int*)malloc(sizeof(int)*numOfSimilarImages); // Store the results
+	if (imageHitsArray == NULL || closestImages == NULL) { // Memory allocation error
+		if(imageHitsArray)
+			free(imageHitsArray);
+		if(closestImages)
+			free(closestImages);
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		return NULL;
+	}
+	// Function code
+	for (i=0;i<numOfFeat;i++) { // For each feature find the closest features's image index
+		bestMatches = kNearestNeighnorSearch(config,kdTree,queryArray[i]);
+		if(!bestMatches){
+			free(imageHitsArray);
+			free(closestImages);
+			return NULL;
+		}
+		for (j=0;j<numOfSimilarImages;j++) {
+			imageHitsArray[bestMatches[j]]++; // Update the hit counter
+		}
+	}
+	// find the index of the images with the most hits
+	for (i=0;i<numOfSimilarImages;i++) {
+		max = 0;
+		for (j=0;j<numOfImages;j++) {
+			if (imageHitsArray[j] > max) {
+				max = imageHitsArray[j];
+				closestImages[i] = j; // set the new highest hit count index
+			}
+		}
+		imageHitsArray[closestImages[i]] = -1; // 'remove' the maximum from the search
+	}
+	free(imageHitsArray);
+	return closestImages;
+}
 
 // Frees all allocation associated with the tree given by root
 void spKDTreeDestroy(KDTreeNode root) {
 	if (!root) {
 		return;
 	}
-	destroyArray(root->left);
-	destroyArray(root->right);
+	//destroyArray(root->left); //TODO compilation error
+	//destroyArray(root->right); //TODO compilation error
 	free(root);
 }
