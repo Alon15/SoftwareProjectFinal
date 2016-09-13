@@ -19,6 +19,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	// Function variables
 	double tmpLoopVar;
 	int j;
+	int tmpVar1,tmpVar2;
 	KDTreeNode node;
 	SPKDArrayPair nodeSons;
 	double* minSpreadArray;
@@ -66,10 +67,12 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				free(node);
 				free(nodeSons);
 				return NULL;
-		}
-		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even
-			node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i); // TODO
-		} else { // Size is odd
+		} // Find the index of the middle point in the sorted array, And then get the selected point value for the given coordinate
+		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
+			tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)%2)-1]],i);
+			tmpVar2 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
+			node->val = (tmpVar1+tmpVar2)/2;
+		} else { // Size is odd, Choose the middle
 			node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
 		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
