@@ -16,11 +16,15 @@ struct kd_tree_node_t {
 // Recursively creates KD tree from KD array
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
+	double tmpLoopVar;
+	int j;
 	KDTreeNode node;
 	SPKDArrayPair nodeSons;
+	double* minSpreadArray;
+	double* maxSpreadArray;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
-	nodeSons = (SPKDArrayPair) malloc(sizeof(*nodeSons));
+	nodeSons = (SPKDArrayPair) malloc(sizeof(SPKDArrayPair));
 	if ((node == NULL)||(nodeSons == NULL)) { // Memory allocation error
 		free(node);
 		free(nodeSons);
@@ -39,14 +43,23 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->data = spKDArrayGetPoints(kdarray)[0];
 	} else {
 		switch (splitMethod) {
-			case RANDOM:
-				i = 0; // TODO
+			case RANDOM: // TODO verify
+				i = rand() % (spKDArrayGetDimension(kdarray) + 1);
 				break;
-			case MAX_SPREAD:
-				i = 0; // TODO
+			case MAX_SPREAD: // TODO verify
+				i = 0;
+				minSpreadArray = spKDArrayGetMinSpread(kdarray);
+				maxSpreadArray = spKDArrayGetMaxSpread(kdarray);
+				for (j=0;j<spKDArrayGetDimension(kdarray);j++) {
+					tmpLoopVar = 0;
+					if (maxSpreadArray[j]-minSpreadArray[j] > tmpLoopVar) { // If dim j spread different is the biggest so far
+						tmpLoopVar = maxSpreadArray[j]-minSpreadArray[j]; // Update what was the maximum wee saw
+						i = j; // Update the splitting dimension
+					}
+				}
 				break;
-			case INCREMENTAL:
-				i = 0; // TODO
+			case INCREMENTAL: // TODO verify
+				i = (i+1) % spKDArrayGetDimension(kdarray);
 				break;
 			default: // Just in case
 				free(node);
@@ -54,11 +67,12 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				return NULL;
 		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
-		node->dim = 0; // TODO
-		node->val = 0; // TODO
-		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i+1,splitMethod); // TODO
-		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i+1,splitMethod); // TODO
+		node->dim = i;
+		node->val = 0; // The median according the dimension i // TODO
+		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO verify
+		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO verify
 		node->data = NULL;
+		free(nodeSons);
 		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
 			free(node);
 			return NULL;
@@ -85,7 +99,11 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 		return false;
 	}
 	kdTree = spKDTreeRecursion(kdArray,0,splitMethod); // TODO
-	return true;
+	if (kdTree == NULL) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 // Frees all allocation associated with the tree given by root
@@ -93,7 +111,7 @@ void spKDTreeDestroy(KDTreeNode root) {
 	if (!root) {
 		return;
 	}
-	destroyArray(root->left);
-	destroyArray(root->right);
+	spKDTreeDestroy(root->left);
+	spKDTreeDestroy(root->right);
 	free(root);
 }
