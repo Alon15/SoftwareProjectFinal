@@ -40,6 +40,10 @@ int spKDArrayGetDimension(SPKDArray array);
 
 int spKDArrayGetSize(SPKDArray array);
 
+double* spKDArrayGetMinSpread(SPKDArray array);
+
+double* spKDArrayGetMaxSpread(SPKDArray array);
+
 SPPoint* spKDArrayGetPoints(SPKDArray array);
 
 int** spKDArrayGetMatrix(SPKDArray array);
