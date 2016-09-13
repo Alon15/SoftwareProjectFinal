@@ -2,6 +2,7 @@
 #define SPKDARRAY_H_
 
 #include "SPPoint.h"
+#include "sort_r.h"
 
 typedef struct kd_array_t *SPKDArray;
 
@@ -13,7 +14,7 @@ typedef struct kd_array_pair_t *SPKDArrayPair;
  * @param TODO
  * @return TODO
  */
-int spKDArrayCompare(const void *aIn, const void *bIn, void *thunkIn);
+int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn);
 
 /*
  * Initializes the kd-array with the data given by arr. The complexity of
