@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <stdlib.h> // malloc, calloc, free, NULL, rand
 #include "KDTreeNode.h"
 #include "SPConfig.h"
 #include "SPKDArray.h"

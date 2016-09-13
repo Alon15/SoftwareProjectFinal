@@ -34,7 +34,17 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size);
  */
 SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor);
 
+/*
+ * TODO
+ *
+ * @param TODO
+ * @return TODO
+ */
 void spKDArrayDestroy(SPKDArray array);
+
+/*
+ * Getters function
+*/
 
 int spKDArrayGetDimension(SPKDArray array);
 

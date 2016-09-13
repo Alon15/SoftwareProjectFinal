@@ -1,7 +1,8 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 
-#include "KDTreeNode.h"
+//#include "KDTreeNode.h" // TODO Can we delete this line?
+#include "SPConfig.h"
 
 /*
  * The function gets the configuration filename from the command line arguments or sets it to
@@ -55,6 +56,6 @@ bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats
  */
 bool fileCheck(const char* fileName);
 
-void tmpFunc1();
+void tmpFunc1(); // TODO DEBUG DELME
 
 #endif /* MAIN_AUX_H_ */

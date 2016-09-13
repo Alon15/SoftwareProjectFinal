@@ -1,3 +1,8 @@
+#include <stdlib.h> // malloc, free, NULL
+#include <stdio.h> // printf, fflush
+#include <stdbool.h> // bool, true, false
+#include <string.h> // strcmp, strcpy
+#include <unistd.h> // F_OK, R_OK
 #include "SPConfig.h"
 #include "SPLogger.h"
 #include "SPPoint.h"
@@ -5,12 +10,6 @@
 #include "defines.h"
 #include "KDTreeNode.h"
 #include "Extraction.h"
-#include <stdlib.h> // malloc, free, NULL
-#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
-#include <stdbool.h> // bool, true, false
-#include <string.h> // strcmp
-#include <unistd.h> // filecheck
-#include "SPKDArray.h" // TODO DEBUG DELME
 
 void getFileName(char* filename, int argc, char** argv) {
 	if (argc > 3) {

@@ -1,9 +1,9 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <float.h>
+//#include <stdarg.h> // TODO Can we delete this line?
+//#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush // TODO Can we delete this line?
+#include <stdlib.h> // malloc, free, NULL
+//#include <string.h> // strcmp // TODO Can we delete this line?
+#include <assert.h> // assert
+#include <float.h> // DBL_MIN
 #include "SPKDArray.h"
 #include "SPPoint.h"
 #include "sort_r.h"

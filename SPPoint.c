@@ -1,6 +1,6 @@
-#include "SPPoint.h"
 #include <stdlib.h> // malloc, free
 #include <assert.h> // assert
+#include "SPPoint.h"
 
 struct sp_point_t {
 	double* data;

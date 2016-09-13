@@ -1,10 +1,10 @@
-#include <stdlib.h> // malloc, free, NULL
-#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
-#include <stdbool.h> // bool, true, false
-#include <string.h> // strcmp
+#include <stdlib.h> // malloc, calloc, free, NULL, atoi
+//#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush // TODO Can we delete this line?
+//#include <stdbool.h> // bool, true, false // TODO Can we delete this line?
+#include <string.h> // strcmp, strcpy, strlen
 #include <assert.h> // assert
 #include "SPConfig.h"
-#include "SPLogger.h"
+//#include "SPLogger.h" // TODO Can we delete this line?
 #include "defines.h"
 
 struct sp_config_t {

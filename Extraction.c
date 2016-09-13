@@ -1,14 +1,13 @@
-#include "SPConfig.h"
+#include <stdlib.h> // malloc, calloc, free, NULL, strtod, strtol
+#include <stdio.h> // FILE, fopen, fclose, sprintf, printf, fwrite
+#include <stdbool.h> // bool, true, false
+#include <string.h> // strlen
+//#include "SPConfig.h" // TODO Can we delete this line?
 #include "SPLogger.h"
 #include "SPPoint.h"
 #include "defines.h"
 #include "main_aux.h"
-#include "Extraction.h"
-#include <stdlib.h> // malloc, free, NULL
-#include <stdio.h> // FILE, stdout, fopen, fclose, sprintf, printf, fflush, stdout
-#include <stdbool.h> // bool, true, false
-#include <string.h> // strcmp
-
+//#include "Extraction.h" // TODO Can we delete this line?
 
 /*
  * The function writes a SPPoint (feature) to a file

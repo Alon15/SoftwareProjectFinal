@@ -1,8 +1,8 @@
 #ifndef SPCONFIG_H_
 #define SPCONFIG_H_
 
-#include <stdbool.h>
-#include <stdio.h>
+#include <stdbool.h> // bool, true, false
+#include <stdio.h> // printf
 #include "SPLogger.h"
 
 /**
@@ -56,8 +56,6 @@ typedef struct sp_config_t* SPConfig;
  * - SP_CONFIG_MISSING_SUFFIX - if spImagesSuffix is missing 
  * - SP_CONFIG_MISSING_NUM_IMAGES - if spNumOfImages is missing
  * - SP_CONFIG_SUCCESS - in case of success
- *
- *
  */
 SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg);
 

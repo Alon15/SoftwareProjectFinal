@@ -1,3 +1,6 @@
+//#include <cstdio> // stdout, fopen, fclose, sprintf, printf, fflush, // TODO Can we delete this line?
+#include <cstdlib> // NULL
+#include <cstring> // strcmp
 #include "SPImageProc.h"
 extern "C" {
 #include "Extraction.h"
@@ -8,9 +11,6 @@ extern "C" {
 #include "defines.h"
 #include "KDTreeNode.h"
 }
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 
 using namespace sp;
 
