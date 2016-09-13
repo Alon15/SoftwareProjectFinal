@@ -134,7 +134,7 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 		}
 	}
 	for (i=0;i<dim;i++) { // Foreach dim
-		qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),(int (*)(const void *,const void *,const void *))spKDArrayCompare,matrix_v[i]);
+		qqsort(matrix_i[i],size,sizeof(matrix_i[i][0]),spKDArrayCompare,matrix_v[i]);
 	}
 	KDarray->matrix = matrix_i;
 	// Free memory

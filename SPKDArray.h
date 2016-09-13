@@ -2,7 +2,6 @@
 #define SPKDARRAY_H_
 
 #include "SPPoint.h"
-#include "sort_r.h"
 
 typedef struct kd_array_t *SPKDArray;
 

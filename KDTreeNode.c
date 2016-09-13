@@ -115,10 +115,22 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 	}
 }
 
-int* kNearestNeighnorSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature) {
+int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature) {
+	// Function variables
 	SPBPQueue bpq;
 	SP_BPQUEUE_MSG bpq_msg;
-	//TODO implement the KNN search. page 14 in the pdf
+	// Function body
+	// TODO implement the KNN search. page 14 in the pdf
+	if (kdTree == NULL) {
+		return NULL;
+	} else if (kdTree->data != NULL) { // kdTree is a leaf
+		//enqueue (index(current), distance(curr,p)) into bpq
+		return NULL;
+	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
+		// Recursively search the left subtree
+	} else {
+		// Recursively search the right subtree
+	}
 	return NULL;
 }
 
@@ -151,7 +163,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 	}
 	// Function code
 	for (i=0;i<numOfFeat;i++) { // For each feature find the closest features's image index
-		bestMatches = kNearestNeighnorSearch(config,kdTree,queryArray[i]);
+		bestMatches = kNearestNeighborsSearch(config,kdTree,queryArray[i]);
 		if(!bestMatches){
 			free(imageHitsArray);
 			free(closestImages);
