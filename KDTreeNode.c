@@ -68,12 +68,12 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				return NULL;
 		}
 		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even
-			node->dim = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i); // TODO
+			node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i); // TODO
 		} else { // Size is odd
-			node->dim = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
+			node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
 		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
-		node->val = spKDArrayGetMatrix(kdarray)[i]; // The median according the dimension i // TODO
+		node->dim = i;
 		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO verify
 		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO verify
 		node->data = NULL;
