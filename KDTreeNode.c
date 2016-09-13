@@ -195,6 +195,6 @@ void spKDTreeDestroy(KDTreeNode root) {
 	}
 	spKDTreeDestroy(root->left);
 	spKDTreeDestroy(root->right);
-	//TODO need to free SPPoint data too?
+	spPointDestroy(root->data); // TODO Verify if need to free SPPoint data too...
 	free(root);
 }
