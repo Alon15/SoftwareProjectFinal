@@ -4,6 +4,7 @@
 #include "SPKDArray.h"
 #include "SPPoint.h"
 #include "defines.h"
+#include "SPBPriorityQueue.h"
 
 // Tree datatype
 struct kd_tree_node_t {
@@ -115,7 +116,9 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 }
 
 int* kNearestNeighnorSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature) {
-	//TODO implement the KNN search.
+	SPBPQueue bpq;
+	SP_BPQUEUE_MSG bpq_msg;
+	//TODO implement the KNN search. page 14 in the pdf
 	return NULL;
 }
 

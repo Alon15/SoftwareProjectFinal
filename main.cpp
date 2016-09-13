@@ -1,4 +1,3 @@
-//#include <cstdio> // stdout, fopen, fclose, sprintf, printf, fflush, // TODO Can we delete this line?
 #include <cstdlib> // NULL
 #include <cstring> // strcmp
 #include "SPImageProc.h"
@@ -157,6 +156,7 @@ int main (int argc, char *argv[]) {
 		return false;
 	}
 	PRINT_INFO_LOGGER(KDTREE_INIT);
+	//TODO the program crash here
 	if (!spKDTreeInit(config,featuresArray,numOfFeats,kdTree)) { // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats)
 		return EXIT_FAILURE;
