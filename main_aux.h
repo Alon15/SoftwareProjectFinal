@@ -42,17 +42,16 @@ bool initLogger(SPConfig config);
 void freeMainMemory(SPConfig config,SPPoint* featuresArray,int numOfFeats, bool logger,KDTreeNode kdTree);
 
 /*
- * Extract all the features from the ".feats" files of all the images in the directory, and store
- * the features extracted in 'featuresArray', also store the number of features extracted in 'numOfFeats'
+ * Extract all the features from the ".feats" files of all the images in the directory, and return
+ * a pointer to the features extracted, also store the number of features extracted in 'numOfFeats'
  *
  *  @param config - The configuration structure
- *  @param featuresArray - A pointer to the array that will store the features
  *  @param numOfFeats - A pointer to a integer that will store the number of features extracted
  *
- *  @return True if the extraction finished successfully
- *  		False if extraction failed (an error message will be displayed)
+ *  @return Pointer to the features array if the extraction finished successfully
+ *  		NULL if extraction failed (an error message will be displayed)
  */
-bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats);
+SPPoint* extractAllFeatures(SPConfig config, int* numOfFeats);
 
 /*
  * Checks if the file exists and if it is readable

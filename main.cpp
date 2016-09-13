@@ -152,11 +152,14 @@ int main (int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 	}
-	if (!extractAllFeatures(config,featuresArray,&numOfFeats)) {
-		return false;
+	PRINT_INFO_LOGGER(EXTRACT_FEATURES_START);
+	featuresArray = extractAllFeatures(config,&numOfFeats);
+	if (featuresArray == NULL) {
+		FREE_ALL(config,featuresArray,numOfFeats,kdTree)
+		return EXIT_FAILURE;
 	}
+	PRINT_INFO_LOGGER(EXTRACT_FEATURES_SUCCESS);
 	PRINT_INFO_LOGGER(KDTREE_INIT);
-	//TODO the program crash here
 	if (!spKDTreeInit(config,featuresArray,numOfFeats,kdTree)) { // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 		return EXIT_FAILURE;

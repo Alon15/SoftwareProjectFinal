@@ -76,6 +76,8 @@
 #define LOGGER_INIT_SUCCESS "Logger was successfully initialized"
 #define KDTREE_INIT "Initializing KDTree"
 #define KDTREE_SUCCESS "KDTree was successfully initialized"
+#define EXTRACT_FEATURES_START "Extracting features from files"
+#define EXTRACT_FEATURES_SUCCESS "Extraction completed successfully"
 
 /*
  * Macros

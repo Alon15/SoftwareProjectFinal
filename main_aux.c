@@ -91,11 +91,14 @@ void freeMainMemory(SPConfig config, SPPoint* featuresArray, int numOfFeats, boo
  * If a parameter is NULL, then it won't be freed .
  *
  */
-void freeExtractAllFeaturesMemory(SPPoint** imageArray, int numOfImages, int* numOfFeatsArray, SPPoint* featuresArray, int totalNumOfFeatures) {
+void freeExtractAllFeaturesMemory(SPPoint** imageArray, int numOfImages, int* numOfFeatsArray, SPPoint* featuresArray, bool subArray) {
 	int i;
 	if (imageArray && numOfFeatsArray){
 		for (i=0;i<numOfImages;i++){
-			FREE_FEATURES_ARRAY(imageArray[i],numOfFeatsArray[i]); // free the sub-arrays
+			if (subArray)
+				FREE_FEATURES_ARRAY(imageArray[i],numOfFeatsArray[i]); // free the points in the sub-arrays
+			else
+				free(imageArray[i]); // free only the array
 		}
 		free(imageArray);
 		free(numOfFeatsArray);
@@ -105,28 +108,29 @@ void freeExtractAllFeaturesMemory(SPPoint** imageArray, int numOfImages, int* nu
 	if (imageArray) // numOfFeatsArray might be NULL, so only imageArray need to be freed
 		free(imageArray);
 	if (featuresArray)
-		FREE_FEATURES_ARRAY(featuresArray,totalNumOfFeatures);
+		free(featuresArray);
 }
 
-bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats) {
+SPPoint* extractAllFeatures(SPConfig config, int* numOfFeats) {
 	// Function variables
 	int numOfImages, i, j, k;
 	int* numOfFeatsArray = NULL; // array of number of feature (correspond to a feature array)
 	SPPoint** imageArray = NULL; // array of feature arrays
 	char featurePath[STRING_LENGTH];
+	SPPoint* featuresArray = NULL;
 	SP_CONFIG_MSG config_msg = SP_CONFIG_SUCCESS;
 	numOfImages = spConfigGetNumOfImages(config,&config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS) {
 		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
-		return false;
+		return NULL;
 	}
 	// Memory allocation
 	imageArray = (SPPoint**) malloc(sizeof(SPPoint*)*numOfImages);
 	numOfFeatsArray = (int*) malloc(sizeof(int)*numOfImages);
 	if (imageArray == NULL || numOfFeatsArray == NULL){
-		freeExtractAllFeaturesMemory(imageArray,0,numOfFeatsArray,NULL,0);
+		freeExtractAllFeaturesMemory(imageArray,0,numOfFeatsArray,NULL,true);
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
-		return false;
+		return NULL;
 	}
 	// Function code
 	*numOfFeats = 0;
@@ -134,17 +138,21 @@ bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats
 		config_msg = spConfigGetFeatsPath(featurePath,config,i);
 		if (config_msg != SP_CONFIG_SUCCESS) {
 			PRINT_ERROR_LOGGER(GET_FEATS_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
-			freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,0);
-			return false;
+			freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,true);
+			return NULL;
 		}
 		imageArray[i] = ImportFeats(featurePath,&(numOfFeatsArray[i]));
+		if (imageArray[i] == NULL){
+			freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,true);
+			return NULL;
+		}
 		*numOfFeats += numOfFeatsArray[i];
 	}
-	featuresArray = (SPPoint*) malloc((*numOfFeats)*sizeof(SPPoint*));
+	featuresArray = (SPPoint*) malloc((*numOfFeats)*sizeof(SPPoint));
 	if (featuresArray == NULL){
 		freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,featuresArray,0);
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
-		return false;
+		return NULL;
 	}
 	k = 0;
 	for (i=0;i<numOfImages;i++){
@@ -153,8 +161,8 @@ bool extractAllFeatures(SPConfig config, SPPoint* featuresArray, int* numOfFeats
 			k++;
 		}
 	}
-	freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,NULL,0);
-	return true;
+	freeExtractAllFeaturesMemory(imageArray,numOfImages,numOfFeatsArray,NULL,false);
+	return featuresArray;
 }
 
 bool fileCheck(const char* fileName){
