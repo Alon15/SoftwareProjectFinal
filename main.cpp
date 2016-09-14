@@ -160,7 +160,7 @@ int main (int argc, char *argv[]) {
 	}
 	PRINT_INFO_LOGGER(EXTRACT_FEATURES_SUCCESS);
 	PRINT_INFO_LOGGER(KDTREE_INIT);
-	if (!spKDTreeInit(config,featuresArray,numOfFeats,kdTree)) { // initialize KDTree
+	if (!spKDTreeInit(config,featuresArray,numOfFeats,&kdTree)) { // initialize KDTree
 		FREE_ALL(config,featuresArray,numOfFeats,kdTree)
 		return EXIT_FAILURE;
 	}

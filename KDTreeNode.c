@@ -88,14 +88,18 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	return node;
 }
 
-bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode kdTree) {
+bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree) {
 	// Function variables
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	SPKDArray kdArray;
 	// Allocate memory
-	kdTree = NULL;
 	config_msg = SP_CONFIG_SUCCESS;
+	*kdTree = (KDTreeNode)malloc(sizeof(*kdTree));
+	*kdTree = NULL;
+	if (kdTree == NULL) {
+		return false;
+	}
 	// Function body
 	config_msg = spConfigGetKDTreeSplitMethod(&splitMethod,config);
 	if (config_msg != SP_CONFIG_SUCCESS) {
@@ -105,8 +109,8 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 	if (kdArray == NULL) {
 		return false;
 	}
-	kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
-	if (kdTree == NULL) {
+	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
+	if (*kdTree == NULL) {
 		return false;
 	} else {
 		return true;

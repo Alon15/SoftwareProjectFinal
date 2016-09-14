@@ -24,7 +24,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
  *  @return True if the KDTree was successfully initialized
  *  		False if the initialization failed
  */
-bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode kdTree);
+bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree);
 
 /*
  * Find the k nearest features in our kdTree to the query feature
