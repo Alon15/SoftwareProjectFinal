@@ -116,7 +116,16 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 		return true;
 	}
 }
-
+/*
+ * Recursive function that find the k nearest features to our feature and store them in the Priority Queue
+ *
+ * @param kdTree - The current node we are checking
+ * @param bpq - The priority queue we are filling
+ * @param feature - The query feature, we are searching the k closest features to him
+ *
+ * @return False if a memory allocation error occurred
+ * 		   True otherwise
+ */
 bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
 	// Function variables
 	SPListElement element;
@@ -130,7 +139,7 @@ bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
 				spPointL2SquaredDistance(kdTree->data,feature));
 		if (element == NULL)
 			return false;
-		if (spBPQueueEnqueue(bpq,element)==SP_BPQUEUE_OUT_OF_MEMORY)
+		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY)
 			return false;
 		spListElementDestroy(element);
 		return true;

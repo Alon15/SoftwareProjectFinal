@@ -27,9 +27,14 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode kdTree);
 
 /*
- * @@@@@@@@@@@ TODO
+ * Find the k nearest features in our kdTree to the query feature
  *
- * @@@@@@@@@@@ TODO
+ * @param config - The configuration structure
+ * @param kdTree - The data structure of our features
+ * @param feature - The query feature
+ *
+ * @return A pointer to the array of the indexes of the k nearest features
+ * 		   NULL if an error occurred
  */
 int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature);
 
@@ -47,9 +52,10 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray, int numOfFeat);
 
 /*
- * @@@@@@@@@@@ TODO
+ * Free all the memory associated with the kdTree
  *
- * @@@@@@@@@@@ TODO
+ * @param root - The root of the kdTree we are freeing
+ *
  */
 void spKDTreeDestroy(KDTreeNode root);
 
