@@ -5,11 +5,12 @@
 #include "SPPoint.h"
 #include "defines.h"
 #include "SPBPriorityQueue.h"
+#include "SPListElement.h"
 
 // Tree datatype
 struct kd_tree_node_t {
-	double dim; // The splitting dimension
-	int val; // The median value of the splitting dimension
+	int dim; // The splitting dimension
+	double val; // The median value of the splitting dimension
 	struct kd_tree_node_t* left; // Pointer to the left subtree
 	struct kd_tree_node_t* right; // Pointer to the right subtree
 	SPPoint data; // Pointer to a point (only if the current node is a leaf) otherwise this field value is NULL
@@ -116,23 +117,90 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode 
 	}
 }
 
+bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
+	// Function variables
+	SPListElement element;
+	bool leftSide = false;
+	double diff;
+	// Function body
+	if (kdTree == NULL){ // subtree is NULL
+		return true;
+	} else if (kdTree->data != NULL) { // kdTree is a leaf
+		element = spListElementCreate(spPointGetIndex(kdTree->data),
+				spPointL2SquaredDistance(kdTree->data,feature));
+		if (element == NULL)
+			return false;
+		if (spBPQueueEnqueue(bpq,element)==SP_BPQUEUE_OUT_OF_MEMORY)
+			return false;
+		spListElementDestroy(element);
+		return true;
+	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
+		if(!recKNNSearch(kdTree->left,bpq,feature)) // recursively search the left subtree
+			return false;
+		leftSide = true;
+	} else {
+		if(!recKNNSearch(kdTree->right,bpq,feature)) // recursively search the right subtree
+			return false;
+	}
+	// check if the candidate hypersphere crosses the splitting plane
+	diff = (kdTree->val)-spPointGetAxisCoor(feature,kdTree->dim);
+	if(!spBPQueueIsFull(bpq) || (diff*diff) < spBPQueueMaxValue(bpq)){
+		if(leftSide){
+			if(!recKNNSearch(kdTree->right,bpq,feature)) // recursively search the right subtree
+				return false;
+		}
+		else{
+			if(!recKNNSearch(kdTree->left,bpq,feature)) // recursively search the left subtree
+				return false;
+		}
+	}
+	return true;
+}
+
 int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature) {
 	// Function variables
 	SPBPQueue bpq;
-	SP_BPQUEUE_MSG bpq_msg;
+	SP_CONFIG_MSG config_msg;
+	int KNN, i;
+	int* NNArray;
+	SPListElement element;
 	// Function body
-	// TODO implement the KNN search. page 14 in the pdf
-	if (kdTree == NULL) {
+	if (kdTree == NULL)
 		return NULL;
-	} else if (kdTree->data != NULL) { // kdTree is a leaf
-		//enqueue (index(current), distance(curr,p)) into bpq
+	KNN = spConfigGetKNN(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS)
 		return NULL;
-	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
-		// Recursively search the left subtree
-	} else {
-		// Recursively search the right subtree
+	bpq = spBPQueueCreate(KNN);
+	if (bpq == NULL)
+		return NULL;
+	if(!recKNNSearch(kdTree,bpq,feature)){
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		spBPQueueDestroy(bpq);
+		return NULL;
 	}
-	return NULL;
+	NNArray = (int*)malloc(sizeof(int)*KNN);
+	if (NNArray == NULL){
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		spBPQueueDestroy(bpq);
+		return NULL;
+	}
+	for (i=0;i<KNN;i++){
+		element = spBPQueuePeek(bpq);
+		if (element == NULL){
+			free(NNArray);
+			spBPQueueDestroy(bpq);
+			return NULL;
+		}
+		NNArray[i] = spListElementGetIndex(element);
+		spListElementDestroy(element);
+		if(spBPQueueDequeue(bpq)!= SP_BPQUEUE_SUCCESS){
+			free(NNArray);
+			spBPQueueDestroy(bpq);
+			return NULL;
+		}
+	}
+	spBPQueueDestroy(bpq);
+	return NNArray;
 }
 
 int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray, int numOfFeat) {
@@ -141,6 +209,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 	int max, numOfSimilarImages, numOfImages;
 	int* imageHitsArray, *bestMatches, *closestImages;
 	SP_CONFIG_MSG config_msg;
+	int KNN;
 	// Allocate memory
 	numOfImages = spConfigGetNumOfImages(config,&config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS) {
@@ -152,6 +221,9 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		PRINT_ERROR_LOGGER(GET_NUM_OF_IMAGES_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
+	KNN = spConfigGetKNN(config,&config_msg);
+	if (config_msg != SP_CONFIG_SUCCESS)
+		return NULL;
 	imageHitsArray = (int*)calloc(numOfImages,sizeof(int)); // Feature's hit counter
 	closestImages = (int*)malloc(sizeof(int)*numOfSimilarImages); // Store the results
 	if (imageHitsArray == NULL || closestImages == NULL) { // Memory allocation error
@@ -170,7 +242,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 			free(closestImages);
 			return NULL;
 		}
-		for (j=0;j<numOfSimilarImages;j++) {
+		for (j=0;j<KNN;j++) {
 			imageHitsArray[bestMatches[j]]++; // Update the hit counter
 		}
 	}
