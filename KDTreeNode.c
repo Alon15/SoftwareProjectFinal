@@ -183,9 +183,10 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 		return NULL;
 	}
 	KNN = spConfigGetKNN(config,&config_msg);
-	if (config_msg != SP_CONFIG_SUCCESS)
+	if (config_msg != SP_CONFIG_SUCCESS){
 		PRINT_ERROR_LOGGER(GET_KNN_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
+	}
 	bpq = spBPQueueCreate(KNN);
 	if (bpq == NULL){
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
