@@ -215,11 +215,11 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 			return false;
 		}
 	} else if (strcmp(variableName,"spKDTreeSplitMethod") == 0) {
-		if (strcmp(variableName,"RANDOM") == 0) {
+		if (strcmp(value,"RANDOM") == 0) {
 			config->spKDTreeSplitMethod = RANDOM;
-		} else if (strcmp(variableName,"MAX_SPREAD") == 0) {
+		} else if (strcmp(value,"MAX_SPREAD") == 0) {
 			config->spKDTreeSplitMethod = MAX_SPREAD;
-		} else if (strcmp(variableName,"INCREMENTAL") == 0) {
+		} else if (strcmp(value,"INCREMENTAL") == 0) {
 			config->spKDTreeSplitMethod = INCREMENTAL;
 		} else {
 			*msg = SP_CONFIG_INVALID_STRING;
