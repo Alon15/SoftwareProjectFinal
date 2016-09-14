@@ -63,6 +63,4 @@ SPPoint* extractAllFeatures(SPConfig config, int* numOfFeats);
  */
 bool fileCheck(const char* fileName);
 
-void tmpFunc1(); // TODO DEBUG DELME
-
 #endif /* MAIN_AUX_H_ */

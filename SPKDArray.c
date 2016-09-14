@@ -23,8 +23,7 @@ struct kd_array_pair_t {
 };
 
 //
-int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn)
-{
+int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn) {
 	const int *a = aIn, *b = bIn;
 	const double *thunk = thunkIn;
 	if (thunk[*a] < thunk[*b]) {

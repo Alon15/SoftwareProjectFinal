@@ -19,7 +19,7 @@ SP_LOGGER_MSG spLoggerCreate(const char* filename, SP_LOGGER_LEVEL level) {
 	if (logger != NULL) { // Already defined
 		return SP_LOGGER_DEFINED;
 	}
-	logger = (SPLogger) malloc(sizeof(*logger));
+	logger = (SPLogger)malloc(sizeof(*logger));
 	if (logger == NULL) { // Allocation failure
 		return SP_LOGGER_OUT_OF_MEMORY;
 	}

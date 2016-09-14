@@ -139,34 +139,36 @@ bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
 	if (kdTree == NULL){ // subtree is NULL
 		return true;
 	} else if (kdTree->data != NULL) { // kdTree is a leaf
-		element = spListElementCreate(spPointGetIndex(kdTree->data),
-				spPointL2SquaredDistance(kdTree->data,feature));
-		if (element == NULL){
+		element = spListElementCreate(spPointGetIndex(kdTree->data),spPointL2SquaredDistance(kdTree->data,feature));
+		if (element == NULL) {
 			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		}
-		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY){
+		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY) {
 			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		}
 		spListElementDestroy(element);
 		return true;
 	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
-		if(!recKNNSearch(kdTree->left,bpq,feature)) // recursively search the left subtree
+		if (!recKNNSearch(kdTree->left,bpq,feature)) { // recursively search the left subtree
 			return false;
+		}
 		leftSide = true;
 	} else {
-		if(!recKNNSearch(kdTree->right,bpq,feature)) // recursively search the right subtree
+		if (!recKNNSearch(kdTree->right,bpq,feature)) { // recursively search the right subtree
 			return false;
+		}
 	}
 	// check if the candidate hypersphere crosses the splitting plane
 	diff = (kdTree->val)-spPointGetAxisCoor(feature,kdTree->dim);
-	if(!spBPQueueIsFull(bpq) || (diff*diff) < spBPQueueMaxValue(bpq)){
-		if(leftSide){
-			if(!recKNNSearch(kdTree->right,bpq,feature)) // recursively search the right subtree
+	if (!spBPQueueIsFull(bpq) || (diff*diff) < spBPQueueMaxValue(bpq)) {
+		if (leftSide) {
+			if (!recKNNSearch(kdTree->right,bpq,feature)) { // recursively search the right subtree
 				return false;
-		}
-		else{
-			if(!recKNNSearch(kdTree->left,bpq,feature)) // recursively search the left subtree
+			}
+		} else {
+			if (!recKNNSearch(kdTree->left,bpq,feature)) { // recursively search the left subtree
 				return false;
+			}
 		}
 	}
 	return true;
@@ -180,40 +182,40 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 	int* NNArray;
 	SPListElement element;
 	// Function body
-	if (kdTree == NULL){
+	if (kdTree == NULL) {
 		PRINT_ERROR_LOGGER(KDTREE_IS_NULL,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	KNN = spConfigGetKNN(config,&config_msg);
-	if (config_msg != SP_CONFIG_SUCCESS){
+	if (config_msg != SP_CONFIG_SUCCESS) {
 		PRINT_ERROR_LOGGER(GET_KNN_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	bpq = spBPQueueCreate(KNN);
-	if (bpq == NULL){
+	if (bpq == NULL) {
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
-	if(!recKNNSearch(kdTree,bpq,feature)){
+	if (!recKNNSearch(kdTree,bpq,feature)) {
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		spBPQueueDestroy(bpq);
 		return NULL;
 	}
 	NNArray = (int*)malloc(sizeof(int)*KNN);
-	if (NNArray == NULL){
+	if (NNArray == NULL) {
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		spBPQueueDestroy(bpq);
 		return NULL;
 	}
-	for (i=0;i<KNN;i++){
-		if (spBPQueueIsEmpty(bpq)){
+	for (i=0;i<KNN;i++) {
+		if (spBPQueueIsEmpty(bpq)) {
 			PRINT_ERROR_LOGGER(BPQ_EMPTY_ERROR,__FILE__,__func__,__LINE__);
 			free(NNArray);
 			spBPQueueDestroy(bpq);
 			return NULL;
 		}
-			element = spBPQueuePeek(bpq);
-		if (element == NULL){
+		element = spBPQueuePeek(bpq);
+		if (element == NULL) {
 			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			free(NNArray);
 			spBPQueueDestroy(bpq);
@@ -221,7 +223,7 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 		}
 		NNArray[i] = spListElementGetIndex(element);
 		spListElementDestroy(element);
-		if(spBPQueueDequeue(bpq)!= SP_BPQUEUE_SUCCESS){
+		if (spBPQueueDequeue(bpq)!= SP_BPQUEUE_SUCCESS) {
 			free(NNArray);
 			spBPQueueDestroy(bpq);
 			PRINT_ERROR_LOGGER(BPQ_EMPTY_ERROR,__FILE__,__func__,__LINE__);
@@ -251,22 +253,25 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		return NULL;
 	}
 	KNN = spConfigGetKNN(config,&config_msg);
-	if (config_msg != SP_CONFIG_SUCCESS)
+	if (config_msg != SP_CONFIG_SUCCESS) {
 		return NULL;
+	}
 	imageHitsArray = (int*)calloc(numOfImages,sizeof(int)); // Feature's hit counter
 	closestImages = (int*)malloc(sizeof(int)*numOfSimilarImages); // Store the results
 	if (imageHitsArray == NULL || closestImages == NULL) { // Memory allocation error
-		if(imageHitsArray)
+		if(imageHitsArray) {
 			free(imageHitsArray);
-		if(closestImages)
+		}
+		if(closestImages) {
 			free(closestImages);
+		}
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	// Function code
 	for (i=0;i<numOfFeat;i++) { // For each feature find the closest features's image index
 		bestMatches = kNearestNeighborsSearch(config,kdTree,queryArray[i]);
-		if(!bestMatches){
+		if(!bestMatches) {
 			free(imageHitsArray);
 			free(closestImages);
 			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);

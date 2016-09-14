@@ -8,7 +8,6 @@
 /**
  * A data-structure which is used for configuring the system.
  */
-
 typedef enum sp_config_msg_t {
 	SP_CONFIG_MISSING_DIR,
 	SP_CONFIG_MISSING_PREFIX,

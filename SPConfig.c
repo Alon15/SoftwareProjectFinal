@@ -95,18 +95,18 @@ void SetDefaultConfigValues(SPConfig config) {
  *
  * @param config - The configuration structure.
  */
-bool SetDefaultConfigString(SPConfig config, SP_CONFIG_MSG* msg){
-	if (config->spPCAFilename == NULL){
-		config->spPCAFilename = (char*) malloc(strlen("pca.yml")+1);
-		if (config->spPCAFilename == NULL){
+bool SetDefaultConfigString(SPConfig config, SP_CONFIG_MSG* msg) {
+	if (config->spPCAFilename == NULL) {
+		config->spPCAFilename = (char*)malloc(strlen("pca.yml")+1);
+		if (config->spPCAFilename == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
 		strcpy(config->spPCAFilename, "pca.yml");
 	}
-	if (config->spLoggerFilename == NULL){
-		config->spLoggerFilename = (char*) malloc(strlen("stdout")+1);
-		if (config->spLoggerFilename == NULL){
+	if (config->spLoggerFilename == NULL) {
+		config->spLoggerFilename = (char*)malloc(strlen("stdout")+1);
+		if (config->spLoggerFilename == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
@@ -142,7 +142,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 	}
 	if (strcmp(variableName,"spImagesDirectory") == 0) {
 		config->spImagesDirectory = (char*) malloc(strlen(value)+1);
-		if (config->spImagesDirectory == NULL){
+		if (config->spImagesDirectory == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
@@ -150,7 +150,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		*nonDefaultParam = true;
 	} else if (strcmp(variableName,"spImagesPrefix") == 0) {
 		config->spImagesPrefix = (char*) malloc(strlen(value)+1);
-		if (config->spImagesPrefix == NULL){
+		if (config->spImagesPrefix == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
@@ -159,7 +159,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 	} else if (strcmp(variableName,"spImagesSuffix") == 0) {
 		if ((strcmp(value,".jpg") || strcmp(value,".png") || strcmp(value,".bmp") || strcmp(value,".gif")) != false) {
 			config->spImagesSuffix = (char*) malloc(strlen(value)+1);
-			if (config->spImagesSuffix == NULL){
+			if (config->spImagesSuffix == NULL) {
 				*msg = SP_CONFIG_ALLOC_FAIL;
 				return false;
 			}
@@ -186,7 +186,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		}
 	} else if (strcmp(variableName,"spPCAFilename") == 0) {
 		config->spPCAFilename = (char*) malloc(strlen(value)+1);
-		if (config->spPCAFilename == NULL){
+		if (config->spPCAFilename == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
@@ -250,7 +250,7 @@ bool setConfigParameters(const SPConfig config,const char* variableName,const ch
 		}
 	} else if (strcmp(variableName,"spLoggerFilename") == 0) {
 		config->spLoggerFilename = (char*) malloc(strlen(value)+1);
-		if (config->spLoggerFilename == NULL){
+		if (config->spLoggerFilename == NULL) {
 			*msg = SP_CONFIG_ALLOC_FAIL;
 			return false;
 		}
@@ -334,14 +334,22 @@ bool ParseLine(char* line, char* variableName, char* value, SP_CONFIG_MSG* msg) 
  * If any parameter is NULL pointer (allocation fail or never allocated), then the function ignore it.
  */
 void FreeParseConfig(char* buffer, char* line, char* value, char* variableName) {
-	if (variableName)
+	if (variableName) {
 		free(variableName);
-	if (value)
+		variableName = NULL;
+	}
+	if (value) {
 		free(value);
-	if (buffer)
+		value = NULL;
+	}
+	if (buffer) {
 		free(buffer);
-	if (line)
+		buffer = NULL;
+	}
+	if (line) {
 		free(line);
+		line = NULL;
+	}
 }
 /*
  * The function remove all the occurrences of a given character from a given string
@@ -459,7 +467,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg) {
 		PRINT(errorMsg);
 		return NULL;
 	}
-	config = (SPConfig) malloc(sizeof(struct sp_config_t));
+	config = (SPConfig)malloc(sizeof(struct sp_config_t));
 	if (config == NULL) {
 		*msg = SP_CONFIG_ALLOC_FAIL;
 		ConfigErrorMsg(filename,lineNumber,msg,errorMsg);
