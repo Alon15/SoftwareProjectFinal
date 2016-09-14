@@ -1,0 +1,826 @@
+---INFO---
+- message: Logger was successfully initialized
+---INFO---
+- message: Initializing imageProc
+---INFO---
+- message: ImageProc was successfully initialized
+---INFO---
+- message: Starting extraction mode
+---INFO---
+- message: Features export of: ./test1images/img0.feats started
+---INFO---
+- message: Features export of: ./test1images/img0.feats ended
+---INFO---
+- message: Features export of: ./test1images/img1.feats started
+---INFO---
+- message: Features export of: ./test1images/img1.feats ended
+---INFO---
+- message: Features export of: ./test1images/img2.feats started
+---INFO---
+- message: Features export of: ./test1images/img2.feats ended
+---INFO---
+- message: Features export of: ./test1images/img3.feats started
+---INFO---
+- message: Features export of: ./test1images/img3.feats ended
+---INFO---
+- message: Features export of: ./test1images/img4.feats started
+---INFO---
+- message: Features export of: ./test1images/img4.feats ended
+---INFO---
+- message: Features export of: ./test1images/img5.feats started
+---INFO---
+- message: Features export of: ./test1images/img5.feats ended
+---INFO---
+- message: Features export of: ./test1images/img6.feats started
+---INFO---
+- message: Features export of: ./test1images/img6.feats ended
+---INFO---
+- message: Features export of: ./test1images/img7.feats started
+---INFO---
+- message: Features export of: ./test1images/img7.feats ended
+---INFO---
+- message: Features export of: ./test1images/img8.feats started
+---INFO---
+- message: Features export of: ./test1images/img8.feats ended
+---INFO---
+- message: Features export of: ./test1images/img9.feats started
+---INFO---
+- message: Features export of: ./test1images/img9.feats ended
+---INFO---
+- message: Features export of: ./test1images/img10.feats started
+---INFO---
+- message: Features export of: ./test1images/img10.feats ended
+---INFO---
+- message: Features export of: ./test1images/img11.feats started
+---INFO---
+- message: Features export of: ./test1images/img11.feats ended
+---INFO---
+- message: Features export of: ./test1images/img12.feats started
+---INFO---
+- message: Features export of: ./test1images/img12.feats ended
+---INFO---
+- message: Features export of: ./test1images/img13.feats started
+---INFO---
+- message: Features export of: ./test1images/img13.feats ended
+---INFO---
+- message: Features export of: ./test1images/img14.feats started
+---INFO---
+- message: Features export of: ./test1images/img14.feats ended
+---INFO---
+- message: Features export of: ./test1images/img15.feats started
+---INFO---
+- message: Features export of: ./test1images/img15.feats ended
+---INFO---
+- message: Features export of: ./test1images/img16.feats started
+---INFO---
+- message: Features export of: ./test1images/img16.feats ended
+---INFO---
+- message: Features export of: ./test1images/img17.feats started
+---INFO---
+- message: Features export of: ./test1images/img17.feats ended
+---INFO---
+- message: Features export of: ./test1images/img18.feats started
+---INFO---
+- message: Features export of: ./test1images/img18.feats ended
+---INFO---
+- message: Features export of: ./test1images/img19.feats started
+---INFO---
+- message: Features export of: ./test1images/img19.feats ended
+---INFO---
+- message: Features export of: ./test1images/img20.feats started
+---INFO---
+- message: Features export of: ./test1images/img20.feats ended
+---INFO---
+- message: Features export of: ./test1images/img21.feats started
+---INFO---
+- message: Features export of: ./test1images/img21.feats ended
+---INFO---
+- message: Features export of: ./test1images/img22.feats started
+---INFO---
+- message: Features export of: ./test1images/img22.feats ended
+---INFO---
+- message: Features export of: ./test1images/img23.feats started
+---INFO---
+- message: Features export of: ./test1images/img23.feats ended
+---INFO---
+- message: Features export of: ./test1images/img24.feats started
+---INFO---
+- message: Features export of: ./test1images/img24.feats ended
+---INFO---
+- message: Features export of: ./test1images/img25.feats started
+---INFO---
+- message: Features export of: ./test1images/img25.feats ended
+---INFO---
+- message: Features export of: ./test1images/img26.feats started
+---INFO---
+- message: Features export of: ./test1images/img26.feats ended
+---INFO---
+- message: Features export of: ./test1images/img27.feats started
+---INFO---
+- message: Features export of: ./test1images/img27.feats ended
+---INFO---
+- message: Features export of: ./test1images/img28.feats started
+---INFO---
+- message: Features export of: ./test1images/img28.feats ended
+---INFO---
+- message: Features export of: ./test1images/img29.feats started
+---INFO---
+- message: Features export of: ./test1images/img29.feats ended
+---INFO---
+- message: Features export of: ./test1images/img30.feats started
+---INFO---
+- message: Features export of: ./test1images/img30.feats ended
+---INFO---
+- message: Features export of: ./test1images/img31.feats started
+---INFO---
+- message: Features export of: ./test1images/img31.feats ended
+---INFO---
+- message: Features export of: ./test1images/img32.feats started
+---INFO---
+- message: Features export of: ./test1images/img32.feats ended
+---INFO---
+- message: Features export of: ./test1images/img33.feats started
+---INFO---
+- message: Features export of: ./test1images/img33.feats ended
+---INFO---
+- message: Features export of: ./test1images/img34.feats started
+---INFO---
+- message: Features export of: ./test1images/img34.feats ended
+---INFO---
+- message: Features export of: ./test1images/img35.feats started
+---INFO---
+- message: Features export of: ./test1images/img35.feats ended
+---INFO---
+- message: Features export of: ./test1images/img36.feats started
+---INFO---
+- message: Features export of: ./test1images/img36.feats ended
+---INFO---
+- message: Features export of: ./test1images/img37.feats started
+---INFO---
+- message: Features export of: ./test1images/img37.feats ended
+---INFO---
+- message: Features export of: ./test1images/img38.feats started
+---INFO---
+- message: Features export of: ./test1images/img38.feats ended
+---INFO---
+- message: Features export of: ./test1images/img39.feats started
+---INFO---
+- message: Features export of: ./test1images/img39.feats ended
+---INFO---
+- message: Features export of: ./test1images/img40.feats started
+---INFO---
+- message: Features export of: ./test1images/img40.feats ended
+---INFO---
+- message: Features export of: ./test1images/img41.feats started
+---INFO---
+- message: Features export of: ./test1images/img41.feats ended
+---INFO---
+- message: Features export of: ./test1images/img42.feats started
+---INFO---
+- message: Features export of: ./test1images/img42.feats ended
+---INFO---
+- message: Features export of: ./test1images/img43.feats started
+---INFO---
+- message: Features export of: ./test1images/img43.feats ended
+---INFO---
+- message: Features export of: ./test1images/img44.feats started
+---INFO---
+- message: Features export of: ./test1images/img44.feats ended
+---INFO---
+- message: Features export of: ./test1images/img45.feats started
+---INFO---
+- message: Features export of: ./test1images/img45.feats ended
+---INFO---
+- message: Features export of: ./test1images/img46.feats started
+---INFO---
+- message: Features export of: ./test1images/img46.feats ended
+---INFO---
+- message: Features export of: ./test1images/img47.feats started
+---INFO---
+- message: Features export of: ./test1images/img47.feats ended
+---INFO---
+- message: Features export of: ./test1images/img48.feats started
+---INFO---
+- message: Features export of: ./test1images/img48.feats ended
+---INFO---
+- message: Features export of: ./test1images/img49.feats started
+---INFO---
+- message: Features export of: ./test1images/img49.feats ended
+---INFO---
+- message: Features export of: ./test1images/img50.feats started
+---INFO---
+- message: Features export of: ./test1images/img50.feats ended
+---INFO---
+- message: Features export of: ./test1images/img51.feats started
+---INFO---
+- message: Features export of: ./test1images/img51.feats ended
+---INFO---
+- message: Features export of: ./test1images/img52.feats started
+---INFO---
+- message: Features export of: ./test1images/img52.feats ended
+---INFO---
+- message: Features export of: ./test1images/img53.feats started
+---INFO---
+- message: Features export of: ./test1images/img53.feats ended
+---INFO---
+- message: Features export of: ./test1images/img54.feats started
+---INFO---
+- message: Features export of: ./test1images/img54.feats ended
+---INFO---
+- message: Features export of: ./test1images/img55.feats started
+---INFO---
+- message: Features export of: ./test1images/img55.feats ended
+---INFO---
+- message: Features export of: ./test1images/img56.feats started
+---INFO---
+- message: Features export of: ./test1images/img56.feats ended
+---INFO---
+- message: Features export of: ./test1images/img57.feats started
+---INFO---
+- message: Features export of: ./test1images/img57.feats ended
+---INFO---
+- message: Features export of: ./test1images/img58.feats started
+---INFO---
+- message: Features export of: ./test1images/img58.feats ended
+---INFO---
+- message: Features export of: ./test1images/img59.feats started
+---INFO---
+- message: Features export of: ./test1images/img59.feats ended
+---INFO---
+- message: Features export of: ./test1images/img60.feats started
+---INFO---
+- message: Features export of: ./test1images/img60.feats ended
+---INFO---
+- message: Features export of: ./test1images/img61.feats started
+---INFO---
+- message: Features export of: ./test1images/img61.feats ended
+---INFO---
+- message: Features export of: ./test1images/img62.feats started
+---INFO---
+- message: Features export of: ./test1images/img62.feats ended
+---INFO---
+- message: Features export of: ./test1images/img63.feats started
+---INFO---
+- message: Features export of: ./test1images/img63.feats ended
+---INFO---
+- message: Features export of: ./test1images/img64.feats started
+---INFO---
+- message: Features export of: ./test1images/img64.feats ended
+---INFO---
+- message: Features export of: ./test1images/img65.feats started
+---INFO---
+- message: Features export of: ./test1images/img65.feats ended
+---INFO---
+- message: Features export of: ./test1images/img66.feats started
+---INFO---
+- message: Features export of: ./test1images/img66.feats ended
+---INFO---
+- message: Features export of: ./test1images/img67.feats started
+---INFO---
+- message: Features export of: ./test1images/img67.feats ended
+---INFO---
+- message: Features export of: ./test1images/img68.feats started
+---INFO---
+- message: Features export of: ./test1images/img68.feats ended
+---INFO---
+- message: Features export of: ./test1images/img69.feats started
+---INFO---
+- message: Features export of: ./test1images/img69.feats ended
+---INFO---
+- message: Features export of: ./test1images/img70.feats started
+---INFO---
+- message: Features export of: ./test1images/img70.feats ended
+---INFO---
+- message: Features export of: ./test1images/img71.feats started
+---INFO---
+- message: Features export of: ./test1images/img71.feats ended
+---INFO---
+- message: Features export of: ./test1images/img72.feats started
+---INFO---
+- message: Features export of: ./test1images/img72.feats ended
+---INFO---
+- message: Features export of: ./test1images/img73.feats started
+---INFO---
+- message: Features export of: ./test1images/img73.feats ended
+---INFO---
+- message: Features export of: ./test1images/img74.feats started
+---INFO---
+- message: Features export of: ./test1images/img74.feats ended
+---INFO---
+- message: Features export of: ./test1images/img75.feats started
+---INFO---
+- message: Features export of: ./test1images/img75.feats ended
+---INFO---
+- message: Features export of: ./test1images/img76.feats started
+---INFO---
+- message: Features export of: ./test1images/img76.feats ended
+---INFO---
+- message: Features export of: ./test1images/img77.feats started
+---INFO---
+- message: Features export of: ./test1images/img77.feats ended
+---INFO---
+- message: Features export of: ./test1images/img78.feats started
+---INFO---
+- message: Features export of: ./test1images/img78.feats ended
+---INFO---
+- message: Features export of: ./test1images/img79.feats started
+---INFO---
+- message: Features export of: ./test1images/img79.feats ended
+---INFO---
+- message: Features export of: ./test1images/img80.feats started
+---INFO---
+- message: Features export of: ./test1images/img80.feats ended
+---INFO---
+- message: Features export of: ./test1images/img81.feats started
+---INFO---
+- message: Features export of: ./test1images/img81.feats ended
+---INFO---
+- message: Features export of: ./test1images/img82.feats started
+---INFO---
+- message: Features export of: ./test1images/img82.feats ended
+---INFO---
+- message: Features export of: ./test1images/img83.feats started
+---INFO---
+- message: Features export of: ./test1images/img83.feats ended
+---INFO---
+- message: Features export of: ./test1images/img84.feats started
+---INFO---
+- message: Features export of: ./test1images/img84.feats ended
+---INFO---
+- message: Features export of: ./test1images/img85.feats started
+---INFO---
+- message: Features export of: ./test1images/img85.feats ended
+---INFO---
+- message: Features export of: ./test1images/img86.feats started
+---INFO---
+- message: Features export of: ./test1images/img86.feats ended
+---INFO---
+- message: Features export of: ./test1images/img87.feats started
+---INFO---
+- message: Features export of: ./test1images/img87.feats ended
+---INFO---
+- message: Features export of: ./test1images/img88.feats started
+---INFO---
+- message: Features export of: ./test1images/img88.feats ended
+---INFO---
+- message: Features export of: ./test1images/img89.feats started
+---INFO---
+- message: Features export of: ./test1images/img89.feats ended
+---INFO---
+- message: Features export of: ./test1images/img90.feats started
+---INFO---
+- message: Features export of: ./test1images/img90.feats ended
+---INFO---
+- message: Features export of: ./test1images/img91.feats started
+---INFO---
+- message: Features export of: ./test1images/img91.feats ended
+---INFO---
+- message: Features export of: ./test1images/img92.feats started
+---INFO---
+- message: Features export of: ./test1images/img92.feats ended
+---INFO---
+- message: Features export of: ./test1images/img93.feats started
+---INFO---
+- message: Features export of: ./test1images/img93.feats ended
+---INFO---
+- message: Features export of: ./test1images/img94.feats started
+---INFO---
+- message: Features export of: ./test1images/img94.feats ended
+---INFO---
+- message: Features export of: ./test1images/img95.feats started
+---INFO---
+- message: Features export of: ./test1images/img95.feats ended
+---INFO---
+- message: Features export of: ./test1images/img96.feats started
+---INFO---
+- message: Features export of: ./test1images/img96.feats ended
+---INFO---
+- message: Features export of: ./test1images/img97.feats started
+---INFO---
+- message: Features export of: ./test1images/img97.feats ended
+---INFO---
+- message: Features export of: ./test1images/img98.feats started
+---INFO---
+- message: Features export of: ./test1images/img98.feats ended
+---INFO---
+- message: Features export of: ./test1images/img99.feats started
+---INFO---
+- message: Features export of: ./test1images/img99.feats ended
+---INFO---
+- message: Extraction mode finished successfully
+---INFO---
+- message: Extracting features from files
+---INFO---
+- message: Features import of: ./test1images/img0.feats started
+---INFO---
+- message: Features import of: ./test1images/img0.feats ended
+---INFO---
+- message: Features import of: ./test1images/img1.feats started
+---INFO---
+- message: Features import of: ./test1images/img1.feats ended
+---INFO---
+- message: Features import of: ./test1images/img2.feats started
+---INFO---
+- message: Features import of: ./test1images/img2.feats ended
+---INFO---
+- message: Features import of: ./test1images/img3.feats started
+---INFO---
+- message: Features import of: ./test1images/img3.feats ended
+---INFO---
+- message: Features import of: ./test1images/img4.feats started
+---INFO---
+- message: Features import of: ./test1images/img4.feats ended
+---INFO---
+- message: Features import of: ./test1images/img5.feats started
+---INFO---
+- message: Features import of: ./test1images/img5.feats ended
+---INFO---
+- message: Features import of: ./test1images/img6.feats started
+---INFO---
+- message: Features import of: ./test1images/img6.feats ended
+---INFO---
+- message: Features import of: ./test1images/img7.feats started
+---INFO---
+- message: Features import of: ./test1images/img7.feats ended
+---INFO---
+- message: Features import of: ./test1images/img8.feats started
+---INFO---
+- message: Features import of: ./test1images/img8.feats ended
+---INFO---
+- message: Features import of: ./test1images/img9.feats started
+---INFO---
+- message: Features import of: ./test1images/img9.feats ended
+---INFO---
+- message: Features import of: ./test1images/img10.feats started
+---INFO---
+- message: Features import of: ./test1images/img10.feats ended
+---INFO---
+- message: Features import of: ./test1images/img11.feats started
+---INFO---
+- message: Features import of: ./test1images/img11.feats ended
+---INFO---
+- message: Features import of: ./test1images/img12.feats started
+---INFO---
+- message: Features import of: ./test1images/img12.feats ended
+---INFO---
+- message: Features import of: ./test1images/img13.feats started
+---INFO---
+- message: Features import of: ./test1images/img13.feats ended
+---INFO---
+- message: Features import of: ./test1images/img14.feats started
+---INFO---
+- message: Features import of: ./test1images/img14.feats ended
+---INFO---
+- message: Features import of: ./test1images/img15.feats started
+---INFO---
+- message: Features import of: ./test1images/img15.feats ended
+---INFO---
+- message: Features import of: ./test1images/img16.feats started
+---INFO---
+- message: Features import of: ./test1images/img16.feats ended
+---INFO---
+- message: Features import of: ./test1images/img17.feats started
+---INFO---
+- message: Features import of: ./test1images/img17.feats ended
+---INFO---
+- message: Features import of: ./test1images/img18.feats started
+---INFO---
+- message: Features import of: ./test1images/img18.feats ended
+---INFO---
+- message: Features import of: ./test1images/img19.feats started
+---INFO---
+- message: Features import of: ./test1images/img19.feats ended
+---INFO---
+- message: Features import of: ./test1images/img20.feats started
+---INFO---
+- message: Features import of: ./test1images/img20.feats ended
+---INFO---
+- message: Features import of: ./test1images/img21.feats started
+---INFO---
+- message: Features import of: ./test1images/img21.feats ended
+---INFO---
+- message: Features import of: ./test1images/img22.feats started
+---INFO---
+- message: Features import of: ./test1images/img22.feats ended
+---INFO---
+- message: Features import of: ./test1images/img23.feats started
+---INFO---
+- message: Features import of: ./test1images/img23.feats ended
+---INFO---
+- message: Features import of: ./test1images/img24.feats started
+---INFO---
+- message: Features import of: ./test1images/img24.feats ended
+---INFO---
+- message: Features import of: ./test1images/img25.feats started
+---INFO---
+- message: Features import of: ./test1images/img25.feats ended
+---INFO---
+- message: Features import of: ./test1images/img26.feats started
+---INFO---
+- message: Features import of: ./test1images/img26.feats ended
+---INFO---
+- message: Features import of: ./test1images/img27.feats started
+---INFO---
+- message: Features import of: ./test1images/img27.feats ended
+---INFO---
+- message: Features import of: ./test1images/img28.feats started
+---INFO---
+- message: Features import of: ./test1images/img28.feats ended
+---INFO---
+- message: Features import of: ./test1images/img29.feats started
+---INFO---
+- message: Features import of: ./test1images/img29.feats ended
+---INFO---
+- message: Features import of: ./test1images/img30.feats started
+---INFO---
+- message: Features import of: ./test1images/img30.feats ended
+---INFO---
+- message: Features import of: ./test1images/img31.feats started
+---INFO---
+- message: Features import of: ./test1images/img31.feats ended
+---INFO---
+- message: Features import of: ./test1images/img32.feats started
+---INFO---
+- message: Features import of: ./test1images/img32.feats ended
+---INFO---
+- message: Features import of: ./test1images/img33.feats started
+---INFO---
+- message: Features import of: ./test1images/img33.feats ended
+---INFO---
+- message: Features import of: ./test1images/img34.feats started
+---INFO---
+- message: Features import of: ./test1images/img34.feats ended
+---INFO---
+- message: Features import of: ./test1images/img35.feats started
+---INFO---
+- message: Features import of: ./test1images/img35.feats ended
+---INFO---
+- message: Features import of: ./test1images/img36.feats started
+---INFO---
+- message: Features import of: ./test1images/img36.feats ended
+---INFO---
+- message: Features import of: ./test1images/img37.feats started
+---INFO---
+- message: Features import of: ./test1images/img37.feats ended
+---INFO---
+- message: Features import of: ./test1images/img38.feats started
+---INFO---
+- message: Features import of: ./test1images/img38.feats ended
+---INFO---
+- message: Features import of: ./test1images/img39.feats started
+---INFO---
+- message: Features import of: ./test1images/img39.feats ended
+---INFO---
+- message: Features import of: ./test1images/img40.feats started
+---INFO---
+- message: Features import of: ./test1images/img40.feats ended
+---INFO---
+- message: Features import of: ./test1images/img41.feats started
+---INFO---
+- message: Features import of: ./test1images/img41.feats ended
+---INFO---
+- message: Features import of: ./test1images/img42.feats started
+---INFO---
+- message: Features import of: ./test1images/img42.feats ended
+---INFO---
+- message: Features import of: ./test1images/img43.feats started
+---INFO---
+- message: Features import of: ./test1images/img43.feats ended
+---INFO---
+- message: Features import of: ./test1images/img44.feats started
+---INFO---
+- message: Features import of: ./test1images/img44.feats ended
+---INFO---
+- message: Features import of: ./test1images/img45.feats started
+---INFO---
+- message: Features import of: ./test1images/img45.feats ended
+---INFO---
+- message: Features import of: ./test1images/img46.feats started
+---INFO---
+- message: Features import of: ./test1images/img46.feats ended
+---INFO---
+- message: Features import of: ./test1images/img47.feats started
+---INFO---
+- message: Features import of: ./test1images/img47.feats ended
+---INFO---
+- message: Features import of: ./test1images/img48.feats started
+---INFO---
+- message: Features import of: ./test1images/img48.feats ended
+---INFO---
+- message: Features import of: ./test1images/img49.feats started
+---INFO---
+- message: Features import of: ./test1images/img49.feats ended
+---INFO---
+- message: Features import of: ./test1images/img50.feats started
+---INFO---
+- message: Features import of: ./test1images/img50.feats ended
+---INFO---
+- message: Features import of: ./test1images/img51.feats started
+---INFO---
+- message: Features import of: ./test1images/img51.feats ended
+---INFO---
+- message: Features import of: ./test1images/img52.feats started
+---INFO---
+- message: Features import of: ./test1images/img52.feats ended
+---INFO---
+- message: Features import of: ./test1images/img53.feats started
+---INFO---
+- message: Features import of: ./test1images/img53.feats ended
+---INFO---
+- message: Features import of: ./test1images/img54.feats started
+---INFO---
+- message: Features import of: ./test1images/img54.feats ended
+---INFO---
+- message: Features import of: ./test1images/img55.feats started
+---INFO---
+- message: Features import of: ./test1images/img55.feats ended
+---INFO---
+- message: Features import of: ./test1images/img56.feats started
+---INFO---
+- message: Features import of: ./test1images/img56.feats ended
+---INFO---
+- message: Features import of: ./test1images/img57.feats started
+---INFO---
+- message: Features import of: ./test1images/img57.feats ended
+---INFO---
+- message: Features import of: ./test1images/img58.feats started
+---INFO---
+- message: Features import of: ./test1images/img58.feats ended
+---INFO---
+- message: Features import of: ./test1images/img59.feats started
+---INFO---
+- message: Features import of: ./test1images/img59.feats ended
+---INFO---
+- message: Features import of: ./test1images/img60.feats started
+---INFO---
+- message: Features import of: ./test1images/img60.feats ended
+---INFO---
+- message: Features import of: ./test1images/img61.feats started
+---INFO---
+- message: Features import of: ./test1images/img61.feats ended
+---INFO---
+- message: Features import of: ./test1images/img62.feats started
+---INFO---
+- message: Features import of: ./test1images/img62.feats ended
+---INFO---
+- message: Features import of: ./test1images/img63.feats started
+---INFO---
+- message: Features import of: ./test1images/img63.feats ended
+---INFO---
+- message: Features import of: ./test1images/img64.feats started
+---INFO---
+- message: Features import of: ./test1images/img64.feats ended
+---INFO---
+- message: Features import of: ./test1images/img65.feats started
+---INFO---
+- message: Features import of: ./test1images/img65.feats ended
+---INFO---
+- message: Features import of: ./test1images/img66.feats started
+---INFO---
+- message: Features import of: ./test1images/img66.feats ended
+---INFO---
+- message: Features import of: ./test1images/img67.feats started
+---INFO---
+- message: Features import of: ./test1images/img67.feats ended
+---INFO---
+- message: Features import of: ./test1images/img68.feats started
+---INFO---
+- message: Features import of: ./test1images/img68.feats ended
+---INFO---
+- message: Features import of: ./test1images/img69.feats started
+---INFO---
+- message: Features import of: ./test1images/img69.feats ended
+---INFO---
+- message: Features import of: ./test1images/img70.feats started
+---INFO---
+- message: Features import of: ./test1images/img70.feats ended
+---INFO---
+- message: Features import of: ./test1images/img71.feats started
+---INFO---
+- message: Features import of: ./test1images/img71.feats ended
+---INFO---
+- message: Features import of: ./test1images/img72.feats started
+---INFO---
+- message: Features import of: ./test1images/img72.feats ended
+---INFO---
+- message: Features import of: ./test1images/img73.feats started
+---INFO---
+- message: Features import of: ./test1images/img73.feats ended
+---INFO---
+- message: Features import of: ./test1images/img74.feats started
+---INFO---
+- message: Features import of: ./test1images/img74.feats ended
+---INFO---
+- message: Features import of: ./test1images/img75.feats started
+---INFO---
+- message: Features import of: ./test1images/img75.feats ended
+---INFO---
+- message: Features import of: ./test1images/img76.feats started
+---INFO---
+- message: Features import of: ./test1images/img76.feats ended
+---INFO---
+- message: Features import of: ./test1images/img77.feats started
+---INFO---
+- message: Features import of: ./test1images/img77.feats ended
+---INFO---
+- message: Features import of: ./test1images/img78.feats started
+---INFO---
+- message: Features import of: ./test1images/img78.feats ended
+---INFO---
+- message: Features import of: ./test1images/img79.feats started
+---INFO---
+- message: Features import of: ./test1images/img79.feats ended
+---INFO---
+- message: Features import of: ./test1images/img80.feats started
+---INFO---
+- message: Features import of: ./test1images/img80.feats ended
+---INFO---
+- message: Features import of: ./test1images/img81.feats started
+---INFO---
+- message: Features import of: ./test1images/img81.feats ended
+---INFO---
+- message: Features import of: ./test1images/img82.feats started
+---INFO---
+- message: Features import of: ./test1images/img82.feats ended
+---INFO---
+- message: Features import of: ./test1images/img83.feats started
+---INFO---
+- message: Features import of: ./test1images/img83.feats ended
+---INFO---
+- message: Features import of: ./test1images/img84.feats started
+---INFO---
+- message: Features import of: ./test1images/img84.feats ended
+---INFO---
+- message: Features import of: ./test1images/img85.feats started
+---INFO---
+- message: Features import of: ./test1images/img85.feats ended
+---INFO---
+- message: Features import of: ./test1images/img86.feats started
+---INFO---
+- message: Features import of: ./test1images/img86.feats ended
+---INFO---
+- message: Features import of: ./test1images/img87.feats started
+---INFO---
+- message: Features import of: ./test1images/img87.feats ended
+---INFO---
+- message: Features import of: ./test1images/img88.feats started
+---INFO---
+- message: Features import of: ./test1images/img88.feats ended
+---INFO---
+- message: Features import of: ./test1images/img89.feats started
+---INFO---
+- message: Features import of: ./test1images/img89.feats ended
+---INFO---
+- message: Features import of: ./test1images/img90.feats started
+---INFO---
+- message: Features import of: ./test1images/img90.feats ended
+---INFO---
+- message: Features import of: ./test1images/img91.feats started
+---INFO---
+- message: Features import of: ./test1images/img91.feats ended
+---INFO---
+- message: Features import of: ./test1images/img92.feats started
+---INFO---
+- message: Features import of: ./test1images/img92.feats ended
+---INFO---
+- message: Features import of: ./test1images/img93.feats started
+---INFO---
+- message: Features import of: ./test1images/img93.feats ended
+---INFO---
+- message: Features import of: ./test1images/img94.feats started
+---INFO---
+- message: Features import of: ./test1images/img94.feats ended
+---INFO---
+- message: Features import of: ./test1images/img95.feats started
+---INFO---
+- message: Features import of: ./test1images/img95.feats ended
+---INFO---
+- message: Features import of: ./test1images/img96.feats started
+---INFO---
+- message: Features import of: ./test1images/img96.feats ended
+---INFO---
+- message: Features import of: ./test1images/img97.feats started
+---INFO---
+- message: Features import of: ./test1images/img97.feats ended
+---INFO---
+- message: Features import of: ./test1images/img98.feats started
+---INFO---
+- message: Features import of: ./test1images/img98.feats ended
+---INFO---
+- message: Features import of: ./test1images/img99.feats started
+---INFO---
+- message: Features import of: ./test1images/img99.feats ended
+---INFO---
+- message: Extraction completed successfully
+---INFO---
+- message: Initializing KDTree
+---INFO---
+- message: KDTree was successfully initialized
+---INFO---
+- message: Getting queries from the user
+---INFO---
+- message: Similar images search started
+---INFO---
+- message: Similar images found successfully
+---INFO---
+- message: Showing similar images
