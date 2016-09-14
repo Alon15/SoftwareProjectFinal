@@ -17,6 +17,7 @@ struct kd_tree_node_t {
 };
 
 // Recursively creates KD tree from KD array
+//TODO massive memory leak in this function (4MB for 16 images) + doesn't do what it suppose to do
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	double tmpLoopVar;
@@ -28,16 +29,13 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	double* maxSpreadArray;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
-	nodeSons = (SPKDArrayPair) malloc(sizeof(SPKDArrayPair));
-	if ((node == NULL)||(nodeSons == NULL)) { // Memory allocation error
+	if (node == NULL) { // Memory allocation error
 		free(node);
-		free(nodeSons);
 		return NULL;
 	}
 	// Function body
 	if (spKDArrayGetSize(kdarray) == 0) {
 		free(node);
-		free(nodeSons);
 		return NULL;
 	} else if (spKDArrayGetSize(kdarray) == 1) {
 		node->dim = 0;
@@ -67,7 +65,6 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				break;
 			default: // Just in case
 				free(node);
-				free(nodeSons);
 				return NULL;
 		} // Find the index of the middle point in the sorted array, And then get the selected point value for the given coordinate
 		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
@@ -80,10 +77,10 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
 		node->dim = i;
-		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO verify
-		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO verify
+		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO memory leak in this part
+		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO need to free all the KDArrays
 		node->data = NULL;
-		free(nodeSons);
+		free(nodeSons); // Allocated inside spKDArraySplit
 		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
 			free(node);
 			return NULL;

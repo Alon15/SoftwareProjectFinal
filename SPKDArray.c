@@ -148,7 +148,6 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	return KDarray;
 }
 
-//TODO massive memory leak in this function (4MB for 16 images)
 SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	// Function variables
 	double tmpLoopData;
@@ -261,6 +260,14 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	if (supportSub) { // A tiny chance for errors in some compilers
 		free(supportSub);
 		supportSub = NULL; // Preventing a "double-free"
+	}
+	if (minSpread){ // A tiny chance for errors in some compilers
+		free(minSpread);
+		minSpread = NULL; // Preventing a "double-free"
+	}
+	if (maxSpread){ // A tiny chance for errors in some compilers
+		free(maxSpread);
+		maxSpread = NULL; // Preventing a "double-free"
 	}
 	// Finish
 	return res;
