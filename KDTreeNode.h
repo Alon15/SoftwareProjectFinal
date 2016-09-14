@@ -8,9 +8,14 @@
 typedef struct kd_tree_node_t *KDTreeNode;
 
 /*
- * @@@@@@@@@@@ TODO
+ * Recursive function which build a KDTree from KDArray
  *
- * @@@@@@@@@@@ TODO
+ * @param kdarray - The array we are using to build the tree
+ * @param i - The splitting dimension if we are using Incremental split method
+ * @param splitMethod - The split method
+ *
+ * @return Pointer to the root of the KDTree on success
+ * 		   NULL on failure
  */
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod);
 

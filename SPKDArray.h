@@ -8,10 +8,17 @@ typedef struct kd_array_t *SPKDArray;
 typedef struct kd_array_pair_t *SPKDArrayPair;
 
 /*
- * TODO
+ * A Comparator function for the qsort function.
  *
- * @param TODO
- * @return TODO
+ * The function compare doubles
+ *
+ * @param aIn - The index of the first element
+ * @param bIn - The index of the second element
+ * @param thunkIn - The array of the elements we are comparing
+ *
+ * @return 1 If thunk[aIn] > thunk[bIn]
+ * 		  -1 If thunk[aIn] < thunk[bIn]
+ * 		   0 If thunk[aIn] = thunk[bIn]
  */
 int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn);
 
@@ -19,8 +26,11 @@ int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn);
  * Initializes the kd-array with the data given by arr. The complexity of
  * this operation is O(d X nlog(n))
  *
- * @param TODO
- * @return TODO
+ * @param arr - Array of the features
+ * @param size - The size of the array (number of features)
+ *
+ * @return The kd array on success
+ * 		   NULL on failure
  */
 SPKDArray spKDArrayInit(SPPoint* arr, int size);
 
@@ -29,16 +39,18 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size);
  * with respect to the coordinate coor are in kdLeft , and the rest of the
  * points are in kdRight.
  *
- * @param TODO
- * @return TODO
+ * @param kdArr - The KDArray we are splitting
+ * @param coor - The coordinate we are splitting wit respect to
+ *
+ * @return a structure that hold the 2 new KDArrays
  */
 SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor);
 
 /*
- * TODO
+ * Free all the memory associated with the KDArray
  *
- * @param TODO
- * @return TODO
+ * @param array - The array we are freeing
+ *
  */
 void spKDArrayDestroy(SPKDArray array);
 
