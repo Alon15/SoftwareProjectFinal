@@ -123,8 +123,6 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree) {
 }
 
 int main (int argc, char *argv[]) {
-	//tmpFunc1(); //TODO DEBUG DELME
-	//return EXIT_FAILURE; //TODO DEBUG DELME
 	// Function variables
 	char filename[STRING_LENGTH];
 	int numOfFeats = 0;

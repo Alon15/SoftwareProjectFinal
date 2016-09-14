@@ -2,12 +2,6 @@
 #define SPBPRIORITYQUEUE_H_
 #include "SPListElement.h"
 #include <stdbool.h>
-/**
- * SP Bounded Priority Queue summary
- *
- * TODO Complete documentation
- */
-
 
 /** type used to define Bounded priority queue **/
 typedef struct sp_bp_queue_t* SPBPQueue;
