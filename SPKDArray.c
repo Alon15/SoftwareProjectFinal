@@ -148,7 +148,7 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	return KDarray;
 }
 
-//
+//TODO massive memory leak in this function (4MB for 16 images)
 SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	// Function variables
 	double tmpLoopData;

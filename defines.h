@@ -47,7 +47,7 @@
 #define STR_TO_INT_FAIL_WARNING "Feature corrupted - could not parse expected integer"
 #define STR_TO_DOUBLE_FAIL_WARNING "Feature corrupted - could not parse expected double"
 #define CORRUPTED_DATA_DIM_WARNING "Feature corrupted - Dimension and actual number coordinates does not match"
-#define CORRUPTED_FILE_ERROR "An error occurred - could not extract features from file, big part of the data is invalid"
+#define CORRUPTED_FILE_ERROR "An error occurred - could not extract features from file, big part of the data is corrupted"
 #define CORRUPTED_FILE_TOO_MANY_FEATURES "An error occurred - number of features parameter does not match the the actual features extracted"
 #define MEMORY_ALLOCATION_ERROR "An error occurred - allocation failure"
 
@@ -56,7 +56,7 @@
 #define LOGGER_LEVEL_INVALID_ERROR "An error occurred - logger level is invalid"
 #define LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to file"
 #define DEFAULT_LOGGER_CREATE_FAIL_ERROR "An error occurred - could not initialize logger to stdout"
-#define FILE_NOT_EXISTS "Invalid query - file is not exists\n"
+#define FILE_NOT_EXISTS "Invalid query - file does not exists\n"
 #define FILE_CANT_READ "Invalid query - file cannot be read\n"
 
 // SPConfig messages

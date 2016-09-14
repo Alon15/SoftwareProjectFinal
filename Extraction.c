@@ -228,6 +228,7 @@ SPPoint* ParseFeats(FILE* featsFile,const char* filename, int* numOfFeats) {
 							PRINT_ERROR_LOGGER(CORRUPTED_FILE_ERROR,filename,__func__,0);
 							FreeParseFeats(buffer, feature, header, data);
 							FREE_FEATURES_ARRAY(features,featsExtracted);
+							return NULL;
 						}
 					} else {
 						if(featsExtracted > *numOfFeats) { // checks if we are trying to extract more features then expected
