@@ -1,4 +1,5 @@
 #include <stdlib.h> // malloc, calloc, free, NULL, rand
+#include <time.h> // time
 #include "KDTreeNode.h"
 #include "SPConfig.h"
 #include "SPKDArray.h"
@@ -47,7 +48,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	} else {
 		switch (splitMethod) {
 			case RANDOM: // TODO verify
-				i = rand() % (spKDArrayGetDimension(kdarray) + 1);
+				i = rand() % spKDArrayGetDimension(kdarray);
 				break;
 			case MAX_SPREAD: // TODO verify
 				i = 0;
@@ -111,6 +112,7 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 	if (kdArray == NULL) {
 		return false;
 	}
+	srand((unsigned int)time(NULL));
 	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
 	if (*kdTree == NULL) {
 		return false;
