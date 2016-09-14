@@ -104,7 +104,7 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree) {
 			break;
 		}
 		if (fileCheck(query)) {
-			featuresArray = imageProc->getImageFeatures(query,-1,&numOfFeats);
+			featuresArray = imageProc->getImageFeatures(query,0,&numOfFeats);
 			if (featuresArray == NULL) {
 				PRINT_ERROR_LOGGER(FEATURES_EXTRACTION_FROM_IMAGE_FAIL_ERROR,__FILE__,__func__,__LINE__);
 				return false;
