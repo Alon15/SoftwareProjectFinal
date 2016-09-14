@@ -293,6 +293,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		imageHitsArray[closestImages[i]] = -1; // 'remove' the maximum from the search
 	}
 	free(imageHitsArray);
+	free(bestMatches);
 	return closestImages;
 }
 
