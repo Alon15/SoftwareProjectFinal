@@ -130,13 +130,13 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
  * @return False if a memory allocation error occurred
  * 		   True otherwise
  */
-bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
+bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature) {
 	// Function variables
 	SPListElement element;
 	bool leftSide = false;
 	double diff;
 	// Function body
-	if (kdTree == NULL){ // subtree is NULL
+	if (kdTree == NULL) { // subtree is NULL
 		return true;
 	} else if (kdTree->data != NULL) { // kdTree is a leaf
 		element = spListElementCreate(spPointGetIndex(kdTree->data),spPointL2SquaredDistance(kdTree->data,feature));
