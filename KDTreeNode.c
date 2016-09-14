@@ -4,6 +4,7 @@
 #include "SPKDArray.h"
 #include "SPPoint.h"
 #include "defines.h"
+#include "SPLogger.h"
 #include "SPBPriorityQueue.h"
 #include "SPListElement.h"
 
@@ -138,10 +139,12 @@ bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
 	} else if (kdTree->data != NULL) { // kdTree is a leaf
 		element = spListElementCreate(spPointGetIndex(kdTree->data),
 				spPointL2SquaredDistance(kdTree->data,feature));
-		if (element == NULL)
-			return false;
-		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY)
-			return false;
+		if (element == NULL){
+			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		}
+		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY){
+			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		}
 		spListElementDestroy(element);
 		return true;
 	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
@@ -218,6 +221,7 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 		if(spBPQueueDequeue(bpq)!= SP_BPQUEUE_SUCCESS){
 			free(NNArray);
 			spBPQueueDestroy(bpq);
+			PRINT_ERROR_LOGGER(BPQ_EMPTY_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 	}
@@ -262,6 +266,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		if(!bestMatches){
 			free(imageHitsArray);
 			free(closestImages);
+			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 		for (j=0;j<KNN;j++) {
@@ -290,6 +295,6 @@ void spKDTreeDestroy(KDTreeNode root) {
 	}
 	spKDTreeDestroy(root->left);
 	spKDTreeDestroy(root->right);
-	spPointDestroy(root->data); // TODO Verify if need to free SPPoint data too...
+	spPointDestroy(root->data);
 	free(root);
 }

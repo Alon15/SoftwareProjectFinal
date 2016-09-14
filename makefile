@@ -42,9 +42,10 @@ SPConfig.o: SPConfig.c SPConfig.h SPLogger.h defines.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
 Extraction.o: Extraction.c Extraction.h SPLogger.h SPPoint.h main_aux.h defines.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
-KDTreeNode.o: KDTreeNode.c KDTreeNode.h SPConfig.h SPKDArray.h SPPoint.h defines.h SPBPriorityQueue.h SPListElement.h
+KDTreeNode.o: KDTreeNode.c KDTreeNode.h SPConfig.h SPKDArray.h SPPoint.h defines.h SPBPriorityQueue.h \
+SPListElement.h SPLogger.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
-SPKDArray.o: SPKDArray.c SPKDArray.h SPPoint.h sort_r.h
+SPKDArray.o: SPKDArray.c SPKDArray.h SPPoint.h sort_r.h defines.h SPLogger.h
 	$(CC) $(C_COMP_FLAG) -c $*.c
 clean:
 	rm -f $(OBJS) $(EXEC)
