@@ -68,6 +68,11 @@
 #define CONFIG_INVALID_VALUE(errorMsg,filename,lineNumber) snprintf(errorMsg,STRING_LENGTH,"File: %s\nLine: %d\nMessage: Invalid value - constraint not met\n",filename, lineNumber)
 #define CONFIG_INVALID_ARGUMENT(errorMsg) snprintf(errorMsg,STRING_LENGTH,"Invalid command line : use -c <config_filename>\n")
 
+// KDTreeNode messages
+#define KDTREE_IS_NULL "An error occurred - the kdTreeNode is NULL"
+#define GET_KNN_FAIL_ERROR "An error occurred - could not retrieve KKN from the configuration file"
+#define BPQ_EMPTY_ERROR "An error occurred - could not retrieve element, the BPQ is empty"
+
 // info messages
 #define IMAGE_PROC_INIT "Initializing imageProc"
 #define IMAGE_PROC_SUCCESS "ImageProc was successfully initialized"

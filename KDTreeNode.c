@@ -174,14 +174,19 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 	int* NNArray;
 	SPListElement element;
 	// Function body
-	if (kdTree == NULL)
+	if (kdTree == NULL){
+		PRINT_ERROR_LOGGER(KDTREE_IS_NULL,__FILE__,__func__,__LINE__);
 		return NULL;
+	}
 	KNN = spConfigGetKNN(config,&config_msg);
 	if (config_msg != SP_CONFIG_SUCCESS)
+		PRINT_ERROR_LOGGER(GET_KNN_FAIL_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	bpq = spBPQueueCreate(KNN);
-	if (bpq == NULL)
+	if (bpq == NULL){
+		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
+	}
 	if(!recKNNSearch(kdTree,bpq,feature)){
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		spBPQueueDestroy(bpq);
@@ -194,8 +199,15 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 		return NULL;
 	}
 	for (i=0;i<KNN;i++){
-		element = spBPQueuePeek(bpq);
+		if (spBPQueueIsEmpty(bpq)){
+			PRINT_ERROR_LOGGER(BPQ_EMPTY_ERROR,__FILE__,__func__,__LINE__);
+			free(NNArray);
+			spBPQueueDestroy(bpq);
+			return NULL;
+		}
+			element = spBPQueuePeek(bpq);
 		if (element == NULL){
+			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			free(NNArray);
 			spBPQueueDestroy(bpq);
 			return NULL;
