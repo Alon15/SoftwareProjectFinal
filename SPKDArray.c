@@ -300,7 +300,7 @@ void spKDArrayDestroy(SPKDArray array) {
 			array->maxSpread = NULL; // Preventing a "double-free"
 		}
 		if (array->points) { // A tiny chance for errors in some compilers
-			free(array->points);
+			spPointDestroy(array->points);
 			array->points = NULL; // Preventing a "double-free"
 		}
 		free(array);
