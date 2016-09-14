@@ -3,7 +3,6 @@
 #include "SPConfig.h"
 #include "SPKDArray.h"
 #include "SPPoint.h"
-#include "SPLogger.h"
 #include "defines.h"
 #include "SPBPriorityQueue.h"
 #include "SPListElement.h"
@@ -53,8 +52,8 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				i = 0;
 				minSpreadArray = spKDArrayGetMinSpread(kdarray);
 				maxSpreadArray = spKDArrayGetMaxSpread(kdarray);
+				tmpLoopVar = 0;
 				for (j=0;j<spKDArrayGetDimension(kdarray);j++) {
-					tmpLoopVar = 0;
 					if (maxSpreadArray[j]-minSpreadArray[j] > tmpLoopVar) { // If dim j spread different is the biggest so far
 						tmpLoopVar = maxSpreadArray[j]-minSpreadArray[j]; // Update what was the maximum wee saw
 						i = j; // Update the splitting dimension
@@ -69,9 +68,8 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				return NULL;
 		} // Find the index of the middle point in the sorted array, And then get the selected point value for the given coordinate
 		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
-			//TODO this line crash the program
-			tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)%2)-1]],i);
-			tmpVar2 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
+			tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)/2)-1]],i);
+			tmpVar2 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)/2]],i);
 			node->val = (tmpVar1+tmpVar2)/2;
 		} else { // Size is odd, Choose the middle
 			node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
@@ -135,14 +133,10 @@ bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature){
 	} else if (kdTree->data != NULL) { // kdTree is a leaf
 		element = spListElementCreate(spPointGetIndex(kdTree->data),
 				spPointL2SquaredDistance(kdTree->data,feature));
-		if (element == NULL){
-			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		if (element == NULL)
 			return false;
-		}
-		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY){
-			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
+		if (spBPQueueEnqueue(bpq,element) == SP_BPQUEUE_OUT_OF_MEMORY)
 			return false;
-		}
 		spListElementDestroy(element);
 		return true;
 	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
@@ -219,7 +213,6 @@ int* kNearestNeighborsSearch(SPConfig config, KDTreeNode kdTree, SPPoint feature
 		if(spBPQueueDequeue(bpq)!= SP_BPQUEUE_SUCCESS){
 			free(NNArray);
 			spBPQueueDestroy(bpq);
-			PRINT_ERROR_LOGGER(BPQ_EMPTY_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 	}
@@ -264,7 +257,6 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		if(!bestMatches){
 			free(imageHitsArray);
 			free(closestImages);
-			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 		for (j=0;j<KNN;j++) {
@@ -293,6 +285,6 @@ void spKDTreeDestroy(KDTreeNode root) {
 	}
 	spKDTreeDestroy(root->left);
 	spKDTreeDestroy(root->right);
-	spPointDestroy(root->data);
+	spPointDestroy(root->data); // TODO Verify if need to free SPPoint data too...
 	free(root);
 }

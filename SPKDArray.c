@@ -4,8 +4,6 @@
 #include "SPKDArray.h"
 #include "SPPoint.h"
 #include "sort_r.h"
-#include "SPLogger.h"
-#include "defines.h"
 
 // Array datatype
 struct kd_array_t {
@@ -105,7 +103,6 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	KDarray->points = (SPPoint *)malloc(size * sizeof(*KDarray->points));
 	if ((KDarray == NULL)||(matrix_v == NULL)||(matrix_i == NULL)||(KDarray->minSpread == NULL)||(KDarray->maxSpread == NULL)||(KDarray->points == NULL)) { // Memory allocation error
 		specificMemoryFree(NULL,NULL,KDarray->minSpread,KDarray->maxSpread,matrix_i,NULL,matrix_v,NULL,KDarray,NULL,KDarray->points,NULL);
-		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	for (i=0;i<dim;i++) {
@@ -115,7 +112,6 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 		matrix_i[i] = (int *)malloc(size * sizeof(int));
 		if ((matrix_v[i] == NULL)||(matrix_i[i] == NULL)) { // Memory allocation error
 			specificMemoryFree(NULL,NULL,KDarray->minSpread,KDarray->maxSpread,matrix_i,NULL,matrix_v,NULL,KDarray,NULL,KDarray->points,NULL);
-			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 	}
@@ -180,7 +176,6 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	pointsRight = (SPPoint *) malloc(((kdArr->size)-spltr) * sizeof(*pointsRight));
 	if ((supportSide==NULL)||(supportSub==NULL)||(matrixLeft==NULL)||(matrixRight==NULL)||(minSpread==NULL)||(maxSpread==NULL)||(res==NULL)||(pointsLeft==NULL)||(pointsRight==NULL)) { // Memory allocation error
 		specificMemoryFree(supportSide,supportSub,NULL,NULL,matrixLeft,matrixRight,minSpread,maxSpread,NULL,res,pointsLeft,pointsRight);
-		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	minSpread[0] = (double *)malloc(kdArr->dim * sizeof(double));
@@ -191,7 +186,6 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	res->right = (SPKDArray) malloc(sizeof(*res->right));
 	if ((minSpread[0]==NULL)||(minSpread[1]==NULL)||(maxSpread[0]==NULL)||(maxSpread[1]==NULL)||(res->left==NULL)||(res->right==NULL)) { // Memory allocation error
 		specificMemoryFree(supportSide,supportSub,NULL,NULL,matrixLeft,matrixRight,minSpread,maxSpread,NULL,res,pointsLeft,pointsRight);
-		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	for (i=0;i<kdArr->dim;i++) {
@@ -203,7 +197,6 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 		matrixRight[i] = (int *)malloc(((kdArr->size)-spltr) * sizeof(int));
 		if ((matrixLeft[i] == NULL)||(matrixRight[i] == NULL)) { // Memory allocation error
 			specificMemoryFree(supportSide,supportSub,NULL,NULL,matrixLeft,matrixRight,minSpread,maxSpread,NULL,res,pointsLeft,pointsRight);
-			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 			return NULL;
 		}
 	}
