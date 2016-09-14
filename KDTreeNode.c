@@ -80,6 +80,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO need to free all the KDArrays
 		node->data = NULL;
 		free(nodeSons); // Allocated inside spKDArraySplit
+		spKDArrayDestroy(kdarray); // Free kdarray memory // TODO verify that this command is correct
 		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
 			free(node);
 			return NULL;
