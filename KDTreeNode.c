@@ -69,7 +69,14 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		} // Find the index of the middle point in the sorted array, And then get the selected point value for the given coordinate
 		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
 			//TODO this line crash the program
-			tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)%2)-1]],i);
+			int v0 = spKDArrayGetSize(kdarray);
+			int v1 = (v0%2)-1;
+			int v2 = spKDArrayGetMatrix(kdarray)[i][v1];
+			SPPoint* v3 = spKDArrayGetPoints(kdarray);
+			SPPoint v4 = v3[v2];
+			int v5 = spPointGetAxisCoor(v4,i);
+			tmpVar1 = v5;
+			//tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)%2)-1]],i);
 			tmpVar2 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
 			node->val = (tmpVar1+tmpVar2)/2;
 		} else { // Size is odd, Choose the middle
