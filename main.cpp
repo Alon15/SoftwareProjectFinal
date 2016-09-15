@@ -2,13 +2,13 @@
 #include <cstring> // strcmp
 #include "SPImageProc.h"
 extern "C" {
-#include "Extraction.h"
-#include "main_aux.h"
-#include "SPConfig.h"
-#include "SPLogger.h"
-#include "SPPoint.h"
-#include "defines.h"
-#include "KDTreeNode.h"
+	#include "Extraction.h"
+	#include "main_aux.h"
+	#include "SPConfig.h"
+	#include "SPLogger.h"
+	#include "SPPoint.h"
+	#include "defines.h"
+	#include "KDTreeNode.h"
 }
 
 using namespace sp;
@@ -81,10 +81,12 @@ bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* qu
 			PRINT_ERROR_LOGGER(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
 			return false;
 		}
-		if (!minimalGui)
+
+		if (!minimalGui) {
 			PRINT_NON_MINIMAL_GUI_RESULT(imagePath);
-		else
+		} else {
 			imageProc->showImage(imagePath);
+		}
 	}
 	return true;
 }
@@ -117,7 +119,7 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree) {
 			}
 			PRINT_INFO_LOGGER(SIMILAR_IMAGES_FOUND);
 			FREE_FEATURES_ARRAY(featuresArray,numOfFeats); // free the query features
-			if(!showImages(config,imageProc,closestImages,query)){
+			if (!showImages(config,imageProc,closestImages,query)){
 				free(closestImages);
 				return false;
 			}
