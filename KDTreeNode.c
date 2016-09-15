@@ -19,7 +19,6 @@ struct kd_tree_node_t {
 };
 
 // Recursively creates KD tree from KD array
-// TODO massive memory leak in this function
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	double tmpLoopVar;
@@ -284,6 +283,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		for (j=0;j<KNN;j++) {
 			imageHitsArray[bestMatches[j]]++; // Update the hit counter
 		}
+		free(bestMatches); // Free memory of the last feature
 	}
 	// find the index of the images with the most hits
 	for (i=0;i<numOfSimilarImages;i++) {
@@ -297,7 +297,6 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 		imageHitsArray[closestImages[i]] = -1; // 'remove' the maximum from the search
 	}
 	free(imageHitsArray);
-	free(bestMatches);
 	return closestImages;
 }
 

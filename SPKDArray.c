@@ -120,11 +120,11 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	// Function body
 	KDarray->dim = dim;
 	KDarray->size = size;
-	for (i=0;i<size;i++) {
-		KDarray->points[i] = spPointCopy(arr[i]);
-		for (j=0;j<dim;j++) {
-			matrix_v[j][i] = spPointGetAxisCoor(arr[i],j);
-			matrix_i[j][i] = i;
+	for (i=0;i<size;i++) {//								 The example from FinalProject.pdf (page 10) will look like:
+		KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		for (j=0;j<dim;j++) {//								 matrix_v = |   2 |  70 |   7 |  11 |   4 |
+			matrix_v[j][i] = spPointGetAxisCoor(arr[i],j);//			|   0 |   1 |   2 |   3 |   4 |
+			matrix_i[j][i] = i;//							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
 			if ((KDarray->maxSpread[j] == DBL_MIN)||(KDarray->maxSpread[j] < matrix_v[j][i])) {
 				KDarray->maxSpread[j] = matrix_v[j][i]; // Update the maximum spread for dim=j
 			} else if ((KDarray->minSpread[j] == DBL_MIN)||(matrix_v[j][i] < KDarray->minSpread[j])) {
@@ -297,7 +297,7 @@ void spKDArrayDestroy(SPKDArray array) {
 			free(array->maxSpread);
 			array->maxSpread = NULL; // Preventing a "double-free"
 		}
-		if (array->points) { // A tiny chance for errors in some compilers // TODO
+		if (array->points) { // A tiny chance for errors in some compilers
 			for (i=0;i<array->size;i++) {
 				spPointDestroy(array->points[i]);
 				array->points[i] = NULL; // Preventing a "double-free"
