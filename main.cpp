@@ -115,8 +115,12 @@ bool query(SPConfig config, ImageProc* imageProc, KDTreeNode kdTree) {
 				return false;
 			}
 			PRINT_INFO_LOGGER(SIMILAR_IMAGES_FOUND);
-			showImages(config,imageProc,closestImages,query);
 			FREE_FEATURES_ARRAY(featuresArray,numOfFeats); // free the query features
+			if(!showImages(config,imageProc,closestImages,query)){
+				free(closestImages);
+				return false;
+			}
+			free(closestImages);
 		}
 	}
 	return true;

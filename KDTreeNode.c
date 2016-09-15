@@ -168,7 +168,6 @@ bool recKNNSearch(KDTreeNode kdTree,SPBPQueue bpq,SPPoint feature) {
 			PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
 		}
 		spListElementDestroy(element);
-		return true;
 	} else if (spPointGetAxisCoor(feature,kdTree->dim) <= kdTree->val) {
 		if (!recKNNSearch(kdTree->left,bpq,feature)) { // recursively search the left subtree
 			return false;
