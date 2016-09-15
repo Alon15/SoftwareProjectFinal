@@ -47,10 +47,16 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size);
 SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor);
 
 /*
+ * Free all the memory associated with the KDArrayPair
+ *
+ * @param array - The array pair that we are freeing
+ */
+void spKDArrayPairDestroy(SPKDArrayPair arrayPair);
+
+/*
  * Free all the memory associated with the KDArray
  *
- * @param array - The array we are freeing
- *
+ * @param array - The array that we are freeing
  */
 void spKDArrayDestroy(SPKDArray array);
 

@@ -168,8 +168,8 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	SPPoint* pointsRight; // The points for the right SPKDArray
 	// Allocate memory
 	spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
-	supportSide = (int *) malloc(kdArr->size * sizeof(int));
-	supportSub = (int *) malloc(kdArr->size * sizeof(int));
+	supportSide = (int *)malloc(kdArr->size * sizeof(int));
+	supportSub = (int *)malloc(kdArr->size * sizeof(int));
 	matrixLeft = (int **)malloc(kdArr->dim * sizeof(int*));
 	matrixRight = (int **)malloc(kdArr->dim * sizeof(int*));
 	minSpread = (double **)malloc(2 * sizeof(double*)); // [0] is for the left & [1] for the right
@@ -186,8 +186,8 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	minSpread[1] = (double *)malloc(kdArr->dim * sizeof(double));
 	maxSpread[0] = (double *)malloc(kdArr->dim * sizeof(double));
 	maxSpread[1] = (double *)malloc(kdArr->dim * sizeof(double));
-	res->left = (SPKDArray) malloc(sizeof(*res->left));
-	res->right = (SPKDArray) malloc(sizeof(*res->right));
+	res->left = (SPKDArray)malloc(sizeof(*res->left));
+	res->right = (SPKDArray)malloc(sizeof(*res->right));
 	if ((minSpread[0]==NULL)||(minSpread[1]==NULL)||(maxSpread[0]==NULL)||(maxSpread[1]==NULL)||(res->left==NULL)||(res->right==NULL)) { // Memory allocation error
 		specificMemoryFree(supportSide,supportSub,NULL,NULL,matrixLeft,matrixRight,minSpread,maxSpread,NULL,res,pointsLeft,pointsRight);
 		PRINT_ERROR_LOGGER(MEMORY_ALLOCATION_ERROR,__FILE__,__func__,__LINE__);
@@ -267,6 +267,14 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 		free(supportSub);
 		supportSub = NULL; // Preventing a "double-free"
 	}
+	for (i=0;i<2;i++) {
+		if (minSpread[i]) { // A tiny chance for errors in some compilers
+			free(minSpread[i]);
+		}
+		if (maxSpread[i]) { // A tiny chance for errors in some compilers
+			free(maxSpread[i]);
+		}
+	}
 	if (minSpread) { // A tiny chance for errors in some compilers
 		free(minSpread);
 		minSpread = NULL; // Preventing a "double-free"
@@ -277,6 +285,11 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 	}
 	// Finish
 	return res;
+}
+
+void spKDArrayPairDestroy(SPKDArrayPair arrayPair) {
+	spKDArrayDestroy(arrayPair->left);
+	spKDArrayDestroy(arrayPair->right);
 }
 
 void spKDArrayDestroy(SPKDArray array) {

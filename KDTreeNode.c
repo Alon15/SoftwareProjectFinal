@@ -19,11 +19,11 @@ struct kd_tree_node_t {
 };
 
 // Recursively creates KD tree from KD array
-//TODO massive memory leak in this function (4MB for 16 images) + doesn't do what it suppose to do
+// TODO massive memory leak in this function
 KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMethod) {
 	// Function variables
 	double tmpLoopVar;
-	int j;
+	int j; // Generic loop variable
 	int tmpVar1,tmpVar2;
 	KDTreeNode node;
 	SPKDArrayPair nodeSons;
@@ -31,13 +31,20 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	double* maxSpreadArray;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
-	if (node == NULL) { // Memory allocation error
-		free(node);
-		return NULL;
-	}
 	// Function body
-	if (spKDArrayGetSize(kdarray) == 0) {
-		free(node);
+	if ((node == NULL)||(spKDArrayGetSize(kdarray) == 0)) {
+		if (node) {
+			free(node);
+		}
+		/*if (nodeSons) { // TODO DELME
+			free(nodeSons); // TODO DELME
+		}
+		if (minSpreadArray) { // TODO DELME
+			free(minSpreadArray); // TODO DELME
+		}
+		if (maxSpreadArray) { // TODO DELME
+			free(maxSpreadArray); // TODO DELME
+		}*/
 		return NULL;
 	} else if (spKDArrayGetSize(kdarray) == 1) {
 		node->dim = 0;
@@ -78,21 +85,35 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		}
 		nodeSons = spKDArraySplit(kdarray,i); // Split by the i dimension
 		node->dim = i;
-		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod); // TODO memory leak in this part
-		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod); // TODO need to free all the KDArrays
+		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod);
+		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod);
 		node->data = NULL;
-		free(nodeSons); // Allocated inside spKDArraySplit
-		spKDArrayDestroy(kdarray); // Free kdarray memory // TODO verify that this command is correct
-		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
-			free(node);
-			return NULL;
-		}
 	}
-	return node;
+	// Free memory
+	spKDArrayDestroy(kdarray);
+	if (nodeSons) {
+		spKDArrayPairDestroy(nodeSons);
+	}
+	if (minSpreadArray) { // A tiny chance for errors in some compilers
+		free(minSpreadArray);
+		minSpreadArray = NULL; // Preventing a "double-free"
+	}
+	if (maxSpreadArray) { // A tiny chance for errors in some compilers
+		free(maxSpreadArray);
+		maxSpreadArray = NULL; // Preventing a "double-free"
+	}
+	// Finish
+	if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
+		spKDTreeDestroy(node);
+		return NULL;
+	} else {
+		return node;
+	}
 }
 
 bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree) {
 	// Function variables
+	int i; // Generic loop variable
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	SPKDArray kdArray;
@@ -114,6 +135,16 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 	}
 	srand((unsigned int)time(NULL));
 	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
+	// Free memory
+	if (featuresArray) { // A tiny chance for errors in some compilers
+		for (i=0;i<size;i++) {
+			spPointDestroy(featuresArray[i]);
+			featuresArray[i] = NULL; // Preventing a "double-free"
+		}
+		free(featuresArray);
+		featuresArray = NULL; // Preventing a "double-free"
+	}
+	// Finish
 	if (*kdTree == NULL) {
 		return false;
 	} else {
@@ -299,11 +330,16 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 
 // Frees all allocation associated with the tree given by root
 void spKDTreeDestroy(KDTreeNode root) {
-	if (!root) {
-		return;
+	if (root != NULL) {
+		if (root->left) {
+			spKDTreeDestroy(root->left);
+		}
+		if (root->right) {
+			spKDTreeDestroy(root->right);
+		}
+		if (root->data) {
+			spPointDestroy(root->data);
+		}
+		free(root);
 	}
-	spKDTreeDestroy(root->left);
-	spKDTreeDestroy(root->right);
-	spPointDestroy(root->data);
-	free(root);
 }
