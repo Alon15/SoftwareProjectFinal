@@ -22,7 +22,6 @@ struct kd_array_pair_t {
 	SPKDArray right;
 };
 
-//
 int spKDArrayCompare(const void *aIn, const void *bIn, const void *thunkIn) {
 	const int *a = aIn, *b = bIn;
 	const double *thunk = thunkIn;
@@ -121,11 +120,11 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 	// Function body
 	KDarray->dim = dim;
 	KDarray->size = size;
-	for (i=0;i<size;i++) { //								 The example from FinalProject.pdf (page 10) will look like:
-		KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
-		for (j=0;j<dim;j++) { //							 matrix_v = |   2 |  70 |   7 |  11 |   4 |
-			matrix_v[j][i] = spPointGetAxisCoor(arr[i],j); //			|   0 |   1 |   2 |   3 |   4 |
-			matrix_i[j][i] = i; //							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
+	for (i=0;i<size;i++) {
+		KDarray->points[i] = spPointCopy(arr[i]);
+		for (j=0;j<dim;j++) {
+			matrix_v[j][i] = spPointGetAxisCoor(arr[i],j);
+			matrix_i[j][i] = i;
 			if ((KDarray->maxSpread[j] == DBL_MIN)||(KDarray->maxSpread[j] < matrix_v[j][i])) {
 				KDarray->maxSpread[j] = matrix_v[j][i]; // Update the maximum spread for dim=j
 			} else if ((KDarray->minSpread[j] == DBL_MIN)||(matrix_v[j][i] < KDarray->minSpread[j])) {
@@ -147,7 +146,6 @@ SPKDArray spKDArrayInit(SPPoint* arr, int size) {
 		free(matrix_v);
 		matrix_v = NULL; // Preventing a "double-free"
 	}
-	// Finish
 	return KDarray;
 }
 
@@ -219,12 +217,6 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 			pointsRight[i-spltr] = spPointCopy(kdArr->points[tmpIndex]);
 		}
 	}
-	// The example from FinalProject.pdf (page 10) will look like:
-	// supportSide = [0,1,0,1,0]
-	// supportSub = [0,0,-1,-3,-2]
-	// pointsLeft = [a,c,e]
-	// pointsRight = [d,b]
-	// So far the complexity is O( MAX(d,n) )
 	for (i=0;i<kdArr->dim;i++) {
 		pointerLeft = 0;
 		pointerRight = 0;
@@ -298,11 +290,11 @@ void spKDArrayDestroy(SPKDArray array) {
 			array->matrix = NULL; // Preventing a "double-free"
 		}
 		if (array->minSpread) { // A tiny chance for errors in some compilers
-			free(array->minSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+			free(array->minSpread);
 			array->minSpread = NULL; // Preventing a "double-free"
 		}
 		if (array->maxSpread) { // A tiny chance for errors in some compilers
-			free(array->maxSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+			free(array->maxSpread);
 			array->maxSpread = NULL; // Preventing a "double-free"
 		}
 		if (array->points) { // A tiny chance for errors in some compilers // TODO

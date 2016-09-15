@@ -97,7 +97,6 @@
 freeMainMemory(config,featuresArray,numOfFeats,true,kdTree);
 
 // print and messages
-//TODO fix print or delete it completely
 #define PRINT(msg) printf("%s",msg);
 #define LOGGER_INFO_EXTRACTION_MSG(buffer,msg,filename) sprintf(buffer,msg,filename);\
 PRINT_INFO_LOGGER(buffer);
