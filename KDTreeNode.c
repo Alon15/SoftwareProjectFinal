@@ -30,12 +30,12 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	double* minSpreadArray;
 	double* maxSpreadArray;
 	// Allocate memory
-	node = (KDTreeNode) malloc(sizeof(*node));
+	node = (KDTreeNode)malloc(sizeof(*node));
 	// Function body
 	if ((node == NULL)||(spKDArrayGetSize(kdarray) == 0)) {
-		if (node) {
+		/*if (node) {
 			free(node);
-		}
+		}*/
 		/*if (nodeSons) { // TODO DELME
 			free(nodeSons); // TODO DELME
 		}
@@ -45,13 +45,14 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		if (maxSpreadArray) { // TODO DELME
 			free(maxSpreadArray); // TODO DELME
 		}*/
-		return NULL;
+		node->dim = -1;
+		return node;
 	} else if (spKDArrayGetSize(kdarray) == 1) {
 		node->dim = 0;
 		node->val = 0;
 		node->left = NULL;
 		node->right = NULL;
-		node->data = spKDArrayGetPoints(kdarray)[0];
+		node->data = spKDArrayGetPoints(kdarray)[0]; // Does not duplicate the point!!!
 	} else {
 		switch (splitMethod) {
 			case RANDOM: // TODO verify
@@ -73,8 +74,8 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 				i = (i+1) % spKDArrayGetDimension(kdarray);
 				break;
 			default: // Just in case
-				free(node);
-				return NULL;
+				node->dim = -1;
+				return node;
 		} // Find the index of the middle point in the sorted array, And then get the selected point value for the given coordinate
 		if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
 			tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)/2)-1]],i);
@@ -90,8 +91,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->data = NULL;
 	}
 	// Free memory
-	spKDArrayDestroy(kdarray);
-	if (nodeSons) {
+	/*if (nodeSons) { // TODO "No source available for ntdll!RtlFreeHeap" error
 		spKDArrayPairDestroy(nodeSons);
 	}
 	if (minSpreadArray) { // A tiny chance for errors in some compilers
@@ -102,13 +102,12 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		free(maxSpreadArray);
 		maxSpreadArray = NULL; // Preventing a "double-free"
 	}
+	spKDArrayDestroy(kdarray);*/
 	// Finish
-	if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
-		spKDTreeDestroy(node);
-		return NULL;
-	} else {
-		return node;
+	if (((node->left)&&(node->left->dim == -1))||((node->right)&&(node->right->dim == -1))) { // Bubble the alert back to the root
+		node->dim = -1;
 	}
+	return node;
 }
 
 bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree) {
@@ -145,7 +144,8 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 		featuresArray = NULL; // Preventing a "double-free"
 	}
 	// Finish
-	if (*kdTree == NULL) {
+	if ((*kdTree == NULL)||((*kdTree)->dim == -1)) {
+		spKDTreeDestroy(*kdTree);
 		return false;
 	} else {
 		return true;

@@ -288,14 +288,14 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 }
 
 void spKDArrayPairDestroy(SPKDArrayPair arrayPair) {
-	spKDArrayDestroy(arrayPair->left);
-	spKDArrayDestroy(arrayPair->right);
+	spKDArrayDestroy(spKDArrayPairGetLeft(arrayPair));
+	spKDArrayDestroy(spKDArrayPairGetRight(arrayPair));
 }
 
 void spKDArrayDestroy(SPKDArray array) {
 	int i;
 	if (array != NULL) {
-		for (i=0;i<array->dim;i++) {
+		/*for (i=0;i<array->dim;i++) {
 			if (array->matrix[i]) { // A tiny chance for errors in some compilers
 				free(array->matrix[i]);
 			}
@@ -305,21 +305,21 @@ void spKDArrayDestroy(SPKDArray array) {
 			array->matrix = NULL; // Preventing a "double-free"
 		}
 		if (array->minSpread) { // A tiny chance for errors in some compilers
-			free(array->minSpread);
+			//free(array->minSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
 			array->minSpread = NULL; // Preventing a "double-free"
 		}
 		if (array->maxSpread) { // A tiny chance for errors in some compilers
-			free(array->maxSpread);
+			//free(array->maxSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
 			array->maxSpread = NULL; // Preventing a "double-free"
-		}
-		if (array->points) { // A tiny chance for errors in some compilers
+		}*/
+		/*if (array->points) { // A tiny chance for errors in some compilers // TODO
 			for (i=0;i<array->size;i++) {
 				spPointDestroy(array->points[i]);
 				array->points[i] = NULL; // Preventing a "double-free"
 			}
 			free(array->points);
 			array->points = NULL; // Preventing a "double-free"
-		}
+		}*/
 		free(array);
 	}
 }
@@ -354,12 +354,12 @@ int** spKDArrayGetMatrix(SPKDArray array) {
 	return array->matrix;
 }
 
-SPKDArray spKDArrayPairGetLeft(SPKDArrayPair array) {
-	assert(array != NULL);
-	return array->left;
+SPKDArray spKDArrayPairGetLeft(SPKDArrayPair arrayPair) {
+	assert(arrayPair != NULL);
+	return arrayPair->left;
 }
 
-SPKDArray spKDArrayPairGetRight(SPKDArrayPair array) {
-	assert(array != NULL);
-	return array->right;
+SPKDArray spKDArrayPairGetRight(SPKDArrayPair arrayPair) {
+	assert(arrayPair != NULL);
+	return arrayPair->right;
 }
