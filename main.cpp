@@ -81,7 +81,6 @@ bool showImages(SPConfig config,ImageProc* imageProc,int* closestImages,char* qu
 			PRINT_ERROR_LOGGER(GET_IMAGE_PATH_FAIL_ERROR,__FILE__,__func__,__LINE__);
 			return false;
 		}
-
 		if (!minimalGui) {
 			PRINT_NON_MINIMAL_GUI_RESULT(imagePath);
 		} else {
