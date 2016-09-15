@@ -217,6 +217,12 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 			pointsRight[i-spltr] = spPointCopy(kdArr->points[tmpIndex]);
 		}
 	}
+	// The example from FinalProject.pdf (page 10) will look like:
+	// supportSide = [0,1,0,1,0]
+	// supportSub = [0,0,-1,-3,-2]
+	// pointsLeft = [a,c,e]
+	// pointsRight = [d,b]
+	// So far the complexity is O( MAX(d,n) )
 	for (i=0;i<kdArr->dim;i++) {
 		pointerLeft = 0;
 		pointerRight = 0;
