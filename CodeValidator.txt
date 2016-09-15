@@ -1,0 +1,327 @@
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\Extraction.c
+	 Raw strings detected:
+		Line: 26 - sprintf(dataTruc,"%d,",spPointGetDimension(feature)); // write dimension
+		Line: 27 - sprintf(storedFeat+j,"%s",dataTruc);
+		Line: 30 - sprintf(dataTruc,"%.4f,",spPointGetAxisCoor(feature,i)); // write data
+		Line: 31 - sprintf(storedFeat+j,"%s",dataTruc);
+		Line: 50 - LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features export of: %s started",filename)
+		Line: 55 - featsFile = fopen(filename,"w");
+		Line: 60 - sprintf(firstLine,"%d,%d\n",numOfFeats,spPointGetIndex(*feats)); // number of features and index of the image
+		Line: 72 - LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features export of: %s ended",filename)
+		Line: 138 - buffer = NULL; // Preventing a "double-free"
+		Line: 142 - feature = NULL; // Preventing a "double-free"
+		Line: 146 - header = NULL; // Preventing a "double-free"
+		Line: 150 - data = NULL; // Preventing a "double-free"
+		Line: 258 - LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features import of: %s started",filename)
+		Line: 263 - featsFile = fopen(filename,"r");
+		Line: 270 - LOGGER_INFO_EXTRACTION_MSG(infoLoggerMsg,"Features import of: %s ended",filename)
+	 Numbers detected:
+		Line: 22 - char storedFeat[STRING_LENGTH], dataTruc[50];
+		Line: 30 - sprintf(dataTruc,"%.4f,",spPointGetAxisCoor(feature,i)); // write data
+		Line: 34 - storedFeat[j-1] = '\n';
+		Line: 35 - success = fwrite(storedFeat,1,strlen(storedFeat),featsFile); // write the line to file
+		Line: 61 - success = fwrite(firstLine,1,strlen(firstLine),featsFile);
+		Line: 89 - char storedDim[50], storedData[STRING_LENGTH];
+		Line: 210 - ind = strtol(header, &ptr, 10);
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\KDTreeNode.c
+	 TODO statements detected:
+		Line: 38 - /*if (nodeSons) { // TODO DELME
+		Line: 39 - free(nodeSons); // TODO DELME
+		Line: 41 - if (minSpreadArray) { // TODO DELME
+		Line: 42 - free(minSpreadArray); // TODO DELME
+		Line: 44 - if (maxSpreadArray) { // TODO DELME
+		Line: 45 - free(maxSpreadArray); // TODO DELME
+		Line: 57 - case RANDOM: // TODO verify
+		Line: 60 - case MAX_SPREAD: // TODO verify
+		Line: 72 - case INCREMENTAL: // TODO verify
+	 Raw strings detected:
+		Line: 100 - nodeSons = NULL; // Preventing a "double-free"
+		Line: 341 - sprintf(b, "(%03d)", (*kdTree)->val);
+		Line: 390 - printf("printing KDTree:\n");
+		Line: 394 - sprintf(s[i], "%80s", " ");
+		Line: 398 - printf("%s\n", s[i]);
+	 Numbers detected:
+		Line: 47 - node->dim = -1;
+		Line: 49 - } else if (spKDArrayGetSize(kdarray) == 1) {
+		Line: 73 - i = (i+1) % spKDArrayGetDimension(kdarray);
+		Line: 76 - node->dim = -1;
+		Line: 79 - if (spKDArrayGetSize(kdarray)%2 == 0) { // Size is even, Choose the AVG of the two points that in the middle
+		Line: 80 - tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)/2)-1]],i);
+		Line: 80 - tmpVar1 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][(spKDArrayGetSize(kdarray)/2)-1]],i);
+		Line: 81 - tmpVar2 = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)/2]],i);
+		Line: 82 - node->val = (tmpVar1+tmpVar2)/2;
+		Line: 84 - node->val = spPointGetAxisCoor(spKDArrayGetPoints(kdarray)[spKDArrayGetMatrix(kdarray)[i][spKDArrayGetSize(kdarray)%2]],i);
+		Line: 103 - if (((node->left)&&(node->left->dim == -1))||((node->right)&&(node->right->dim == -1))) { // Bubble the alert back to the root
+		Line: 103 - if (((node->left)&&(node->left->dim == -1))||((node->right)&&(node->right->dim == -1))) { // Bubble the alert back to the root
+		Line: 104 - node->dim = -1;
+		Line: 134 - if ((*kdTree == NULL)||((*kdTree)->dim == -1)) {
+		Line: 310 - imageHitsArray[closestImages[i]] = -1; // 'remove' the maximum from the search
+		Line: 333 - int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300], bool compact) {
+		Line: 333 - int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300], bool compact) {
+		Line: 333 - int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300], bool compact) {
+		Line: 333 - int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300], bool compact) {
+		Line: 334 - char b[128];
+		Line: 334 - char b[128];
+		Line: 334 - char b[128];
+		Line: 335 - int width = 5;
+		Line: 341 - sprintf(b, "(%03d)", (*kdTree)->val);
+		Line: 343 - left  = _print_t(&((*kdTree)->left),  1, offset,				depth + 1, s, compact);
+		Line: 343 - left  = _print_t(&((*kdTree)->left),  1, offset,				depth + 1, s, compact);
+		Line: 345 - left = 4;
+		Line: 348 - right = _print_t(&((*kdTree)->right), 0, offset + left + width, depth + 1, s, compact);
+		Line: 350 - right = 4;
+		Line: 358 - s[depth - 1][offset + left + width/2 + i] = '-';
+		Line: 358 - s[depth - 1][offset + left + width/2 + i] = '-';
+		Line: 360 - s[depth - 1][offset + left + width/2] = '.';
+		Line: 360 - s[depth - 1][offset + left + width/2] = '.';
+		Line: 363 - s[depth - 1][offset - width/2 + i] = '-';
+		Line: 363 - s[depth - 1][offset - width/2 + i] = '-';
+		Line: 365 - s[depth - 1][offset + left + width/2] = '.';
+		Line: 365 - s[depth - 1][offset + left + width/2] = '.';
+		Line: 369 - s[2 * depth][offset + left + i] = b[i];
+		Line: 373 - s[2 * depth - 1][offset + left + width/2 + i] = '-';
+		Line: 373 - s[2 * depth - 1][offset + left + width/2 + i] = '-';
+		Line: 373 - s[2 * depth - 1][offset + left + width/2 + i] = '-';
+		Line: 375 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 375 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 375 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 376 - s[2 * depth - 1][offset + left + width + right + width/2] = '+';
+		Line: 376 - s[2 * depth - 1][offset + left + width + right + width/2] = '+';
+		Line: 376 - s[2 * depth - 1][offset + left + width + right + width/2] = '+';
+		Line: 379 - s[2 * depth - 1][offset - width/2 + i] = '-';
+		Line: 379 - s[2 * depth - 1][offset - width/2 + i] = '-';
+		Line: 379 - s[2 * depth - 1][offset - width/2 + i] = '-';
+		Line: 381 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 381 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 381 - s[2 * depth - 1][offset + left + width/2] = '+';
+		Line: 382 - s[2 * depth - 1][offset - width/2 - 1] = '+';
+		Line: 382 - s[2 * depth - 1][offset - width/2 - 1] = '+';
+		Line: 382 - s[2 * depth - 1][offset - width/2 - 1] = '+';
+		Line: 382 - s[2 * depth - 1][offset - width/2 - 1] = '+';
+		Line: 392 - char s[128][300];
+		Line: 392 - char s[128][300];
+		Line: 392 - char s[128][300];
+		Line: 392 - char s[128][300];
+		Line: 394 - sprintf(s[i], "%80s", " ");
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\main.cpp
+	 Raw strings detected:
+		Line: 4 - #include "Extraction.h"
+		Line: 5 - #include "main_aux.h"
+		Line: 6 - #include "SPConfig.h"
+		Line: 7 - #include "SPLogger.h"
+		Line: 8 - #include "SPPoint.h"
+		Line: 9 - #include "defines.h"
+		Line: 10 - #include "KDTreeNode.h"
+		Line: 102 - scanf("%1024s",query);
+		Line: 103 - if(strcmp(query,"<>") == 0) {
+	 Numbers detected:
+		Line: 102 - scanf("%1024s",query);
+		Line: 102 - scanf("%1024s",query);
+		Line: 102 - scanf("%1024s",query);
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\main_aux.c
+	 Raw strings detected:
+		Line: 15 - } else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		Line: 52 - if (strcmp(filename,"stdout") == 0) { // check if stdout was chosen to be output stream
+	 Numbers detected:
+		Line: 13 - if (argc > 3) {
+		Line: 15 - } else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		Line: 15 - } else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		Line: 15 - } else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		Line: 15 - } else if ((argc == 3)&&(argv[1][0] == '-')&&(argv[1][1] == 'c')) { // Special configuration file specified by "-c <config_filename>"
+		Line: 16 - strcpy(filename,argv[2]);
+		Line: 24 - case 1:
+		Line: 26 - case 2:
+		Line: 28 - case 3:
+		Line: 30 - case 4:
+		Line: 146 - freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,true);
+		Line: 151 - freeExtractAllFeaturesMemory(imageArray,i-1,numOfFeatsArray,NULL,true);
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\sort_r.c
+	 Numbers detected:
+		Line: 44 - if (n <= 1)
+		Line: 133 - mid = i = base + qsz * ((unsigned) (lo / qsz) >> 1);
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPBPriorityQueue.c
+	 Numbers detected:
+		Line: 63 - return -1;
+		Line: 71 - return -1;
+		Line: 143 - return -1.0;
+		Line: 151 - return -1.0;
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPConfig.c
+	 Raw strings detected:
+		Line: 38 - CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesDirectory");
+		Line: 41 - CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesPrefix");
+		Line: 44 - CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spImagesSuffix");
+		Line: 47 - CONFIG_NON_DEFAULT_PARAMETER_MISSING(errorMsg,filename,lineNumber,"spNumOfImages");
+		Line: 99 - config->spPCAFilename = (char*)malloc(strlen("pca.yml")+1);
+		Line: 104 - strcpy(config->spPCAFilename, "pca.yml");
+		Line: 107 - config->spLoggerFilename = (char*)malloc(strlen("stdout")+1);
+		Line: 112 - strcpy(config->spLoggerFilename, "stdout");
+		Line: 139 - if (strcmp(variableName,"\0") == 0) {
+		Line: 142 - if (strcmp(variableName,"spImagesDirectory") == 0) {
+		Line: 150 - } else if (strcmp(variableName,"spImagesPrefix") == 0) {
+		Line: 158 - } else if (strcmp(variableName,"spImagesSuffix") == 0) {
+		Line: 159 - if ((strcmp(value,".jpg") || strcmp(value,".png") || strcmp(value,".bmp") || strcmp(value,".gif")) != false) {
+		Line: 171 - } else if (strcmp(variableName,"spNumOfImages") == 0) {
+		Line: 179 - } else if (strcmp(variableName,"spPCADimension") == 0) {
+		Line: 186 - } else if (strcmp(variableName,"spPCAFilename") == 0) {
+		Line: 193 - } else if (strcmp(variableName,"spNumOfFeatures") == 0) {
+		Line: 200 - } else if (strcmp(variableName,"spExtractionMode") == 0) {
+		Line: 201 - if (strcmp(value,"true") == 0) {
+		Line: 203 - } else if (strcmp(value,"false") == 0) {
+		Line: 209 - } else if (strcmp(variableName,"spNumOfSimilarImages") == 0) {
+		Line: 216 - } else if (strcmp(variableName,"spKDTreeSplitMethod") == 0) {
+		Line: 217 - if (strcmp(value,"RANDOM") == 0) {
+		Line: 219 - } else if (strcmp(value,"MAX_SPREAD") == 0) {
+		Line: 221 - } else if (strcmp(value,"INCREMENTAL") == 0) {
+		Line: 227 - } else if (strcmp(variableName,"spKNN") == 0) {
+		Line: 234 - } else if (strcmp(variableName,"spMinimalGUI") == 0) {
+		Line: 235 - if (strcmp(value,"true") == 0) {
+		Line: 237 - } else if (strcmp(value,"false") == 0) {
+		Line: 243 - } else if (strcmp(variableName,"spLoggerLevel") == 0) {
+		Line: 250 - } else if (strcmp(variableName,"spLoggerFilename") == 0) {
+		Line: 458 - configFile = fopen(filename,"r");
+		Line: 460 - if (strcmp(filename,"spcbir.config") == 0) {
+		Line: 554 - snprintf(imagePath,STRING_LENGTH,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,config->spImagesSuffix);
+		Line: 565 - snprintf(imagePath,STRING_LENGTH,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,".feats");
+		Line: 573 - snprintf(pcaPath,STRING_LENGTH,"%s%s",config->spImagesDirectory,config->spPCAFilename);
+		Line: 611 - snprintf(fileName,STRING_LENGTH,"%s",config->spLoggerFilename);
+	 Numbers detected:
+		Line: 13 - int spPCADimension;						// default value = 20
+		Line: 15 - int spNumOfFeatures;					// default value = 100
+		Line: 17 - int spNumOfSimilarImages;				// default value = 1
+		Line: 20 - int spKNN;								// default value = 1
+		Line: 23 - int spLoggerLevel;						// default value = 3
+		Line: 80 - config->spPCADimension = 20;
+		Line: 81 - config->spNumOfFeatures = 100;
+		Line: 83 - config->spNumOfSimilarImages = 1;
+		Line: 85 - config->spKNN = 1;
+		Line: 87 - config->spLoggerLevel = 3;
+		Line: 99 - config->spPCAFilename = (char*)malloc(strlen("pca.yml")+1);
+		Line: 107 - config->spLoggerFilename = (char*)malloc(strlen("stdout")+1);
+		Line: 143 - config->spImagesDirectory = (char*) malloc(strlen(value)+1);
+		Line: 151 - config->spImagesPrefix = (char*) malloc(strlen(value)+1);
+		Line: 160 - config->spImagesSuffix = (char*) malloc(strlen(value)+1);
+		Line: 180 - if (atoi(value) > 28 || atoi(value) < 10) {
+		Line: 180 - if (atoi(value) > 28 || atoi(value) < 10) {
+		Line: 180 - if (atoi(value) > 28 || atoi(value) < 10) {
+		Line: 187 - config->spPCAFilename = (char*) malloc(strlen(value)+1);
+		Line: 244 - if (atoi(value) > 4 || atoi(value) < 1) {
+		Line: 244 - if (atoi(value) > 4 || atoi(value) < 1) {
+		Line: 251 - config->spLoggerFilename = (char*) malloc(strlen(value)+1);
+		Line: 426 - case 1:
+		Line: 429 - case 2:
+		Line: 432 - case 3:
+		Line: 449 - int lineNumber = 1;
+		Line: 518 - return -1;
+		Line: 529 - return -1;
+		Line: 540 - return -1;
+		Line: 589 - return -1;
+		Line: 600 - return -1;
+		Line: 619 - return -1;
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPImageProc.cpp
+	 Raw strings detected:
+		Line: 70 - sprintf(warningMSG, "%s %s", imagePath, IMAGE_NOT_EXIST_MSG);
+		Line: 178 - sprintf(errorMSG, "%s %s", imagePath, IMAGE_NOT_EXIST_MSG);
+	 Numbers detected:
+		Line: 63 - char imagePath[STRING_LENGTH + 1] = { '\0' };
+		Line: 104 - char pcaPath[STRING_LENGTH + 1] = { '\0' };
+		Line: 129 - char pcaFilename[STRING_LENGTH + 1] = { '\0' };
+		Line: 170 - char errorMSG[STRING_LENGTH * 2];
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPImageProc.h
+	 Raw strings detected:
+		Line: 18 - const char* windowName = "Software Project CBIR";
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPKDArray.c
+	 TODO statements detected:
+		Line: 300 - free(array->minSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+		Line: 304 - free(array->maxSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+		Line: 307 - if (array->points) { // A tiny chance for errors in some compilers // TODO
+	 Raw strings detected:
+		Line: 40 - v0 = NULL; // Preventing a "double-free"
+		Line: 44 - v1 = NULL; // Preventing a "double-free"
+		Line: 48 - v2 = NULL; // Preventing a "double-free"
+		Line: 52 - v3 = NULL; // Preventing a "double-free"
+		Line: 56 - v4 = NULL; // Preventing a "double-free"
+		Line: 60 - v5 = NULL; // Preventing a "double-free"
+		Line: 64 - v6 = NULL; // Preventing a "double-free"
+		Line: 68 - v7 = NULL; // Preventing a "double-free"
+		Line: 72 - v8 = NULL; // Preventing a "double-free"
+		Line: 76 - v9 = NULL; // Preventing a "double-free"
+		Line: 80 - v10 = NULL; // Preventing a "double-free"
+		Line: 84 - v11 = NULL; // Preventing a "double-free"
+		Line: 147 - matrix_v = NULL; // Preventing a "double-free"
+		Line: 263 - supportSide = NULL; // Preventing a "double-free"
+		Line: 267 - supportSub = NULL; // Preventing a "double-free"
+		Line: 271 - minSpread = NULL; // Preventing a "double-free"
+		Line: 275 - maxSpread = NULL; // Preventing a "double-free"
+		Line: 297 - array->matrix = NULL; // Preventing a "double-free"
+		Line: 300 - free(array->minSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+		Line: 301 - array->minSpread = NULL; // Preventing a "double-free"
+		Line: 304 - free(array->maxSpread); // TODO "No source available for ntdll!RtlInitUnicodeString()" error
+		Line: 305 - array->maxSpread = NULL; // Preventing a "double-free"
+		Line: 310 - array->points[i] = NULL; // Preventing a "double-free"
+		Line: 313 - array->points = NULL; // Preventing a "double-free"
+	 Numbers detected:
+		Line: 29 - return -1;
+		Line: 31 - return 1;
+		Line: 37 - void specificMemoryFree(int* v0, int* v1, double* v2, double* v3, int** v4, int** v5, double** v6, double** v7, SPKDArray v8, SPKDArrayPair v9, SPPoint* v10, SPPoint* v11) {
+		Line: 83 - free(v11);
+		Line: 84 - v11 = NULL; // Preventing a "double-free"
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 124 - KDarray->points[i] = spPointCopy(arr[i]); //					|   1 | 123 |   2 |   9 |   3 |
+		Line: 126 - matrix_v[j][i] = spPointGetAxisCoor(arr[i],j); //			|   0 |   1 |   2 |   3 |   4 |
+		Line: 126 - matrix_v[j][i] = spPointGetAxisCoor(arr[i],j); //			|   0 |   1 |   2 |   3 |   4 |
+		Line: 126 - matrix_v[j][i] = spPointGetAxisCoor(arr[i],j); //			|   0 |   1 |   2 |   3 |   4 |
+		Line: 126 - matrix_v[j][i] = spPointGetAxisCoor(arr[i],j); //			|   0 |   1 |   2 |   3 |   4 |
+		Line: 127 - matrix_i[j][i] = i; //							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
+		Line: 127 - matrix_i[j][i] = i; //							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
+		Line: 127 - matrix_i[j][i] = i; //							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
+		Line: 127 - matrix_i[j][i] = i; //							 matrix_i = |   0 |   1 |   2 |   3 |   4 |
+		Line: 169 - spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
+		Line: 169 - spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
+		Line: 169 - spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
+		Line: 169 - spltr = (kdArr->size)-(kdArr->size)/2; // Ex. 5/2=3
+		Line: 185 - minSpread[1] = (double *)malloc(kdArr->dim * sizeof(double));
+		Line: 187 - maxSpread[1] = (double *)malloc(kdArr->dim * sizeof(double));
+		Line: 190 - if ((minSpread[0]==NULL)||(minSpread[1]==NULL)||(maxSpread[0]==NULL)||(maxSpread[1]==NULL)||(res->left==NULL)||(res->right==NULL)) { // Memory allocation error
+		Line: 190 - if ((minSpread[0]==NULL)||(minSpread[1]==NULL)||(maxSpread[0]==NULL)||(maxSpread[1]==NULL)||(res->left==NULL)||(res->right==NULL)) { // Memory allocation error
+		Line: 197 - minSpread[1][i] = DBL_MIN; // Reset the minimum spread of dim i in the right SPKDArray to be 'infinity'
+		Line: 199 - maxSpread[1][i] = DBL_MIN; // Reset the maximum spread of dim i in the right SPKDArray to be 'infinity'
+		Line: 216 - supportSide[tmpIndex] = 1;
+		Line: 235 - pointerLeft+=1;
+		Line: 239 - pointerRight+=1;
+		Line: 256 - res->right->minSpread = minSpread[1];
+		Line: 257 - res->right->maxSpread = maxSpread[1];
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPList.c
+	 Numbers detected:
+		Line: 96 - return list == NULL ? -1 : list->size;
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPListElement.c
+	 Numbers detected:
+		Line: 56 - return -1;
+		Line: 73 - return -1.0;
+		Line: 84 - return 1;
+		Line: 86 - return -1;
+[WARNING] - C:\Users\XqG3X\workspace\c_final\.\SPLogger.c
+	 Raw strings detected:
+		Line: 64 - sprintf(out,"---ERROR---\n- file: %s\n- function: %s\n- line: %d\n- message: %s",file,function,line,msg);
+		Line: 80 - sprintf(out,"---WARNING---\n- file: %s\n- function: %s\n- line: %d\n- message: %s",file,function,line,msg);
+		Line: 99 - sprintf(out,"---INFO---\n- message: %s",msg);
+		Line: 118 - sprintf(out,"---DEBUG---\n- file: %s\n- function: %s\n- line: %d\n- message: %s",file,function,line,msg);
+		Line: 138 - printf("%s\n",out);
+		Line: 141 - strcat(out, "\n");
+	 Numbers detected:
+		Line: 56 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 56 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 56 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 71 - char out[strlen(msg)+strlen(file)+strlen(function)+125];
+		Line: 71 - char out[strlen(msg)+strlen(file)+strlen(function)+125];
+		Line: 71 - char out[strlen(msg)+strlen(file)+strlen(function)+125];
+		Line: 90 - char out[strlen(msg)+24];
+		Line: 90 - char out[strlen(msg)+24];
+		Line: 109 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 109 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 109 - char out[strlen(msg)+strlen(file)+strlen(function)+123];
+		Line: 142 - stat = fwrite(out,1, strlen(out),logger->outputChannel);
