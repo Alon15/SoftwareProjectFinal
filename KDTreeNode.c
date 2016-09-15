@@ -333,17 +333,17 @@ void spKDTreeDestroy(KDTreeNode root) {
 		free(root);
 	}
 }
-int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[20][255]) {
-	char b[20];
+int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300]) {
+	char b[128];
 	int width = 5;
 	int i;
 	int left, right;
 	if (!kdTree) {
 		return 0;
 	}
-	//sprintf(b, "(%03d)", (*kdTree)->val);
-	printf("(%03d)", (*kdTree)->val);
-	fflush(stdout);
+	sprintf(b, "(%03d)", (*kdTree)->val);
+	//printf("(%03d)", (*kdTree)->val);
+	//fflush(stdout);
 	if ((*kdTree)->left != NULL) {
 		//spKDTreePrint(&((*kdTree)->left));
 		left  = _print_t(&((*kdTree)->left),  1, offset,				depth + 1, s);
@@ -396,12 +396,12 @@ void spKDTreePrint(KDTreeNode *kdTree) {
 	int i;
 	printf("printing KDTree:\n");
 	fflush(stdout);
-	char s[20][255];
-	for (i=0;i<20;i++) {
+	char s[128][300];
+	for (i=0;i<128;i++) {
 		sprintf(s[i], "%80s", " ");
 	}
 	_print_t(kdTree, 0, 0, 0, s);
-	for (i=0;i<20;i++) {
+	for (i=0;i<128;i++) {
 		printf("%s\n", s[i]);
 	}
 	fflush(stdout);
