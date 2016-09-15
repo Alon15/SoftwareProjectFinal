@@ -26,9 +26,9 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	int j; // Generic loop variable
 	int tmpVar1,tmpVar2;
 	KDTreeNode node;
-	SPKDArrayPair nodeSons;
-	double* minSpreadArray;
-	double* maxSpreadArray;
+	SPKDArrayPair nodeSons = NULL;
+	double* minSpreadArray = NULL;
+	double* maxSpreadArray = NULL;
 	// Allocate memory
 	node = (KDTreeNode) malloc(sizeof(*node));
 	// Function body
@@ -88,11 +88,16 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod);
 		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod);
 		node->data = NULL;
+		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
+			spKDTreeDestroy(node);
+			return NULL;
+		}
 	}
 	// Free memory
 	spKDArrayDestroy(kdarray);
 	if (nodeSons) {
-		spKDArrayPairDestroy(nodeSons);
+		free(nodeSons);
+		nodeSons = NULL; // Preventing a "double-free"
 	}
 	if (minSpreadArray) { // A tiny chance for errors in some compilers
 		free(minSpreadArray);
@@ -103,17 +108,13 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		maxSpreadArray = NULL; // Preventing a "double-free"
 	}
 	// Finish
-	if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
-		spKDTreeDestroy(node);
-		return NULL;
-	} else {
-		return node;
-	}
+	return node;
+
 }
 
 bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree) {
 	// Function variables
-	int i; // Generic loop variable
+	//int i; // Generic loop variable
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	SPKDArray kdArray;
@@ -136,14 +137,6 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 	srand((unsigned int)time(NULL));
 	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
 	// Free memory
-	if (featuresArray) { // A tiny chance for errors in some compilers
-		for (i=0;i<size;i++) {
-			spPointDestroy(featuresArray[i]);
-			featuresArray[i] = NULL; // Preventing a "double-free"
-		}
-		free(featuresArray);
-		featuresArray = NULL; // Preventing a "double-free"
-	}
 	// Finish
 	if (*kdTree == NULL) {
 		return false;
