@@ -1,7 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 
-PROJECT_PATH = "C:\\Users\\XqG3X\\workspace\\c_final"
+PROJECT_PATH = "C:\\Users\\$$Update_This_Line$$\\SoftwareProjectFinal"
 SUB_FOLDERS = ["."]
 REQUIRED_FORMATS = [".c", ".cpp", ".h"]
 BAD_SYMBOLS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
