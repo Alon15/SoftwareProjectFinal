@@ -64,4 +64,6 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
  */
 void spKDTreeDestroy(KDTreeNode root);
 
+void spKDTreePrint(KDTreeNode *kdTree);
+
 #endif /* KDTREENODE_H_ */
