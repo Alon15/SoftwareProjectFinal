@@ -26,9 +26,9 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	int j; // Generic loop variable
 	int tmpVar1,tmpVar2;
 	KDTreeNode node;
-	SPKDArrayPair nodeSons;
-	double* minSpreadArray;
-	double* maxSpreadArray;
+	SPKDArrayPair nodeSons = NULL;
+	double* minSpreadArray = NULL;
+	double* maxSpreadArray = NULL;
 	// Allocate memory
 	node = (KDTreeNode)malloc(sizeof(*node));
 	// Function body
@@ -89,10 +89,16 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->left = spKDTreeRecursion(spKDArrayPairGetLeft(nodeSons),i,splitMethod);
 		node->right = spKDTreeRecursion(spKDArrayPairGetRight(nodeSons),i,splitMethod);
 		node->data = NULL;
+		if ((node->left == NULL)||(node->right == NULL)) { // Bubble the alert back to the root
+			spKDTreeDestroy(node);
+			return NULL;
+		}
 	}
 	// Free memory
-	/*if (nodeSons) { // TODO "No source available for ntdll!RtlFreeHeap" error
-		spKDArrayPairDestroy(nodeSons);
+	spKDArrayDestroy(kdarray);
+	if (nodeSons) {
+		free(nodeSons);
+		nodeSons = NULL; // Preventing a "double-free"
 	}
 	if (minSpreadArray) { // A tiny chance for errors in some compilers
 		free(minSpreadArray);
@@ -102,7 +108,6 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		free(maxSpreadArray);
 		maxSpreadArray = NULL; // Preventing a "double-free"
 	}
-	spKDArrayDestroy(kdarray);*/
 	// Finish
 	if (((node->left)&&(node->left->dim == -1))||((node->right)&&(node->right->dim == -1))) { // Bubble the alert back to the root
 		node->dim = -1;
@@ -112,7 +117,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 
 bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode* kdTree) {
 	// Function variables
-	int i; // Generic loop variable
+	//int i; // Generic loop variable
 	SP_CONFIG_MSG config_msg;
 	SP_SPLIT_METHOD splitMethod;
 	SPKDArray kdArray;
@@ -136,14 +141,6 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
 	spKDTreePrint(kdTree);
 	// Free memory
-	if (featuresArray) { // A tiny chance for errors in some compilers
-		for (i=0;i<size;i++) {
-			spPointDestroy(featuresArray[i]);
-			featuresArray[i] = NULL; // Preventing a "double-free"
-		}
-		free(featuresArray);
-		featuresArray = NULL; // Preventing a "double-free"
-	}
 	// Finish
 	if ((*kdTree == NULL)||((*kdTree)->dim == -1)) {
 		spKDTreeDestroy(*kdTree);

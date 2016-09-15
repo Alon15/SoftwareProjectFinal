@@ -212,11 +212,11 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 		if (i < spltr) { // This point go to the left
 			supportSide[tmpIndex] = 0;
 			supportSub[tmpIndex] = i-tmpIndex;
-			pointsLeft[i] = kdArr->points[tmpIndex];
+			pointsLeft[i] = spPointCopy(kdArr->points[tmpIndex]);
 		} else { // This point go to the right
 			supportSide[tmpIndex] = 1;
 			supportSub[tmpIndex] = i-spltr-tmpIndex;
-			pointsRight[i-spltr] = kdArr->points[tmpIndex];
+			pointsRight[i-spltr] = spPointCopy(kdArr->points[tmpIndex]);
 		}
 	}
 	// The example from FinalProject.pdf (page 10) will look like:
@@ -267,14 +267,6 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 		free(supportSub);
 		supportSub = NULL; // Preventing a "double-free"
 	}
-	for (i=0;i<2;i++) {
-		if (minSpread[i]) { // A tiny chance for errors in some compilers
-			free(minSpread[i]);
-		}
-		if (maxSpread[i]) { // A tiny chance for errors in some compilers
-			free(maxSpread[i]);
-		}
-	}
 	if (minSpread) { // A tiny chance for errors in some compilers
 		free(minSpread);
 		minSpread = NULL; // Preventing a "double-free"
@@ -283,6 +275,7 @@ SPKDArrayPair spKDArraySplit(SPKDArray kdArr, int coor) {
 		free(maxSpread);
 		maxSpread = NULL; // Preventing a "double-free"
 	}
+
 	// Finish
 	return res;
 }
