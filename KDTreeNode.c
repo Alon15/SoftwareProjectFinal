@@ -131,8 +131,6 @@ bool spKDTreeInit(SPConfig config, SPPoint* featuresArray, int size, KDTreeNode*
 	}
 	srand((unsigned int)time(NULL));
 	*kdTree = spKDTreeRecursion(kdArray,-1,splitMethod);
-	spKDTreePrint(kdTree);
-	// Free memory
 	// Finish
 	if ((*kdTree == NULL)||((*kdTree)->dim == -1)) {
 		spKDTreeDestroy(*kdTree);
@@ -332,7 +330,8 @@ void spKDTreeDestroy(KDTreeNode root) {
 		free(root);
 	}
 }
-int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300]) {
+
+int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128][300], bool compact) {
 	char b[128];
 	int width = 5;
 	int i;
@@ -341,53 +340,49 @@ int _print_t(KDTreeNode *kdTree, int is_left, int offset, int depth, char s[128]
 		return 0;
 	}
 	sprintf(b, "(%03d)", (*kdTree)->val);
-	//printf("(%03d)", (*kdTree)->val);
-	//fflush(stdout);
 	if ((*kdTree)->left != NULL) {
-		//spKDTreePrint(&((*kdTree)->left));
-		left  = _print_t(&((*kdTree)->left),  1, offset,				depth + 1, s);
+		left  = _print_t(&((*kdTree)->left),  1, offset,				depth + 1, s, compact);
 	} else {
 		left = 4;
 	}
 	if ((*kdTree)->right != NULL) {
-		//spKDTreePrint(&((*kdTree)->right));
-		right = _print_t(&((*kdTree)->right), 0, offset + left + width, depth + 1, s);
+		right = _print_t(&((*kdTree)->right), 0, offset + left + width, depth + 1, s, compact);
 	} else {
 		right = 4;
 	}
-#ifdef COMPACT
-	for (i=0;i<width;i++) {
-		s[depth][offset + left + i] = b[i];
-	}
-	if (depth && is_left) {
-		for (i=0;i<width+right;i++) {
-			s[depth - 1][offset + left + width/2 + i] = '-';
+	if (compact) {
+		for (i=0;i<width;i++) {
+			s[depth][offset + left + i] = b[i];
 		}
-		s[depth - 1][offset + left + width/2] = '.';
-	} else if (depth && !is_left) {
-		for (i=0;i<left+width;i++) {
-			s[depth - 1][offset - width/2 + i] = '-';
+		if (depth && is_left) {
+			for (i=0;i<width+right;i++) {
+				s[depth - 1][offset + left + width/2 + i] = '-';
+			}
+			s[depth - 1][offset + left + width/2] = '.';
+		} else if (depth && !is_left) {
+			for (i=0;i<left+width;i++) {
+				s[depth - 1][offset - width/2 + i] = '-';
+			}
+			s[depth - 1][offset + left + width/2] = '.';
 		}
-		s[depth - 1][offset + left + width/2] = '.';
-	}
-#else
-	for (i=0;i<width;i++) {
-		s[2 * depth][offset + left + i] = b[i];
-	}
-	if (depth && is_left) {
-		for (i=0;i<width+right;i++) {
-			s[2 * depth - 1][offset + left + width/2 + i] = '-';
+	} else {
+		for (i=0;i<width;i++) {
+			s[2 * depth][offset + left + i] = b[i];
 		}
-		s[2 * depth - 1][offset + left + width/2] = '+';
-		s[2 * depth - 1][offset + left + width + right + width/2] = '+';
-	} else if (depth && !is_left) {
-		for (i=0;i<left+width;i++) {
-			s[2 * depth - 1][offset - width/2 + i] = '-';
+		if (depth && is_left) {
+			for (i=0;i<width+right;i++) {
+				s[2 * depth - 1][offset + left + width/2 + i] = '-';
+			}
+			s[2 * depth - 1][offset + left + width/2] = '+';
+			s[2 * depth - 1][offset + left + width + right + width/2] = '+';
+		} else if (depth && !is_left) {
+			for (i=0;i<left+width;i++) {
+				s[2 * depth - 1][offset - width/2 + i] = '-';
+			}
+			s[2 * depth - 1][offset + left + width/2] = '+';
+			s[2 * depth - 1][offset - width/2 - 1] = '+';
 		}
-		s[2 * depth - 1][offset + left + width/2] = '+';
-		s[2 * depth - 1][offset - width/2 - 1] = '+';
 	}
-#endif
 	return left + width + right;
 }
 
@@ -399,21 +394,9 @@ void spKDTreePrint(KDTreeNode *kdTree) {
 	for (i=0;i<128;i++) {
 		sprintf(s[i], "%80s", " ");
 	}
-	_print_t(kdTree, 0, 0, 0, s);
+	_print_t(kdTree, 0, 0, 0, s, true);
 	for (i=0;i<128;i++) {
 		printf("%s\n", s[i]);
 	}
 	fflush(stdout);
-}
-void spKDTreePrint2(KDTreeNode *kdTree) {
-	if(kdTree == NULL) {
-		return;
-	}
-	if ((*kdTree)->left != NULL) {
-		spKDTreePrint(&((*kdTree)->left));
-	}
-	printf("%d\n",(*kdTree)->val);
-	if ((*kdTree)->right != NULL) {
-		spKDTreePrint(&((*kdTree)->right));
-	}
 }
