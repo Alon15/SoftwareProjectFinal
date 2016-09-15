@@ -287,7 +287,7 @@ int* closestImagesQuery(SPConfig config, KDTreeNode kdTree, SPPoint* queryArray,
 	}
 	// find the index of the images with the most hits
 	for (i=0;i<numOfSimilarImages;i++) {
-		max = 0;
+		max = -1;
 		for (j=0;j<numOfImages;j++) {
 			if (imageHitsArray[j] > max) {
 				max = imageHitsArray[j];
