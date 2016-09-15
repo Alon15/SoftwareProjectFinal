@@ -172,13 +172,13 @@ def main(argv):
     proc = open_exe(argv);
 
     config = get_config(argv)
-    print "inserting inputs into program"
+    print ("inserting inputs into program")
     send_input(proc, config)
     
-    print "creating a image dictionary out of program's output"
+    print ("creating a image dictionary out of program's output")
     results = output_to_dict(proc.communicate()[0])
     
-    print "generating HTML file"
+    print ("generating HTML file")
     html = dict_to_html(config, results)
     f = open(os.path.splitext(config)[0] + ".html", "w")
     f.write(html)
