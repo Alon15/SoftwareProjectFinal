@@ -52,7 +52,7 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 		node->val = 0;
 		node->left = NULL;
 		node->right = NULL;
-		node->data = spKDArrayGetPoints(kdarray)[0]; // Does not duplicate the point!!!
+		node->data = spPointCopy(spKDArrayGetPoints(kdarray)[0]);
 	} else {
 		switch (splitMethod) {
 			case RANDOM: // TODO verify
@@ -99,14 +99,6 @@ KDTreeNode spKDTreeRecursion(SPKDArray kdarray, int i, SP_SPLIT_METHOD splitMeth
 	if (nodeSons) {
 		free(nodeSons);
 		nodeSons = NULL; // Preventing a "double-free"
-	}
-	if (minSpreadArray) { // A tiny chance for errors in some compilers
-		free(minSpreadArray);
-		minSpreadArray = NULL; // Preventing a "double-free"
-	}
-	if (maxSpreadArray) { // A tiny chance for errors in some compilers
-		free(maxSpreadArray);
-		maxSpreadArray = NULL; // Preventing a "double-free"
 	}
 	// Finish
 	if (((node->left)&&(node->left->dim == -1))||((node->right)&&(node->right->dim == -1))) { // Bubble the alert back to the root
